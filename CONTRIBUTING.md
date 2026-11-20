@@ -12,6 +12,7 @@ Thanks for helping more people learn Python! Small fixes are as welcome as new l
 ## Style
 
 - One idea per section: a short explanation, a runnable example, and one question for the reader.
+- No open-ended "TODO: write your answer" cells outside the projects. Exercises are fill-in-the-blank code (`___`) that ends with `check(...)`, so learners know whether they're right.
 - Plain words, short sentences, no filler. Explain *why*, not just *what*.
 - Examples use only the standard library and run offline, and the notebook works with **Restart & Run All**.
 - Clear outputs before committing (Jupyter: *Edit → Clear Outputs of All Cells*).

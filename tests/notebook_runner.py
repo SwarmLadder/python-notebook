@@ -13,6 +13,7 @@ import io
 import json
 import os
 import sys
+import traceback
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -72,6 +73,28 @@ def _no_input(prompt: str = "") -> str:  # pragma: no cover - only hit on regres
     )
 
 
+def _stopped_at_blank(error: BaseException, source: str) -> bool:
+    """True if a fill-in cell stopped because of one of its own ___ blanks (expected while unanswered).
+
+    Looks at every frame of the traceback and inside exception groups (e.g. asyncio TaskGroup)."""
+    lines = source.splitlines()
+    pending, seen = [error], set()
+    while pending:
+        current = pending.pop()
+        if current is None or id(current) in seen:
+            continue
+        seen.add(id(current))
+        if type(current).__name__ == "BlankNotFilled":
+            return True
+        for frame in traceback.extract_tb(current.__traceback__):
+            if ("#cell" in frame.filename or frame.filename == "<exercise>") and 0 < frame.lineno <= len(lines) \
+                    and "___" in lines[frame.lineno - 1]:
+                return True
+        pending.extend(getattr(current, "exceptions", ()) or ())
+        pending.append(current.__context__)
+    return False
+
+
 @dataclass
 class RunResult:
     executed_cells: int
@@ -102,6 +125,14 @@ def run_notebook(path: Path) -> RunResult:
                     exec(code, namespace)
             except NotebookCellError:
                 raise
+            except Exception as error:
+                if _stopped_at_blank(error, source):
+                    continue  # fill-in exercise left blank on purpose: that's how the repo ships
+                first_line = source.strip().splitlines()[0][:80]
+                raise NotebookCellError(
+                    f"{notebook_id(path)}: code cell {number} raised "
+                    f"{type(error).__name__}: {error}\n    cell starts with: {first_line!r}"
+                ) from error
             except BaseException as error:  # SystemExit included: notebooks must not exit
                 first_line = source.strip().splitlines()[0][:80]
                 raise NotebookCellError(
@@ -115,6 +146,7 @@ def run_notebook(path: Path) -> RunResult:
         sys.path.remove(str(path.parent))
         sys.modules.pop("quiz", None)
         sys.modules.pop("check", None)
+        sys.modules.pop("lesson", None)
         if previous_checks is None:
             os.environ.pop("PRACTICE_CHECKS", None)
         else:

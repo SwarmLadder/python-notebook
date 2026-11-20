@@ -37,7 +37,9 @@ def test_lesson_quiz_is_answerable(path):
 
 def test_quiz_feedback(capsys):
     q = quiz.Quiz("demo", {1: quiz.fingerprint("demo", 1, "b")})
-    assert q.answer(1, "?") is None
-    assert q.answer(1, "a") is False
-    assert q.answer(1, " B ") is True
+    results = []
+    for choice in ("?", "a", " B "):
+        assert q.answer(1, choice) is None, "answer() prints; returning a value would echo True/False in Jupyter"
+        results.append(q.last_result)
+    assert results == [None, False, True]
     assert "correct" in capsys.readouterr().out

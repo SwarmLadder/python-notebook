@@ -46,6 +46,8 @@ for path in files:
                     exec(compile(content, f"{path}:{index}", "exec"), namespace)
                     executed += 1
                 except Exception as error:
+                    if "___" in content:
+                        continue  # fill-in exercise left blank on purpose
                     failures.append((path, index, f"{type(error).__name__}: {error}"))
                     break
         print(f"{'PASS' if not failures or failures[-1][0] != path else 'FAIL'} "

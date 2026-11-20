@@ -21,8 +21,11 @@ class Quiz:
         self._answers = answers
         self._correct: set[int] = set()
 
-    def answer(self, number: int, choice: str) -> bool | None:
-        """Check your choice ('a', 'b', 'c'...) for question `number`."""
+    def answer(self, number: int, choice: str) -> None:
+        """Check your choice ('a', 'b', 'c'...) for question `number`. Prints the result."""
+        self.last_result = self._grade(number, choice)
+
+    def _grade(self, number: int, choice: str) -> bool | None:
         if number not in self._answers:
             print(f"There is no question {number}. Questions: {sorted(self._answers)}")
             return None
