@@ -28,6 +28,8 @@ for path in files:
     try:
         document = json.loads(path.read_text(encoding="utf-8"))
         namespace = {"__name__": "__main__", "__file__": str(path)}
+        sys.path.insert(0, str(path.parent))  # like Jupyter: import helpers (quiz.py) beside the notebook
+        sys.modules.pop("quiz", None)
         executed = 0
         with redirect_stdout(StringIO()), redirect_stderr(StringIO()):
             for index, cell in enumerate(document["cells"], start=1):
