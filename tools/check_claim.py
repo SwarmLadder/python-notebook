@@ -52,7 +52,7 @@ def parse_claim(text: str) -> tuple[str, str]:
 
 def validate_files(files: list[str], author: str) -> str:
     claim_path = f"achievements/claims/{author}.md"
-    claims = [f for f in files if f.startswith("achievements/claims/")]
+    claims = [f for f in files if f.startswith("achievements/claims/") and f != "achievements/claims/README.md"]
     if [c.lower() for c in claims] != [claim_path.lower()]:
         raise ClaimError(f"the PR must add exactly one claim file: {claim_path} (found {claims or 'none'})")
     others = [f for f in files if f not in claims and not any(fnmatch.fnmatch(f, p) for p in ALLOWED)]

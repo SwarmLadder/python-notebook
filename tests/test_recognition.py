@@ -48,7 +48,7 @@ def test_claim_may_only_touch_exercises_and_own_claim():
     ok = ["practice/exercises/basics_01_fundamentals.py", "basics/exercises/02_control_flow_exercises.ipynb",
           "achievements/claims/ada.md"]
     assert check_claim.validate_files(ok, "ada") == "achievements/claims/ada.md"
-    for files in (ok + ["practice/grader.py"], ok + [".github/workflows/verify-achievement.yml"],
+    for files in (ok + ["practice/grader.py"], ok + ["achievements/claims/README.md"], ok + [".github/workflows/verify-achievement.yml"],
                   ["achievements/claims/eve.md"], ["practice/exercises/x.py"]):
         with pytest.raises(check_claim.ClaimError):
             check_claim.validate_files(files, "ada")

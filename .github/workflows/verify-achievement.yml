@@ -5,6 +5,7 @@ on:
   pull_request:
     paths:
       - "achievements/claims/**"
+      - "!achievements/claims/README.md"
 permissions:
   contents: read
 jobs:
