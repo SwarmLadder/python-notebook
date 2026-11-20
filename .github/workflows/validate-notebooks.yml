@@ -1,0 +1,13 @@
+name: Validate notebooks
+on:
+  push:
+  pull_request:
+jobs:
+  structure-and-syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python tools/validate_notebooks.py
