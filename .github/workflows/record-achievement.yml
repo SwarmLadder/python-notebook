@@ -1,0 +1,56 @@
+name: Record achievement
+# A maintainer adds the label `achievement-approved` to a claim PR after reviewing it.
+# This workflow then adds the learner to ACHIEVEMENTS.md and closes the PR WITHOUT
+# merging it, so the learner's solutions never land in the course.
+# Security: pull_request_target runs this file from main and has a write token, so it
+# must never check out or execute code from the PR. It only reads PR metadata via the API.
+on:
+  pull_request_target:
+    types: [labeled]
+permissions:
+  contents: write
+  pull-requests: write
+  checks: read
+concurrency:
+  group: recognition-files
+  cancel-in-progress: false
+jobs:
+  record:
+    if: github.event.label.name == 'achievement-approved'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4   # main, not the PR
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate the claim using the API only
+        id: claim
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+          AUTHOR: ${{ github.event.pull_request.user.login }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          python tools/check_claim.py --author "$AUTHOR" --api-pr "$PR" --head-sha "$HEAD_SHA" \
+            --require-check "verify" --github-output "$GITHUB_OUTPUT"
+      - name: Add to ACHIEVEMENTS.md
+        env:
+          AUTHOR: ${{ github.event.pull_request.user.login }}
+          LEVEL: ${{ steps.claim.outputs.level }}
+          DISPLAY: ${{ steps.claim.outputs.display_name }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: python tools/recognition.py achievement --login "$AUTHOR" --level "$LEVEL" --name "$DISPLAY" --pr "$PR_URL"
+      - name: Commit
+        run: |
+          git config user.name "course-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ACHIEVEMENTS.md
+          git diff --cached --quiet || git commit -m "Record ${{ steps.claim.outputs.level }} achievement for @${{ github.event.pull_request.user.login }}"
+          git push
+      - name: Thank the learner and close the PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr comment ${{ github.event.pull_request.number }} --repo "$GITHUB_REPOSITORY" --body \
+            "🎉 Congratulations @${{ github.event.pull_request.user.login }}! Your **${{ steps.claim.outputs.level }}** achievement is now in ACHIEVEMENTS.md. This PR is closed without merging so your solutions stay out of the course."
+          gh pr close ${{ github.event.pull_request.number }} --repo "$GITHUB_REPOSITORY"

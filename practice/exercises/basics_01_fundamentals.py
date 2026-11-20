@@ -1,7 +1,7 @@
-# Auto-graded practice. Replace each `raise NotImplementedError` with your code.
-# Check your work:  python -m pytest practice -k basics_01_fundamentals
-# Stuck? Re-read the docstring hint, then the lesson notebook it names.
-# Reset to a blank copy:  git checkout -- practice/exercises/basics_01_fundamentals.py
+# Fill in every ___ so the function does what its docstring says.
+# Check your work:  python -m pytest practice -k basics_01_fundamentals   (or use the workbook notebook)
+# Stuck? Fail a check twice to unlock the hints.
+# Reset this file:  git checkout -- practice/exercises/basics_01_fundamentals.py
 
 """Basics practice 1 — Fundamentals (variables, numbers, strings, booleans).
 
@@ -10,14 +10,14 @@ Companion to basics/exercises/01_fundamentals_exercises.ipynb and lessons 01–0
 import math
 
 
-def total_cost(price_text: str, units: int=7) -> float:
+def total_cost(price_text: str, units: int = 7) -> float:
     """Convert a price written as text into a float and return the cost of `units` items.
 
     >>> total_cost("2.50")
     17.5
     Hint: float() converts text; surrounding spaces are fine for float().
     """
-    raise NotImplementedError('TODO: implement total_cost')
+    return ___
 
 
 def circle_measurements(radius: float) -> tuple[float, float]:
@@ -25,7 +25,9 @@ def circle_measurements(radius: float) -> tuple[float, float]:
 
     Hint: use math.pi; area = pi * r**2, circumference = 2 * pi * r.
     """
-    raise NotImplementedError('TODO: implement circle_measurements')
+    if ___:
+        raise ValueError("radius must be nonnegative")
+    return math.pi * radius ** 2, 2 * math.pi * radius
 
 
 def split_minutes(total_minutes: int) -> tuple[int, int]:
@@ -35,7 +37,7 @@ def split_minutes(total_minutes: int) -> tuple[int, int]:
     (2, 15)
     Hint: floor division // and modulo %, or divmod().
     """
-    raise NotImplementedError('TODO: implement split_minutes')
+    return ___
 
 
 def format_price(product: str, price: float) -> str:
@@ -43,7 +45,7 @@ def format_price(product: str, price: float) -> str:
 
     Hint: f-string format spec  {value:.2f}
     """
-    raise NotImplementedError('TODO: implement format_price')
+    return ___
 
 
 def ends(text: str) -> tuple[str, str]:
@@ -53,12 +55,12 @@ def ends(text: str) -> tuple[str, str]:
     ('note', 'ook')
     Hint: slicing text[:4] and text[-3:].
     """
-    raise NotImplementedError('TODO: implement ends')
+    return ___
 
 
 def normalize(text: str) -> str:
     """Strip surrounding whitespace and casefold, so '  HeLLo ' becomes 'hello'."""
-    raise NotImplementedError('TODO: implement normalize')
+    return ___
 
 
 def hyphenate(sentence: str) -> str:
@@ -68,22 +70,22 @@ def hyphenate(sentence: str) -> str:
     'learn-python-today'
     Hint: split() with no argument also collapses repeated spaces.
     """
-    raise NotImplementedError('TODO: implement hyphenate')
+    return ___
 
 
 def is_csv(filename: str) -> bool:
     """True if the filename ends in .csv, ignoring case ('DATA.CSV' counts)."""
-    raise NotImplementedError('TODO: implement is_csv')
+    return ___
 
 
 def is_valid_score(score: float) -> bool:
     """True if 0 <= score <= 100 (both ends included). Hint: chained comparison."""
-    raise NotImplementedError('TODO: implement is_valid_score')
+    return ___
 
 
 def fahrenheit_to_celsius(fahrenheit: float) -> float:
     """Convert Fahrenheit to Celsius, rounded to one decimal place. 72.5 -> 22.5"""
-    raise NotImplementedError('TODO: implement fahrenheit_to_celsius')
+    return ___
 
 
 def parse_order(order: str) -> tuple[dict[str, int], float]:
@@ -95,17 +97,26 @@ def parse_order(order: str) -> tuple[dict[str, int], float]:
     ({'apple': 2, 'bread': 1}, 3.25)
     Hint: split on ',', then strip() each entry and split on ':'.
     """
-    raise NotImplementedError('TODO: implement parse_order')
+    quantities: dict[str, int] = {}
+    total = 0.0
+    for entry in order.split(","):
+        name, quantity_text, price_text = entry.strip().split(":")
+        quantity = int(quantity_text)
+        quantities[name] = quantities.get(name, 0) + quantity
+        total += ___
+    return ___
 
 
 def initials(full_name: str) -> str:
     """Return uppercase initials: 'ada  lovelace' -> 'AL'. Blank input gives ''."""
-    raise NotImplementedError('TODO: implement initials')
+    return ___
 
 
 def clock_time(seconds: int) -> str:
     """Format seconds as HH:MM:SS with leading zeros: 3725 -> '01:02:05'."""
-    raise NotImplementedError('TODO: implement clock_time')
+    hours, rest = divmod(seconds, 3600)
+    minutes, secs = divmod(rest, 60)
+    return ___
 
 
 def is_palindrome(text: str) -> bool:
@@ -113,12 +124,15 @@ def is_palindrome(text: str) -> bool:
 
     Hint: keep only characters where ch.isalnum(), then compare with [::-1].
     """
-    raise NotImplementedError('TODO: implement is_palindrome')
+    cleaned = [ch.casefold() for ch in text if ch.isalnum()]
+    return ___
 
 
 def percent_change(old: float, new: float) -> float:
     """Percentage change from old to new, rounded to 1 decimal. Raise ValueError if old is 0."""
-    raise NotImplementedError('TODO: implement percent_change')
+    if ___:
+        raise ValueError("old value cannot be zero")
+    return round((new - old) / old * 100, 1)
 
 
 def mask_card(number: str) -> str:
@@ -126,4 +140,5 @@ def mask_card(number: str) -> str:
 
     Ignore spaces. Hint: str.replace and string repetition with *.
     """
-    raise NotImplementedError('TODO: implement mask_card')
+    digits = number.replace(" ", "")
+    return ___

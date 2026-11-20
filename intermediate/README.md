@@ -7,7 +7,7 @@ Develop software-building skills after mastering the [Python Basics course](../b
 | Resource | Count | Purpose |
 |---|---:|---|
 | Guided lessons | **20 notebooks** | Explanation, executable examples, design questions, and independent lesson exercises |
-| Exercise workbooks | **4 notebooks, 80 problems** | Longer challenges with acceptance criteria and hints |
+| Exercise workbooks | **4 notebooks, 73 exercises** | Fill-in-the-blank code with automatic checks and hints |
 | Auto-graded practice | **4 modules, 102 tests** | Instant feedback; answers stay hidden |
 | Portfolio projects | **3 notebooks** | OOP library, offline HTTP/ETL, SQLite task manager |
 | Additional working application | **1 installable Python package** | CLI with SQLite, packaging metadata, and unit tests |
@@ -56,10 +56,10 @@ Before starting, you should be comfortable with conditions, loops, list/dict/set
 
 ## Practice packs — 80 additional problems
 
-- [01 — OOP and collections (20 problems)](exercises/01_oop_and_collections_exercises.ipynb)
-- [02 — Iteration and functional abstractions (20 problems)](exercises/02_iteration_and_abstractions_exercises.ipynb)
-- [03 — Data quality, regex, and testing (20 problems)](exercises/03_data_quality_and_testing_exercises.ipynb)
-- [04 — SQL, HTTP, CLI, and performance (20 problems)](exercises/04_sql_http_cli_performance_exercises.ipynb)
+- [01 — OOP and collections](exercises/01_oop_and_collections_exercises.ipynb)
+- [02 — Iteration and functional abstractions](exercises/02_iteration_and_abstractions_exercises.ipynb)
+- [03 — Data quality, regex, and testing](exercises/03_data_quality_and_testing_exercises.ipynb)
+- [04 — SQL, HTTP, CLI, and performance](exercises/04_sql_http_cli_performance_exercises.ipynb)
 
 Check your work with the matching [auto-graded modules](../practice/README.md): `python -m pytest practice -k intermediate`.
 
@@ -108,7 +108,7 @@ To check your practice work: `python -m pytest practice -k intermediate`.
 ## Completion checklist
 
 - [ ] Complete the 20 guided notebooks and their embedded exercises.
-- [ ] Solve at least 80% of the 80 workbook questions independently.
+- [ ] Pass every check in the four workbooks (`python tools/verify_level.py intermediate`).
 - [ ] Explain and extend all three portfolio projects.
 - [ ] Write tests covering valid, invalid, empty, and boundary inputs.
 - [ ] Run all notebooks with a fresh kernel and resolve hidden-state dependencies.

@@ -1,0 +1,40 @@
+name: Credit contributors
+# When a pull request that improves the course is merged, add its author to CONTRIBUTORS.md.
+# Security: never checks out or runs PR code; it only edits CONTRIBUTORS.md on main.
+on:
+  pull_request_target:
+    types: [closed]
+permissions:
+  contents: write
+concurrency:
+  group: recognition-files
+  cancel-in-progress: false
+jobs:
+  credit:
+    if: >-
+      github.event.pull_request.merged == true &&
+      github.event.pull_request.user.type != 'Bot' &&
+      !contains(github.event.pull_request.labels.*.name, 'achievement-claim') &&
+      !contains(github.event.pull_request.labels.*.name, 'no-credit')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Add the author
+        env:
+          AUTHOR: ${{ github.event.pull_request.user.login }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          TITLE: ${{ github.event.pull_request.title }}
+        run: python tools/recognition.py contributor --login "$AUTHOR" --pr "$PR_URL" --title "$TITLE"
+      - name: Commit
+        run: |
+          git config user.name "course-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add CONTRIBUTORS.md
+          git diff --cached --quiet && exit 0
+          git commit -m "Credit @${{ github.event.pull_request.user.login }} in CONTRIBUTORS.md"
+          git push

@@ -1,7 +1,7 @@
-# Auto-graded practice. Replace each `raise NotImplementedError` with your code.
-# Check your work:  python -m pytest practice -k intermediate_03_data_quality_and_testing
-# Stuck? Re-read the docstring hint, then the lesson notebook it names.
-# Reset to a blank copy:  git checkout -- practice/exercises/intermediate_03_data_quality_and_testing.py
+# Fill in every ___ so the function does what its docstring says.
+# Check your work:  python -m pytest practice -k intermediate_03_data_quality_and_testing   (or use the workbook notebook)
+# Stuck? Fail a check twice to unlock the hints.
+# Reset this file:  git checkout -- practice/exercises/intermediate_03_data_quality_and_testing.py
 
 """Intermediate practice 3 — Type hints, validation, errors, regex, JSON/CSV, logging.
 
@@ -20,7 +20,7 @@ from typing import Optional, TypedDict
 
 def mean_or_none(values: list[float]) -> Optional[float]:
     """Return the arithmetic mean, or None for an empty list."""
-    raise NotImplementedError('TODO: implement mean_or_none')
+    return ___
 
 
 class ProductRecord(TypedDict):
@@ -32,7 +32,7 @@ class ProductRecord(TypedDict):
 
 def apply_transform(records: Iterable[dict], transform: Callable[[dict], dict]) -> list[dict]:
     """Apply `transform` to every record and return the new list."""
-    raise NotImplementedError('TODO: implement apply_transform')
+    return ___
 
 
 @dataclass(frozen=True)
@@ -42,7 +42,10 @@ class Settings:
     retries: int = 3
 
     def __post_init__(self):
-        raise NotImplementedError('TODO: implement __post_init__')
+        if ___:
+            raise ValueError("timeout must be positive")
+        if ___:
+            raise ValueError("retries cannot be negative")
 
 
 class InvalidQuantity(ValueError):
@@ -55,18 +58,26 @@ def parse_quantity(text: str) -> int:
     Raise InvalidQuantity for bad input. When int() fails, chain the original
     error:  raise InvalidQuantity(...) from error   (so __cause__ is set).
     """
-    raise NotImplementedError('TODO: implement parse_quantity')
+    try:
+        value = ___
+    except ValueError as error:
+        raise InvalidQuantity(f"not a whole number: {text!r}") from error
+    if ___:
+        raise InvalidQuantity("quantity cannot be negative")
+    return value
 
 
 def log_request(logger: logging.Logger, url: str, token: str, status: int) -> None:
     """Log 'GET <url> -> <status>' at INFO level. The token must never appear in logs."""
-    raise NotImplementedError('TODO: implement log_request')
-ORDER_CODE = re.compile('[A-Z]{2}-\\d{4}')
+    logger.info("GET %s -> %s", ___)
+
+
+ORDER_CODE = re.compile(r"[A-Z]{2}-\d{4}")
 
 
 def is_order_code(text: str) -> bool:
     """True for exactly two uppercase letters, a dash, four digits: 'AB-1234'. Hint: fullmatch."""
-    raise NotImplementedError('TODO: implement is_order_code')
+    return ___
 
 
 def extract_date(text: str) -> Optional[dict[str, int]]:
@@ -74,12 +85,13 @@ def extract_date(text: str) -> Optional[dict[str, int]]:
 
     Hint: named groups (?P<year>\\d{4}) and match.groupdict().
     """
-    raise NotImplementedError('TODO: implement extract_date')
+    match = re.search(r"(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2})", text)
+    return ___
 
 
 def redact_phones(text: str) -> str:
     """Replace every 555-1234 style number (3 digits, dash, 4 digits) with '[PHONE]'."""
-    raise NotImplementedError('TODO: implement redact_phones')
+    return ___
 
 
 def parse_products(json_text: str) -> list[dict]:
@@ -88,7 +100,13 @@ def parse_products(json_text: str) -> list[dict]:
     Raise ValueError if the JSON is invalid, the top level is not an object, or
     'products' is missing or not a list.
     """
-    raise NotImplementedError('TODO: implement parse_products')
+    try:
+        data = json.loads(json_text)
+    except json.JSONDecodeError as error:
+        raise ValueError(f"invalid JSON: {error}") from error
+    if ___:
+        raise ValueError("expected an object with a 'products' list")
+    return ___
 
 
 def clean_csv(text: str) -> tuple[list[dict], list[int]]:
@@ -96,7 +114,13 @@ def clean_csv(text: str) -> tuple[list[dict], list[int]]:
 
     Valid rows have price converted to float. Line numbers count the header as line 1.
     """
-    raise NotImplementedError('TODO: implement clean_csv')
+    rows, rejected = ___
+    for line_number, row in ___:
+        try:
+            rows.append({"name": row["name"], "price": float(row["price"])})
+        except (TypeError, ValueError):
+            rejected.append(line_number)
+    return rows, rejected
 
 
 def slugify(title: str) -> str:
@@ -104,12 +128,15 @@ def slugify(title: str) -> str:
 
     'Hello, World!  2024' -> 'hello-world-2024'
     """
-    raise NotImplementedError('TODO: implement slugify')
+    return ___
 
 
 def hashtags(text: str) -> list[str]:
     """Unique hashtags (without '#'), lowercase, in first-seen order. '#Py #py #AI' -> ['py', 'ai']."""
-    raise NotImplementedError('TODO: implement hashtags')
+    seen: dict[str, None] = {}
+    for tag in ___:
+        seen.setdefault(tag.lower(), None)
+    return ___
 
 
 def parse_settings(text: str) -> dict[str, str]:
@@ -117,10 +144,26 @@ def parse_settings(text: str) -> dict[str, str]:
 
     Raise ValueError mentioning the line number (e.g. 'line 3') for a line without '='.
     """
-    raise NotImplementedError('TODO: implement parse_settings')
+    settings = {}
+    for number, line in ___:
+        stripped = line.strip()
+        if ___:
+            continue
+        if ___:
+            raise ValueError(f"line {number}: expected key = value")
+        key, value = stripped.split("=", 1)
+        settings[key.strip()] = value.strip()
+    return settings
 
 
 def summarize_sales(rows: list[dict]) -> dict[str, float]:
     """Given rows with 'region' and 'amount' (text), return total per region rounded to 2.
     Skip rows whose amount is not a number."""
-    raise NotImplementedError('TODO: implement summarize_sales')
+    totals: dict[str, float] = {}
+    for row in rows:
+        try:
+            amount = ___
+        except (KeyError, TypeError, ValueError):
+            continue
+        totals[row["region"]] = ___
+    return totals

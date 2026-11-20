@@ -33,8 +33,12 @@ def test_gather_in_order_propagates_errors():
             raise ValueError("bad")
         await asyncio.sleep(0.01)
         return value
-    with pytest.raises(ExceptionGroup):
+    with pytest.raises(ExceptionGroup) as caught:
         asyncio.run(m.gather_in_order([1, 2, 3], maybe_fail))
+    errors = caught.value.exceptions
+    if not any(isinstance(e, ValueError) for e in errors):
+        raise errors[0]  # e.g. an unfilled ___ blank, not the worker's ValueError
+    assert all(isinstance(e, ValueError) for e in errors)
 
 
 def test_with_timeout():

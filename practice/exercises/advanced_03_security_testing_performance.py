@@ -1,7 +1,7 @@
-# Auto-graded practice. Replace each `raise NotImplementedError` with your code.
-# Check your work:  python -m pytest practice -k advanced_03_security_testing_performance
-# Stuck? Re-read the docstring hint, then the lesson notebook it names.
-# Reset to a blank copy:  git checkout -- practice/exercises/advanced_03_security_testing_performance.py
+# Fill in every ___ so the function does what its docstring says.
+# Check your work:  python -m pytest practice -k advanced_03_security_testing_performance   (or use the workbook notebook)
+# Stuck? Fail a check twice to unlock the hints.
+# Reset this file:  git checkout -- practice/exercises/advanced_03_security_testing_performance.py
 
 """Advanced practice 3 — Safe parsing, secrets, subprocess safety, transactions, algorithms.
 
@@ -9,6 +9,7 @@ Companion to advanced/exercises/03_security_testing_performance_exercises.ipynb 
 lessons 10–11, 13–14 and 17.
 """
 from __future__ import annotations
+
 import bisect
 import heapq
 import hmac
@@ -18,26 +19,35 @@ import re
 import secrets
 import sqlite3
 from collections.abc import Sequence
-SENSITIVE_KEYS = {'password', 'token', 'secret', 'api_key', 'authorization'}
+
+SENSITIVE_KEYS = {"password", "token", "secret", "api_key", "authorization"}
 
 
-def parse_limited_json(text: str, max_bytes: int=10000) -> dict:
+def parse_limited_json(text: str, max_bytes: int = 10_000) -> dict:
     """Parse a JSON object safely.
 
     Check the size (UTF-8 bytes) BEFORE parsing; raise ValueError if too big, if
     the JSON is invalid, or if the top level is not an object.
     """
-    raise NotImplementedError('TODO: implement parse_limited_json')
+    if ___:
+        raise ValueError("payload too large")
+    try:
+        data = json.loads(text)
+    except json.JSONDecodeError as error:
+        raise ValueError("invalid JSON") from error
+    if ___:
+        raise ValueError("expected a JSON object")
+    return data
 
 
 def make_token() -> str:
     """Return a URL-safe random token of at least 32 bytes of entropy (use `secrets`, not `random`)."""
-    raise NotImplementedError('TODO: implement make_token')
+    return ___
 
 
 def tokens_match(expected: str, provided: str) -> bool:
     """Compare secrets in constant time with hmac.compare_digest."""
-    raise NotImplementedError('TODO: implement tokens_match')
+    return ___
 
 
 def grep_command(pattern: str, path: str) -> list[str]:
@@ -45,17 +55,27 @@ def grep_command(pattern: str, path: str) -> list[str]:
 
     The '--' stops a pattern like '-rf' from being read as an option.
     """
-    raise NotImplementedError('TODO: implement grep_command')
+    return ___
 
 
 def redact(record: dict) -> dict:
     """Return a copy with values of sensitive keys (case-insensitive, nested dicts too) replaced by '***'."""
-    raise NotImplementedError('TODO: implement redact')
+    cleaned = {}
+    for key, value in record.items():
+        if ___:
+            cleaned[key] = "***"
+        elif ___:
+            cleaned[key] = redact(value)
+        else:
+            cleaned[key] = value
+    return cleaned
 
 
-def limit_text(text: str, max_chars: int=1000) -> str:
+def limit_text(text: str, max_chars: int = 1000) -> str:
     """Return text unchanged if short enough; raise ValueError otherwise."""
-    raise NotImplementedError('TODO: implement limit_text')
+    if ___:
+        raise ValueError(f"input longer than {max_chars} characters")
+    return text
 
 
 class StablePriorityQueue:
@@ -65,21 +85,25 @@ class StablePriorityQueue:
     """
 
     def __init__(self) -> None:
-        raise NotImplementedError('TODO: implement __init__')
+        self._heap: list = []
+        self._counter = ___
 
     def push(self, priority: int, item) -> None:
-        raise NotImplementedError('TODO: implement push')
+        heapq.heappush(___, (priority, next(self._counter), item))
 
     def pop(self):
-        raise NotImplementedError('TODO: implement pop')
+        if ___:
+            raise IndexError("pop from empty queue")
+        return heapq.heappop(self._heap)[2]
 
     def __len__(self) -> int:
-        raise NotImplementedError('TODO: implement __len__')
+        return ___
 
 
 def find_index(sorted_values: Sequence, target) -> int:
     """Binary search with bisect; return the index of target or -1 if absent."""
-    raise NotImplementedError('TODO: implement find_index')
+    index = bisect.bisect_left(sorted_values, target)
+    return ___
 
 
 def add_users(conn: sqlite3.Connection, emails: list[str]) -> None:
@@ -88,17 +112,26 @@ def add_users(conn: sqlite3.Connection, emails: list[str]) -> None:
     If any insert fails (duplicate or invalid email), insert none of them and
     raise ValueError. A valid email matches  something@something.something
     """
-    raise NotImplementedError('TODO: implement add_users')
+    pattern = ___
+    try:
+        with conn:
+            for email in emails:
+                if ___:
+                    raise ValueError(f"invalid email: {email!r}")
+                conn.execute("INSERT INTO users (email) VALUES (?)", (email,))
+    except sqlite3.IntegrityError as error:
+        raise ValueError("duplicate email") from error
 
 
-def hash_password(password: str, salt: bytes, iterations: int=100000) -> str:
+def hash_password(password: str, salt: bytes, iterations: int = 100_000) -> str:
     """PBKDF2-HMAC-SHA256 of the password, returned as hex. Hint: hashlib.pbkdf2_hmac."""
-    raise NotImplementedError('TODO: implement hash_password')
+    import hashlib
+    return ___
 
 
-def verify_password(password: str, salt: bytes, expected_hex: str, iterations: int=100000) -> bool:
+def verify_password(password: str, salt: bytes, expected_hex: str, iterations: int = 100_000) -> bool:
     """Recompute the hash and compare in constant time."""
-    raise NotImplementedError('TODO: implement verify_password')
+    return ___
 
 
 def safe_join(base: str, user_path: str) -> str:
@@ -106,14 +139,19 @@ def safe_join(base: str, user_path: str) -> str:
 
     Raise ValueError if the result escapes base ('../etc/passwd', absolute paths, ...).
     """
-    raise NotImplementedError('TODO: implement safe_join')
+    from pathlib import Path
+    root = Path(base).resolve()
+    target = (root / user_path).resolve()
+    if ___:
+        raise ValueError("path escapes the base directory")
+    return ___
 
 
 def merge_sorted(*sequences: Sequence) -> list:
     """Merge already-sorted sequences into one sorted list lazily. Hint: heapq.merge."""
-    raise NotImplementedError('TODO: implement merge_sorted')
+    return ___
 
 
 def top_k(values: Sequence[float], k: int) -> list:
     """The k largest values, largest first, in O(n log k). Hint: heapq.nlargest."""
-    raise NotImplementedError('TODO: implement top_k')
+    return ___

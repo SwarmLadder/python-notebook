@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for helping more people learn Python! Small fixes are as welcome as new lessons.
+Thanks for helping more people learn Python! Small fixes are as welcome as new lessons. A merged PR adds you to [CONTRIBUTORS.md](CONTRIBUTORS.md) automatically (see [RECOGNITION.md](RECOGNITION.md)).
 
 ## Ways to help
 
@@ -30,7 +30,7 @@ This runs every notebook from a fresh kernel. It also checks titles, cleared out
 Practice answers are hidden. Tests call `check(value)`, and the repo stores only a hash of each correct value. The reference solutions live in a private folder kept by the maintainers.
 
 To propose a new exercise:
-1. Add the function signature and a docstring (with an example and a hint) to `practice/exercises/<module>.py`. Its body must be `raise NotImplementedError(...)`.
+1. Add the function to `practice/exercises/<module>.py` as nearly finished code: a docstring with an example and a hint, and the key parts replaced by `___`. Then run `python tools/make_workbooks.py` so the workbook notebook gets it too.
 2. Add tests that use `check(...)`, or plain `assert`s for rules that don't reveal the answer.
 3. Put your reference implementation in the PR description or a gist instead of the repo. A maintainer adds it to the private solutions and rebuilds the answer keys (see [practice/README.md](practice/README.md#for-maintainers)).
 

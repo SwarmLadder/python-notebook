@@ -1,7 +1,7 @@
-# Auto-graded practice. Replace each `raise NotImplementedError` with your code.
-# Check your work:  python -m pytest practice -k advanced_02_concurrency_resilience
-# Stuck? Re-read the docstring hint, then the lesson notebook it names.
-# Reset to a blank copy:  git checkout -- practice/exercises/advanced_02_concurrency_resilience.py
+# Fill in every ___ so the function does what its docstring says.
+# Check your work:  python -m pytest practice -k advanced_02_concurrency_resilience   (or use the workbook notebook)
+# Stuck? Fail a check twice to unlock the hints.
+# Reset this file:  git checkout -- practice/exercises/advanced_02_concurrency_resilience.py
 
 """Advanced practice 2 — asyncio, TaskGroups, timeouts, threads, retries, idempotency.
 
@@ -9,6 +9,7 @@ Companion to advanced/exercises/02_concurrency_resilience_exercises.ipynb and
 lessons 05–09. Requires Python 3.11+ (TaskGroup, asyncio.timeout).
 """
 from __future__ import annotations
+
 import asyncio
 import random
 import threading
@@ -17,12 +18,18 @@ from collections.abc import Awaitable, Callable, Iterable
 
 async def gather_in_order(values: Iterable, worker: Callable[[object], Awaitable]) -> list:
     """Run worker(value) concurrently in an asyncio.TaskGroup; return results in INPUT order."""
-    raise NotImplementedError('TODO: implement gather_in_order')
+    async with asyncio.TaskGroup() as group:
+        tasks = [group.create_task(worker(value)) for value in values]
+    return ___
 
 
 async def with_timeout(awaitable: Awaitable, seconds: float) -> tuple[str, object]:
     """Return ('ok', result) or ('timeout', None) using asyncio.timeout()."""
-    raise NotImplementedError('TODO: implement with_timeout')
+    try:
+        async with asyncio.timeout(seconds):
+            return ___
+    except TimeoutError:
+        return ___
 
 
 async def run_bounded(values: Iterable, worker: Callable[[object], Awaitable], limit: int) -> tuple[list, int]:
@@ -30,34 +37,65 @@ async def run_bounded(values: Iterable, worker: Callable[[object], Awaitable], l
 
     Return (results in input order, peak number of workers running at once).
     """
-    raise NotImplementedError('TODO: implement run_bounded')
+    semaphore = ___
+    active = peak = 0
+
+    async def guarded(value):
+        nonlocal active, peak
+        async with semaphore:
+            active += 1
+            peak = ___
+            try:
+                return ___
+            finally:
+                active -= 1
+
+    results = ___
+    return results, peak
 
 
-async def pipeline(items: Iterable, transform: Callable[[object], object], maxsize: int=2) -> list:
+async def pipeline(items: Iterable, transform: Callable[[object], object], maxsize: int = 2) -> list:
     """Producer/consumer through a bounded asyncio.Queue; a None sentinel stops the consumer.
 
     Return transform(item) for each item, in order.
     """
-    raise NotImplementedError('TODO: implement pipeline')
+    queue: asyncio.Queue = asyncio.Queue(maxsize=maxsize)
+    output: list = []
+
+    async def producer():
+        for item in ___:
+            await queue.put(item)
+        await queue.put(None)
+
+    async def consumer():
+        while ___:
+            output.append(transform(item))
+
+    async with asyncio.TaskGroup() as group:
+        group.create_task(___)
+        group.create_task(___)
+    return output
 
 
 async def run_blocking(func: Callable, *args):
     """Run a blocking function without blocking the event loop (asyncio.to_thread)."""
-    raise NotImplementedError('TODO: implement run_blocking')
+    return ___
 
 
 class SafeCounter:
     """A counter that is safe to increment from many threads (threading.Lock)."""
 
     def __init__(self) -> None:
-        raise NotImplementedError('TODO: implement __init__')
+        self._value = 0
+        self._lock = ___
 
     def increment(self) -> None:
-        raise NotImplementedError('TODO: implement increment')
+        with ___:
+            self._value += 1
 
     @property
     def value(self) -> int:
-        raise NotImplementedError('TODO: implement value')
+        return ___
 
 
 class TransientError(Exception):
@@ -68,18 +106,29 @@ class PermanentError(Exception):
     """A failure that will not fix itself (bad input, 404...)."""
 
 
-def retry(operation: Callable[[], object], attempts: int=3, base_delay: float=0.1, sleep: Callable[[float], None]=None) -> object:
+def retry(operation: Callable[[], object], attempts: int = 3, base_delay: float = 0.1,
+          sleep: Callable[[float], None] = None) -> object:
     """Call operation(); on TransientError wait base_delay * 2**n and try again.
 
     PermanentError is re-raised immediately. After `attempts` failures re-raise the
     last TransientError. `sleep` is injected so tests never really wait.
     """
-    raise NotImplementedError('TODO: implement retry')
+    import time
+    sleep = sleep or time.sleep
+    for attempt in ___:
+        try:
+            return ___
+        except TransientError:
+            if ___:
+                raise
+            sleep(base_delay * 2 ** attempt)
+    raise ValueError("attempts must be at least 1")
 
 
 def jittered_delays(attempts: int, base: float, seed: int) -> list[float]:
     """Full-jitter backoff: delay n is uniform in [0, base * 2**n]. Same seed -> same delays."""
-    raise NotImplementedError('TODO: implement jittered_delays')
+    rng = random.Random(seed)
+    return ___
 
 
 class IdempotentPayments:
@@ -89,10 +138,18 @@ class IdempotentPayments:
     """
 
     def __init__(self, charge_card: Callable[[float], str]):
-        raise NotImplementedError('TODO: implement __init__')
+        self._charge_card = ___
+        self._results: dict[str, tuple[float, str]] = {}
 
     def charge(self, key: str, amount: float) -> str:
-        raise NotImplementedError('TODO: implement charge')
+        if ___:
+            previous_amount, receipt = self._results[key]
+            if ___:
+                raise ValueError("idempotency key reused with different parameters")
+            return receipt
+        receipt = self._charge_card(amount)
+        self._results[key] = (amount, receipt)
+        return receipt
 
 
 async def first_result(coroutines: list) -> object:
@@ -100,12 +157,21 @@ async def first_result(coroutines: list) -> object:
 
     Hint: asyncio.wait(..., return_when=asyncio.FIRST_COMPLETED).
     """
-    raise NotImplementedError('TODO: implement first_result')
+    tasks = ___
+    try:
+        done, _ = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)
+        return ___
+    finally:
+        for task in tasks:
+            task.cancel()
+        await asyncio.gather(*tasks, return_exceptions=True)
 
 
-def map_threaded(func: Callable, items: list, workers: int=4) -> list:
+def map_threaded(func: Callable, items: list, workers: int = 4) -> list:
     """Apply func to items with a ThreadPoolExecutor; results in input order."""
-    raise NotImplementedError('TODO: implement map_threaded')
+    from concurrent.futures import ThreadPoolExecutor
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        return ___
 
 
 class TokenBucket:
@@ -116,10 +182,18 @@ class TokenBucket:
     """
 
     def __init__(self, capacity: int, rate: float, clock: Callable[[], float]):
-        raise NotImplementedError('TODO: implement __init__')
+        self.capacity, self.rate, self.clock = capacity, rate, clock
+        self._tokens = ___
+        self._last = clock()
 
     def allow(self) -> bool:
-        raise NotImplementedError('TODO: implement allow')
+        now = ___
+        self._tokens = min(self.capacity, self._tokens + (now - self._last) * self.rate)
+        self._last = now
+        if ___:
+            self._tokens -= 1
+            return True
+        return False
 
 
 class CircuitOpen(Exception):
@@ -135,11 +209,28 @@ class CircuitBreaker:
     """
 
     def __init__(self, threshold: int, reset_after: float, clock: Callable[[], float]):
-        raise NotImplementedError('TODO: implement __init__')
+        self.threshold, self.reset_after, self.clock = ___
+        self.failures = 0
+        self._opened_at = None
 
     @property
     def state(self) -> str:
-        raise NotImplementedError('TODO: implement state')
+        if ___:
+            return "closed"
+        if ___:
+            return "half-open"
+        return "open"
 
     def call(self, operation: Callable[[], object]):
-        raise NotImplementedError('TODO: implement call')
+        if ___:
+            raise CircuitOpen("circuit is open")
+        try:
+            result = ___
+        except Exception:
+            self.failures += 1
+            if ___:
+                self._opened_at = self.clock()
+            raise
+        self.failures = 0
+        self._opened_at = None
+        return result

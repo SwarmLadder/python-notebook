@@ -3,8 +3,8 @@
 Learners:     python -m pytest practice
 Maintainers:  python -m pytest practice --record-answers=PATH/TO/practice_solutions
 
-Unstarted functions (still raising NotImplementedError) are reported as
-"TO DO" instead of failures, and a progress table is printed at the end.
+Functions whose ___ blanks are not filled in yet are reported as "TO DO"
+instead of failures, and a progress table is printed at the end.
 """
 from __future__ import annotations
 
@@ -78,10 +78,12 @@ _progress: dict[str, dict[str, int]] = defaultdict(lambda: {"passed": 0, "failed
 
 
 def _not_started(error: BaseException | None) -> bool:
-    """True if a stub's NotImplementedError caused this error (Python may wrap it)."""
+    """True if an unfilled ___ blank (or a NotImplementedError) caused this error."""
     seen = set()
     while error is not None and id(error) not in seen:
         if isinstance(error, NotImplementedError):
+            return True
+        if isinstance(error, NameError) and getattr(error, "name", None) == "___":
             return True
         seen.add(id(error))
         error = error.__cause__ or error.__context__
@@ -101,7 +103,7 @@ def pytest_runtest_makereport(item, call):
     module = path.stem.removeprefix("test_")
     if call.excinfo is not None and _not_started(call.excinfo.value) and not grader.RECORDING:
         report.outcome = "skipped"
-        report.longrepr = (str(path), item.location[1], "TO DO: not implemented yet")
+        report.longrepr = (str(path), item.location[1], "TO DO: fill in the ___ blanks")
         _progress[module]["todo"] += 1
     elif report.passed:
         _progress[module]["passed"] += 1

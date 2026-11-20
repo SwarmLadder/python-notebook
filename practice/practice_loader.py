@@ -9,9 +9,12 @@ from types import ModuleType
 
 HERE = Path(__file__).resolve().parent
 SOURCE_DIR = HERE / "exercises"
+OVERRIDES: dict[str, ModuleType] = {}  # set by notebook_check: grade code written in a notebook
 
 
 def load(name: str) -> ModuleType:
+    if name in OVERRIDES:
+        return OVERRIDES[name]
     path = SOURCE_DIR / f"{name}.py"
     module_name = f"practice_{abs(hash(str(SOURCE_DIR)))}_{name}"
     if module_name in sys.modules:
