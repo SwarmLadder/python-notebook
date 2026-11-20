@@ -26,7 +26,7 @@ This is a transition from writing isolated Python snippets to building reliable,
 4. Complete all embedded exercises.
 5. Record an edge case and a failure mode.
 6. Restart the kernel and run all cells.
-7. Return to the relevant practice pack and then the reference solution notebook.
+7. Return to the relevant practice pack and its auto-graded module.
 
 ## Major checkpoints
 

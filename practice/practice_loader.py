@@ -1,4 +1,5 @@
-"""Load a practice module from practice/exercises/ or practice/solutions/."""
+"""Load a practice module: your work in practice/exercises/, or (for maintainers)
+the private reference solutions passed with --record-answers=DIR."""
 from __future__ import annotations
 
 import importlib.util
@@ -7,13 +8,12 @@ from pathlib import Path
 from types import ModuleType
 
 HERE = Path(__file__).resolve().parent
-USE_SOLUTIONS = False
+SOURCE_DIR = HERE / "exercises"
 
 
 def load(name: str) -> ModuleType:
-    folder = "solutions" if USE_SOLUTIONS else "exercises"
-    path = HERE / folder / f"{name}.py"
-    module_name = f"practice_{folder}_{name}"
+    path = SOURCE_DIR / f"{name}.py"
+    module_name = f"practice_{abs(hash(str(SOURCE_DIR)))}_{name}"
     if module_name in sys.modules:
         return sys.modules[module_name]
     spec = importlib.util.spec_from_file_location(module_name, path)

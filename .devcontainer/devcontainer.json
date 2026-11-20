@@ -1,0 +1,17 @@
+{
+  "name": "Python Learning Notebooks",
+  "image": "mcr.microsoft.com/devcontainers/python:3.12",
+  "postCreateCommand": "python -m pip install -r requirements-dev.txt",
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-python.python", "ms-toolsai.jupyter"],
+      "settings": {
+        "python.testing.pytestEnabled": true,
+        "python.testing.pytestArgs": ["practice"]
+      }
+    },
+    "codespaces": {
+      "openFiles": ["README.md", "basics/notebooks/00_python_introduction.ipynb"]
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+ "test_circuit_breaker#1": "419717a768a93b15215160d2f752c26a51f776dd6a4415f7fae0b67c2ed20fdb",
+ "test_circuit_breaker#2": "f726a36b1999023295501002ccc970c1d0c15815a7d982a3e15b186b2f2c00e0",
+ "test_first_result_cancels_the_rest#1": "8ee1cba10489451fd8de81098859b800a5848ddcda3b8a20c181fd9f73e9989e",
+ "test_first_result_cancels_the_rest#2": "b98ca7c21b4e96113f53023d9f3fe52c15249502c901641f58a4d989768e6160",
+ "test_gather_in_order_keeps_input_order#1": "a18046647589b0c7dbcff0a0b5026bd7378f673170bfb506603b675d27a98bfd",
+ "test_map_threaded#1": "22c6ec2acba051a1672c6f60f619aef9b702da21863969bde0380bf037597c6b",
+ "test_pipeline#1": "49670ebac96db37ca0eb431c1d84a4707e7f0e59934586cd963c7c18d799e628",
+ "test_pipeline#2": "7e98a1d2941fdf12c0b377bbbf3b0720c841b8d234334a601991a87813fb8eb5",
+ "test_retry_gives_up#1": "2aebb10894918479c8917ad32cd5b95187ca3233906bfddd5f5cd61fae8bfde9",
+ "test_retry_succeeds_after_transient_failures#1": "c425a30e7d5e677ce37e6ed7d112cadeeb1b3f48f0f3027f1632fd8e19e927c3",
+ "test_run_bounded_limits_concurrency#1": "e1f906e7de82dd5b032f8b574da861b715814607c08cbdf220e73528f6ceadab",
+ "test_token_bucket#1": "df9c3c7fe49bfca7751ce73b6704260650619623719bee0b9704713c91bcc638",
+ "test_with_timeout#1": "22b4b0479488624dbee50a39ca8f85c732ab08a1e334c892c0439740ccf7853c"
+}
