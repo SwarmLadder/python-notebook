@@ -33,16 +33,17 @@ def test_no_solutions_folder_is_committed():
         assert not (ROOT / level / "solutions").exists()
 
 
+NO_BLANK_NEEDED = {"__init__", "get", "save", "area"}  # trivial setup, Protocol stubs, abstract Shape.area
+
+
 @pytest.mark.parametrize("stub", EXERCISES, ids=STUB_IDS)
-def test_stub_contains_no_implementation(stub):
-    """Every function body is only a docstring plus `raise NotImplementedError`."""
-    leaks = []
-    for node in ast.walk(ast.parse(stub.read_text(encoding="utf-8"))):
-        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-            body = [n for n in node.body if not (isinstance(n, ast.Expr) and isinstance(n.value, ast.Constant))]
-            if not (len(body) == 1 and isinstance(body[0], ast.Raise)):
-                leaks.append(node.name)
-    assert not leaks, f"stub leaks an implementation: {leaks} (regenerate with tools/make_practice_stubs.py)"
+def test_every_exercise_function_has_blanks_to_fill(stub):
+    """Exercises are scaffolds: real code with ___ gaps, never a finished solution."""
+    tree = ast.parse(stub.read_text(encoding="utf-8"))
+    complete = [node.name for node in ast.walk(tree)
+                if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+                and node.name not in NO_BLANK_NEEDED and "___" not in ast.unparse(node)]
+    assert not complete, f"these functions have no ___ blank, so the answer is visible: {complete}"
 
 
 @pytest.mark.parametrize("stub", EXERCISES, ids=STUB_IDS)
@@ -84,3 +85,10 @@ def test_every_exercise_has_step_by_step_hints(stub):
     missing = sorted(n for n in names if len(hints.get(n, [])) < 2)
     assert not missing, f"add two hints (nudge, then method) for: {missing}"
     assert set(hints) <= names | NO_HINT_NEEDED, f"hints for unknown names: {sorted(set(hints) - names)}"
+
+
+def test_workbooks_match_the_practice_modules():
+    import subprocess
+    import sys
+    result = subprocess.run([sys.executable, "tools/make_workbooks.py", "--check"], cwd=ROOT, capture_output=True, text=True)
+    assert result.returncode == 0, result.stdout + result.stderr

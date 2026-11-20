@@ -13,5 +13,4 @@ NOTEBOOKS = all_notebooks()
 @pytest.mark.parametrize("path", NOTEBOOKS, ids=[notebook_id(p) for p in NOTEBOOKS])
 def test_notebook_runs_from_a_fresh_kernel(path):
     result = run_notebook(path)
-    if path.parent.name != "exercises":  # exercise workbooks are intentionally blank
-        assert result.executed_cells > 0, "notebook has no runnable example code"
+    assert result.executed_cells > 0, "notebook has no runnable code"

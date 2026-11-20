@@ -1,7 +1,7 @@
-# Auto-graded practice. Replace each `raise NotImplementedError` with your code.
-# Check your work:  python -m pytest practice -k advanced_01_internals_typing_architecture
-# Stuck? Re-read the docstring hint, then the lesson notebook it names.
-# Reset to a blank copy:  git checkout -- practice/exercises/advanced_01_internals_typing_architecture.py
+# Fill in every ___ so the function does what its docstring says.
+# Check your work:  python -m pytest practice -k advanced_01_internals_typing_architecture   (or use the workbook notebook)
+# Stuck? Fail a check twice to unlock the hints.
+# Reset this file:  git checkout -- practice/exercises/advanced_01_internals_typing_architecture.py
 
 """Advanced practice 1 — Data model, descriptors, generics, plugins, dependency injection.
 
@@ -9,12 +9,14 @@ Companion to advanced/exercises/01_internals_typing_architecture_exercises.ipynb
 lessons 00–04 and 12.
 """
 from __future__ import annotations
+
 import inspect
 from collections.abc import Callable, Iterable, Iterator, Sequence
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from typing import Generic, Optional, Protocol, TypeVar
-T = TypeVar('T')
+
+T = TypeVar("T")
 
 
 class ReadOnlyBag:
@@ -25,19 +27,21 @@ class ReadOnlyBag:
     """
 
     def __init__(self, items: Iterable):
-        raise NotImplementedError('TODO: implement __init__')
+        self._items = ___
 
     def __len__(self) -> int:
-        raise NotImplementedError('TODO: implement __len__')
+        return ___
 
     def __iter__(self) -> Iterator:
-        raise NotImplementedError('TODO: implement __iter__')
+        return ___
 
     def __contains__(self, item) -> bool:
-        raise NotImplementedError('TODO: implement __contains__')
+        return ___
 
     def __repr__(self) -> str:
-        raise NotImplementedError('TODO: implement __repr__')
+        shown = ", ".join(repr(i) for i in self._items[:3])
+        more = ", ..." if len(self._items) > 3 else ""
+        return ___
 
 
 class Ticket:
@@ -47,20 +51,24 @@ class Ticket:
     Tickets are hashable on (priority, sequence).
     """
 
-    def __init__(self, priority: int, sequence: int, title: str=''):
-        raise NotImplementedError('TODO: implement __init__')
+    def __init__(self, priority: int, sequence: int, title: str = ""):
+        self.priority, self.sequence, self.title = ___
 
     def _key(self) -> tuple[int, int]:
-        raise NotImplementedError('TODO: implement _key')
+        return ___
 
     def __eq__(self, other):
-        raise NotImplementedError('TODO: implement __eq__')
+        if ___:
+            return NotImplemented
+        return self._key() == other._key()
 
     def __lt__(self, other):
-        raise NotImplementedError('TODO: implement __lt__')
+        if ___:
+            return NotImplemented
+        return self._key() < other._key()
 
     def __hash__(self) -> int:
-        raise NotImplementedError('TODO: implement __hash__')
+        return ___
 
 
 class PositiveInt:
@@ -71,34 +79,42 @@ class PositiveInt:
     """
 
     def __set_name__(self, owner, name: str) -> None:
-        raise NotImplementedError('TODO: implement __set_name__')
+        self.name = ___
 
     def __get__(self, instance, owner=None):
-        raise NotImplementedError('TODO: implement __get__')
+        if ___:
+            return self
+        return instance.__dict__[self.name]
 
     def __set__(self, instance, value) -> None:
-        raise NotImplementedError('TODO: implement __set__')
+        if ___:
+            raise TypeError(f"{self.name} must be an int")
+        if ___:
+            raise ValueError(f"{self.name} must be positive")
+        instance.__dict__[self.name] = value
 
 
 class Stack(Generic[T]):
     """A typed LIFO stack. pop() on an empty stack raises IndexError('pop from empty stack')."""
 
     def __init__(self) -> None:
-        raise NotImplementedError('TODO: implement __init__')
+        self._items: list[T] = []
 
     def push(self, item: T) -> None:
-        raise NotImplementedError('TODO: implement push')
+        self._items.append(___)
 
     def pop(self) -> T:
-        raise NotImplementedError('TODO: implement pop')
+        if ___:
+            raise IndexError("pop from empty stack")
+        return self._items.pop()
 
     def __len__(self) -> int:
-        raise NotImplementedError('TODO: implement __len__')
+        return ___
 
 
 def first_or_none(values: Sequence[T]) -> Optional[T]:
     """Return the first element or None, preserving the element type for type checkers."""
-    raise NotImplementedError('TODO: implement first_or_none')
+    return ___
 
 
 class PluginRegistry:
@@ -109,16 +125,21 @@ class PluginRegistry:
     """
 
     def __init__(self, allowed: Iterable[str]):
-        raise NotImplementedError('TODO: implement __init__')
+        self._allowed = ___
+        self._plugins: dict[str, Callable] = {}
 
     def register(self, name: str, func: Callable) -> None:
-        raise NotImplementedError('TODO: implement register')
+        if ___:
+            raise ValueError(f"plugin {name!r} is not allowed")
+        self._plugins[name] = func
 
     def run(self, name: str, *args):
-        raise NotImplementedError('TODO: implement run')
+        if ___:
+            raise KeyError(name)
+        return self._plugins[name](*args)
 
     def names(self) -> list[str]:
-        raise NotImplementedError('TODO: implement names')
+        return ___
 
 
 def parameter_defaults(func: Callable) -> dict[str, object]:
@@ -126,36 +147,40 @@ def parameter_defaults(func: Callable) -> dict[str, object]:
 
     Hint: inspect.signature(func).parameters and inspect.Parameter.empty.
     """
-    raise NotImplementedError('TODO: implement parameter_defaults')
+    return ___
 
 
 class UserRepository(Protocol):
     """Storage port: anything with get(user_id) and save(user) qualifies."""
 
-    def get(self, user_id: str) -> Optional[dict]:
-        raise NotImplementedError('TODO: implement get')
-
-    def save(self, user: dict) -> None:
-        raise NotImplementedError('TODO: implement save')
+    def get(self, user_id: str) -> Optional[dict]: ...
+    def save(self, user: dict) -> None: ...
 
 
 class InMemoryUserRepository:
     """Satisfies UserRepository structurally (no inheritance needed)."""
 
     def __init__(self) -> None:
-        raise NotImplementedError('TODO: implement __init__')
+        self._users: dict[str, dict] = {}
 
     def get(self, user_id: str) -> Optional[dict]:
-        raise NotImplementedError('TODO: implement get')
+        return ___
 
     def save(self, user: dict) -> None:
-        raise NotImplementedError('TODO: implement save')
+        self._users[user["id"]] = ___
 
 
 def rename_user(repo: UserRepository, user_id: str, new_name: str) -> dict:
     """Domain service: validate, load, change, save. Raise KeyError if missing,
     ValueError if new_name is blank. Works with any UserRepository."""
-    raise NotImplementedError('TODO: implement rename_user')
+    if ___:
+        raise ValueError("name cannot be blank")
+    user = repo.get(user_id)
+    if ___:
+        raise KeyError(user_id)
+    updated = {**user, "name": new_name.strip()}
+    repo.save(updated)
+    return updated
 
 
 @dataclass
@@ -166,7 +191,7 @@ class Session:
     clock: Callable[[], datetime] = datetime.now
 
     def is_expired(self) -> bool:
-        raise NotImplementedError('TODO: implement is_expired')
+        return ___
 
 
 class Vector:
@@ -174,32 +199,41 @@ class Vector:
 
     repr is 'Vector(x, y)'. Unsupported operands return NotImplemented.
     """
-    __slots__ = ('x', 'y')
+    __slots__ = ("x", "y")
 
     def __init__(self, x: float, y: float):
-        raise NotImplementedError('TODO: implement __init__')
+        self.x, self.y = ___
 
     def __add__(self, other):
-        raise NotImplementedError('TODO: implement __add__')
+        if ___:
+            return NotImplemented
+        return Vector(self.x + other.x, self.y + other.y)
 
     def __sub__(self, other):
-        raise NotImplementedError('TODO: implement __sub__')
+        if ___:
+            return NotImplemented
+        return Vector(self.x - other.x, self.y - other.y)
 
     def __mul__(self, factor):
-        raise NotImplementedError('TODO: implement __mul__')
+        if ___:
+            return NotImplemented
+        return Vector(self.x * factor, self.y * factor)
+
     __rmul__ = __mul__
 
     def __abs__(self) -> float:
-        raise NotImplementedError('TODO: implement __abs__')
+        return ___
 
     def __eq__(self, other):
-        raise NotImplementedError('TODO: implement __eq__')
+        if ___:
+            return NotImplemented
+        return (self.x, self.y) == (other.x, other.y)
 
     def __hash__(self) -> int:
-        raise NotImplementedError('TODO: implement __hash__')
+        return ___
 
     def __repr__(self) -> str:
-        raise NotImplementedError('TODO: implement __repr__')
+        return ___
 
 
 class LRUCache:
@@ -207,17 +241,27 @@ class LRUCache:
     recently used key when full. get() of a missing key returns None. Hint: OrderedDict."""
 
     def __init__(self, capacity: int):
-        raise NotImplementedError('TODO: implement __init__')
+        from collections import OrderedDict
+        if ___:
+            raise ValueError("capacity must be positive")
+        self.capacity = capacity
+        self._data: OrderedDict = OrderedDict()
 
     def get(self, key):
-        raise NotImplementedError('TODO: implement get')
+        if ___:
+            return None
+        self._data.move_to_end(key)
+        return ___
 
     def put(self, key, value) -> None:
-        raise NotImplementedError('TODO: implement put')
+        self._data[key] = value
+        self._data.move_to_end(___)
+        if ___:
+            self._data.popitem(last=False)
 
     def keys(self) -> list:
         """Keys from least to most recently used."""
-        raise NotImplementedError('TODO: implement keys')
+        return ___
 
 
 class Plugin:
@@ -229,7 +273,13 @@ class Plugin:
     registry: dict[str, type] = {}
 
     def __init_subclass__(cls, **kwargs):
-        raise NotImplementedError('TODO: implement __init_subclass__')
+        super().__init_subclass__(**kwargs)
+        name = cls.__dict__.get("name")
+        if ___:
+            raise TypeError(f"{cls.__name__} must define a string `name`")
+        if ___:
+            raise TypeError(f"duplicate plugin name {name!r}")
+        Plugin.registry[name] = cls
 
 
 def enforce_types(func):
@@ -238,4 +288,16 @@ def enforce_types(func):
     Only check parameters annotated with a plain class (int, str, ...); skip others.
     Hint: inspect.signature(func).bind(*args, **kwargs).
     """
-    raise NotImplementedError('TODO: implement enforce_types')
+    import functools
+    signature = ___
+    hints = ___
+
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        bound = signature.bind(*args, **kwargs)
+        for name, value in bound.arguments.items():
+            expected = hints.get(name)
+            if ___:
+                raise TypeError(f"{name} must be {expected.__name__}, got {type(value).__name__}")
+        return ___
+    return wrapper

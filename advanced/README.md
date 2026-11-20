@@ -7,7 +7,7 @@ Learn the engineering techniques required to build reliable and maintainable Pyt
 | Material | Count | Purpose |
 |---|---:|---|
 | Detailed lesson notebooks | **20** | Theory, four executable demonstrations per lesson, design questions, independent exercises |
-| Independent exercise workbooks | **4 / 80 challenges** | Robust programs, concurrency, security, testing and architecture |
+| Exercise workbooks | **4 notebooks, 58 exercises** | Fill-in-the-blank code with automatic checks: concurrency, security, testing, architecture |
 | Auto-graded practice | **4 modules, 95 tests** | Instant feedback; answers stay hidden |
 | Advanced portfolio projects | **3** | Async crawler simulator, streaming text analytics, transactional event processor |
 | Companion application | **1 installable package** | SQLite event processor CLI with unit tests |
@@ -49,12 +49,12 @@ The notebooks use the **Python standard library**. **Python 3.11+** is required 
 | Correctness and systems design | 10–14 | profiling, algorithms, injection, secure parsing, tests and integration |
 | Production engineering | 15–19 | SLIs/SLOs, API evolution, transactional idempotency, CI and capstone |
 
-## Exercise workbooks — 80 independent challenges
+## Exercise workbooks — 58 fill-in exercises
 
-- [01 — Internals, typing, and architecture: 20 problems](exercises/01_internals_typing_architecture_exercises.ipynb)
-- [02 — Concurrency, async, and resilience: 20 problems](exercises/02_concurrency_resilience_exercises.ipynb)
-- [03 — Security, testing, and performance: 20 problems](exercises/03_security_testing_performance_exercises.ipynb)
-- [04 — Production systems: 20 problems](exercises/04_production_systems_exercises.ipynb)
+- [01 — Internals, typing, and architecture](exercises/01_internals_typing_architecture_exercises.ipynb)
+- [02 — Concurrency, async, and resilience](exercises/02_concurrency_resilience_exercises.ipynb)
+- [03 — Security, testing, and performance](exercises/03_security_testing_performance_exercises.ipynb)
+- [04 — Production systems](exercises/04_production_systems_exercises.ipynb)
 
 Check your work with the matching [auto-graded modules](../practice/README.md): `python -m pytest practice -k advanced`.
 

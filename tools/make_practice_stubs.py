@@ -1,71 +1,141 @@
 #!/usr/bin/env python3
-"""Generate learner stubs in practice/exercises/ from the PRIVATE reference solutions.
+"""Generate fill-in-the-blank exercises in practice/exercises/ from the PRIVATE solutions.
 
-Every function and method keeps its signature and docstring, but its body is
-replaced by ``raise NotImplementedError``. Classes, constants and imports are
-kept so the tests can import the stub straight away.
+Learners don't start from an empty function. Each function keeps most of the
+reference solution, but its key parts (a condition, a loop range, the value
+it returns...) are replaced by ``___``. Running the code before filling a
+blank raises ``NameError: name '___' is not defined``, which the practice
+tests report as "to do".
 
-    python tools/make_practice_stubs.py --solutions DIR           # (re)write untouched stubs
-    python tools/make_practice_stubs.py --solutions DIR --check   # exit 1 if a stub is stale
-    python tools/make_practice_stubs.py --solutions DIR --force   # overwrite edited stubs
+    python tools/make_practice_stubs.py --solutions DIR           # (re)write untouched files
+    python tools/make_practice_stubs.py --solutions DIR --check   # exit 1 if a file is stale
+    python tools/make_practice_stubs.py --solutions DIR --force   # overwrite edited files
 
 DIR is the private practice_solutions folder (or set PRACTICE_SOLUTIONS).
 Learners: to reset a module, use  git checkout -- practice/exercises/<module>.py
 
-Without --force, an existing stub is only rewritten if it is still untouched
-(contains no implemented functions), so your work is never overwritten.
+Without --force, a file is only rewritten if it still matches the previously
+generated version (`git diff` clean), so your work is never overwritten.
 """
 from __future__ import annotations
 
 import ast
+import subprocess
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 EXERCISES = ROOT / "practice" / "exercises"
+BLANK = "___"
 HEADER = (
-    "# Auto-graded practice. Replace each `raise NotImplementedError` with your code.\n"
-    "# Check your work:  python -m pytest practice -k {name}\n"
-    "# Stuck? Re-read the docstring hint, then the lesson notebook it names.\n"
-    "# Reset to a blank copy:  git checkout -- practice/exercises/{name}.py\n\n"
+    "# Fill in every ___ so the function does what its docstring says.\n"
+    "# Check your work:  python -m pytest practice -k {name}   (or use the workbook notebook)\n"
+    "# Stuck? Fail a check twice to unlock the hints.\n"
+    "# Reset this file:  git checkout -- practice/exercises/{name}.py\n\n"
 )
+# Expression slots worth blanking, most instructive first.
+PRIORITY = {ast.If: 0, ast.While: 0, ast.Return: 1, ast.AugAssign: 2, ast.For: 3, ast.Assign: 4, ast.Expr: 5,
+            ast.With: 6, ast.AsyncWith: 6}
 
 
-class _Stubber(ast.NodeTransformer):
-    def _stub(self, node):
-        body = []
-        if ast.get_docstring(node, clean=False) is not None:
-            body.append(node.body[0])
-        body.append(ast.parse("raise NotImplementedError('TODO: implement " + node.name + "')").body[0])
-        node.body = body
-        return node
-
-    visit_FunctionDef = _stub
-    visit_AsyncFunctionDef = _stub
-
-
-def stub_source(solution: Path) -> str:
-    tree = _Stubber().visit(ast.parse(solution.read_text(encoding="utf-8")))
-    ast.fix_missing_locations(tree)
-    code = ast.unparse(tree)
-    # ast.unparse leaves one blank line between definitions; PEP 8 wants two at top level.
-    out: list[str] = []
-    for line in code.splitlines():
-        if line.startswith(("def ", "class ", "async def ", "@")) and out and out[-1] == "" \
-                and not (len(out) > 1 and out[-2].startswith("@")):
-            out.append("")
-        out.append(line)
-    return HEADER.format(name=solution.stem) + "\n".join(out) + "\n"
+def _slot(statement: ast.stmt):
+    """The expression inside `statement` that we may replace with ___ (or None)."""
+    if isinstance(statement, (ast.If, ast.While)):
+        return statement.test
+    if isinstance(statement, ast.Return):
+        value = statement.value
+        return None if value is None or (isinstance(value, ast.Constant) and value.value in (True, False, None)) else value
+    if isinstance(statement, (ast.AugAssign, ast.Assign)):
+        value = statement.value
+        return None if isinstance(value, ast.Constant) else value
+    if isinstance(statement, ast.For):
+        return statement.iter
+    if isinstance(statement, ast.Expr) and isinstance(statement.value, ast.Call):
+        call = statement.value
+        if call.args and not isinstance(call.args[0], ast.Constant):
+            return call.args[0]
+        if len(call.args) > 1:
+            return (call.args[1], call.args[-1])  # e.g. logger.info("fmt %s", ___)
+        if call.args:
+            return call.func  # e.g. ___("CREATE TABLE ...")
+    if isinstance(statement, (ast.With, ast.AsyncWith)):
+        return statement.items[0].context_expr
+    return None
 
 
-def is_untouched(path: Path) -> bool:
-    """True if every function in the file still only raises NotImplementedError."""
-    for node in ast.walk(ast.parse(path.read_text(encoding="utf-8"))):
+def _statements(body):
+    for statement in body:
+        if isinstance(statement, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+            continue  # nested definitions are handled on their own
+        yield statement
+        for field in ("body", "orelse", "finalbody"):
+            yield from _statements(getattr(statement, field, []) or [])
+        for handler in getattr(statement, "handlers", []) or []:
+            yield from _statements(handler.body)
+
+
+def _choose_blanks(function: ast.FunctionDef | ast.AsyncFunctionDef) -> list:
+    body = function.body[1:] if ast.get_docstring(function) is not None else function.body
+    if len(body) == 1 and isinstance(body[0], ast.Raise):
+        return []  # e.g. an abstract method that is *supposed* to raise
+    candidates = []
+    for order, statement in enumerate(_statements(body)):
+        expr = _slot(statement)
+        if expr is not None:
+            rank = PRIORITY.get(type(statement), 9)
+            plain = isinstance(expr, (ast.Name, ast.Attribute)) or (
+                isinstance(expr, ast.Tuple) and all(isinstance(e, ast.Name) for e in expr.elts))
+            if plain and isinstance(statement, ast.Assign):
+                continue  # `self.owner = owner` just copies an argument: nothing to learn
+            if plain:
+                rank = 8  # `return total` would be a giveaway, not a puzzle
+            candidates.append((rank, order, expr))
+    lines = sum(1 for _ in _statements(body))
+    wanted = 1 if lines <= 3 else 2 if lines <= 8 else 3
+    chosen: list = []
+    for _, _, expr in sorted(candidates, key=lambda c: (c[0], c[1])):
+        if len(chosen) == wanted:
+            break
+        first, last = expr if isinstance(expr, tuple) else (expr, expr)
+        if any(first.lineno <= (c[1] if isinstance(c, tuple) else c).end_lineno
+               and (c[0] if isinstance(c, tuple) else c).lineno <= last.end_lineno for c in chosen):
+            continue  # one blank per line keeps each gap readable
+        chosen.append(expr)
+    if not chosen and body:
+        # Fall back to the first statement with any expression.
+        for statement in _statements(body):
+            expr = _slot(statement)
+            if expr is not None:
+                chosen.append(expr)
+                break
+    return chosen
+
+
+def scaffold_source(solution: Path) -> str:
+    source = solution.read_text(encoding="utf-8")
+    tree = ast.parse(source)
+    lines = source.splitlines(keepends=True)
+    offsets = [0]
+    for line in lines:
+        offsets.append(offsets[-1] + len(line))
+    spans = []
+    for node in ast.walk(tree):
         if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-            body = [n for n in node.body if not (isinstance(n, ast.Expr) and isinstance(n.value, ast.Constant))]
-            if not (len(body) == 1 and isinstance(body[0], ast.Raise)):
-                return False
-    return True
+            for expr in _choose_blanks(node):
+                first, last = expr if isinstance(expr, tuple) else (expr, expr)
+                start = offsets[first.lineno - 1] + len(lines[first.lineno - 1].encode("utf-8")[:first.col_offset].decode("utf-8"))
+                end = offsets[last.end_lineno - 1] + len(lines[last.end_lineno - 1].encode("utf-8")[:last.end_col_offset].decode("utf-8"))
+                spans.append((start, end))
+    for start, end in sorted(spans, reverse=True):
+        source = source[:start] + BLANK + source[end:]
+    ast.parse(source)  # the scaffold must stay valid Python
+    return HEADER.format(name=solution.stem) + source
+
+
+def _is_untouched(path: Path) -> bool:
+    """True if git reports no local edits (so it is safe to regenerate)."""
+    result = subprocess.run(["git", "diff", "--quiet", "--", str(path)], cwd=ROOT)
+    return result.returncode == 0
 
 
 def main(argv: list[str]) -> int:
@@ -80,24 +150,23 @@ def main(argv: list[str]) -> int:
     if not args.solutions:
         parser.error("pass --solutions DIR (the private reference solutions)")
     solutions_dir = Path(args.solutions).expanduser()
-    check, force = args.check, args.force
     EXERCISES.mkdir(parents=True, exist_ok=True)
     stale = []
     for solution in sorted(solutions_dir.glob("*.py")):
         target = EXERCISES / solution.name
-        expected = stub_source(solution)
+        expected = scaffold_source(solution)
         current = target.read_text(encoding="utf-8") if target.exists() else None
         if current == expected:
             continue
-        if check:
+        if args.check:
             stale.append(target.name)
-        elif current is None or force or is_untouched(target):
+        elif current is None or args.force or _is_untouched(target):
             target.write_text(expected, encoding="utf-8")
             print(f"wrote {target.relative_to(ROOT)}")
         else:
             print(f"skipped {target.relative_to(ROOT)} (contains your work; use --force to replace)")
     if stale:
-        print("out-of-date stubs: " + ", ".join(stale) + " — run python tools/make_practice_stubs.py")
+        print("out-of-date exercises: " + ", ".join(stale) + " — run python tools/make_practice_stubs.py")
         return 1
     return 0
 

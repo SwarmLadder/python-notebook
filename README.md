@@ -1,6 +1,6 @@
 # Python Learning Notebooks 🐍
 
-A free, hands-on Python course: **Basics → Intermediate → Advanced**. You read short lessons, run the examples, take a quick quiz and write your own code. Auto-graded exercises tell you whether you're right without showing the answer, with hints when you're stuck.
+A free, hands-on Python course: **Basics → Intermediate → Advanced**. You read short lessons, run the examples and take a quick quiz. Then you complete **fill-in-the-blank exercises**: nearly finished code with a few `___` gaps. A check cell tells you right away whether you got it, without showing the answer, and gives hints when you're stuck. You write programs from scratch only in the projects.
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/SwarmLadder/python-notebook)
 [![Launch Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/SwarmLadder/python-notebook/main?urlpath=lab/tree/basics/notebooks/00_python_introduction.ipynb)
@@ -8,11 +8,11 @@ A free, hands-on Python course: **Basics → Intermediate → Advanced**. You re
 
 **No install needed:** Codespaces gives you everything, including the auto-graded practice. Binder and Colab run the notebooks in your browser.
 
-| Level | Lessons (each with a quiz) | Worked examples | Workbook problems | Auto-graded tests | Projects |
+| Level | Lessons (each with a quiz) | Worked examples | Fill-in exercises | Auto-graded tests | Projects |
 |---|---:|---:|---:|---:|---:|
-| [Basics](basics/README.md) | 18 | 6 | 60 | 231 | 3 |
-| [Intermediate](intermediate/README.md) | 20 | 6 | 80 | 102 | 3 + CLI package |
-| [Advanced](advanced/README.md) | 20 | 6 | 80 | 95 | 3 + CLI package |
+| [Basics](basics/README.md) | 18 | 6 | 72 | 231 | 3 |
+| [Intermediate](intermediate/README.md) | 20 | 6 | 73 | 102 | 3 + CLI package |
+| [Advanced](advanced/README.md) | 20 | 6 | 58 | 95 | 3 + CLI package |
 
 ## Start on your computer
 
@@ -33,17 +33,18 @@ jupyter lab                      # open basics/notebooks/00_python_introduction.
 2. **Change one input** and explain what happened.
 3. **Take the quick quiz** at the end of the lesson. Your answers are checked right away.
 4. **Study the worked examples** (`<level>/worked_examples/`). They show how a solution is planned, written and tested.
-5. **Do the lesson exercises,** then the level's workbook.
-6. **Check yourself** with the auto-graded module for that workbook:
-
-   ```bash
-   python -m pytest practice -k basics_01
-   ```
-
-   You see "correct" or "not correct yet" with your result and the test's inputs, never the answer. Each failure unlocks a hint, and the next failure a more detailed one. See [practice/README.md](practice/README.md).
+5. **Fill in the workbook** for the topic (`<level>/exercises/`). Fill in each `___`, run the cell, then run `check(...)`. ✅ means move on. ❌ shows your result and the test's input, never the answer. The first failure unlocks a hint and the second a more detailed one.
+6. **Prefer a terminal?** The same exercises are in `practice/exercises/`; check them with `python -m pytest practice -k basics_01`. See [practice/README.md](practice/README.md).
 7. **Build the projects** and take the level's assessment before moving up.
 
 Each lesson ends with a **Next:** link. Restart the kernel and run all cells once you finish a lesson.
+
+## Get your name on the course
+
+There are two tracks, both checked automatically (see [RECOGNITION.md](RECOGNITION.md)):
+
+- **Contributors:** improve the course. A merged PR adds you to [CONTRIBUTORS.md](CONTRIBUTORS.md).
+- **Achievers:** pass every workbook of a level. A verified claim adds you to [ACHIEVEMENTS.md](ACHIEVEMENTS.md).
 
 ## For contributors and teachers
 

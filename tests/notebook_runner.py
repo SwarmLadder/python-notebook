@@ -87,6 +87,9 @@ def run_notebook(path: Path) -> RunResult:
     previous_cwd = Path.cwd()
     original_input = builtins.input
     builtins.input = _no_input
+    previous_checks = os.environ.get("PRACTICE_CHECKS")
+    if os.environ.get("PRACTICE_STRICT") != "1":
+        os.environ["PRACTICE_CHECKS"] = "skip"  # workbook blanks are meant to be empty in the repo
     sys.path.insert(0, str(path.parent))  # Jupyter can import helpers (quiz.py) next to the notebook
     try:
         os.chdir(path.parent)  # relative data paths behave as they do in Jupyter
@@ -111,6 +114,11 @@ def run_notebook(path: Path) -> RunResult:
         os.chdir(previous_cwd)
         sys.path.remove(str(path.parent))
         sys.modules.pop("quiz", None)
+        sys.modules.pop("check", None)
+        if previous_checks is None:
+            os.environ.pop("PRACTICE_CHECKS", None)
+        else:
+            os.environ["PRACTICE_CHECKS"] = previous_checks
     return RunResult(executed, stdout.getvalue())
 
 

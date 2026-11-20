@@ -1,0 +1,33 @@
+name: Verify achievement
+# Runs when a learner opens a claim PR (see RECOGNITION.md). It executes the learner's
+# code, so it runs with a read-only token and no secrets. It never writes to the repo.
+on:
+  pull_request:
+    paths:
+      - "achievements/claims/**"
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install test tools
+        run: python -m pip install "pytest>=9.0"
+      - name: Check the claim only touches allowed files
+        env:
+          AUTHOR: ${{ github.event.pull_request.user.login }}
+          BASE: ${{ github.event.pull_request.base.sha }}
+        run: |
+          python tools/check_claim.py --author "$AUTHOR" --base "$BASE" --github-output "$GITHUB_OUTPUT"
+        id: claim
+      - name: Verify the claimed level
+        run: |
+          python tools/verify_level.py "${{ steps.claim.outputs.level }}" --json achievement-report.json | tee report.txt
+          { echo '## Achievement check'; echo '```'; cat report.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"

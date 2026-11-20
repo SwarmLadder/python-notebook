@@ -1,6 +1,8 @@
 # Auto-graded practice ✅
 
-There are 12 modules, one per exercise workbook, with 428 tests. You write the code and the tests tell you whether it's correct. **The answers are never shown.** The repo stores only fingerprints (hashes) of the correct results.
+There are 12 modules, one per exercise workbook, with 428 tests. Each exercise is **nearly finished code with `___` blanks**. Fill them in and the tests tell you whether it's correct. **The answers are never shown.** The repo stores only fingerprints (hashes) of the correct results.
+
+Most learners use the **workbook notebooks** (`<level>/exercises/`), where a `check("name")` cell after each exercise runs these same tests. This folder is the terminal version, and both count for [achievements](../RECOGNITION.md).
 
 ## Start
 
@@ -14,7 +16,7 @@ No install? Open the repo in **GitHub Codespaces** (see the main README). Everyt
 ## The loop
 
 1. Open a module in [`exercises/`](exercises). Each function's docstring says what to build, often with an example and a hint.
-2. Replace `raise NotImplementedError(...)` with your code.
+2. Replace every `___` with the missing code. Don't rewrite the parts that are given.
 3. Run `python -m pytest practice -k <module or function name>`.
 4. Read the result:
 
@@ -31,7 +33,7 @@ No install? Open the repo in **GitHub Codespaces** (see the main README). Everyt
    basics_02_control_flow   [####----------------]  18/86  2 failing, 66 to do
    ```
 
-Functions you haven't started count as **to do**, not failures.
+Functions whose blanks you haven't filled yet count as **to do**, not failures.
 
 **Hints unlock step by step.** The first time a test fails you see hint 1, a nudge. If it fails again you see hint 2, which describes the method. You never see the answer. Your progress is saved locally in `practice/.progress.json`.
 
@@ -54,9 +56,12 @@ Reference solutions are kept **outside this repository**, in a private `practice
 
 ```bash
 python -m pytest practice --record-answers=PATH/TO/practice_solutions
-python tools/make_practice_stubs.py --solutions PATH/TO/practice_solutions
+python tools/make_practice_stubs.py --solutions PATH/TO/practice_solutions --force
+python tools/make_workbooks.py
 ```
 
-`--record-answers` writes `answers/*.json` only if every test passes, and never from a run filtered with `-k`. `tests/test_practice_stubs.py` fails if a stub contains an implementation or a test has no answer key.
+`make_practice_stubs.py` turns each solution into a fill-in exercise by blanking its key expressions (conditions, loop ranges, returned values). `make_workbooks.py` rebuilds the workbook notebooks from those files.
+
+`--record-answers` writes `answers/*.json` only if every test passes, and never from a run filtered with `-k`. `tests/test_practice_stubs.py` fails if an exercise function has no blank, a workbook is out of date, or a test has no answer key.
 
 A determined learner could brute-force a hash with very few possible answers, such as `True` or `False`. The point is that nobody sees an answer by accident. It is not exam security.
