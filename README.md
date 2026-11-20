@@ -15,7 +15,7 @@ A practical, structured Python learning course organized into **Basics → Inter
 1. Install Python 3.10 or newer.
 2. Clone this repository and open a terminal in its root directory.
 3. Create a virtual environment: `python -m venv .venv`.
-4. Activate it: macOS/Linux: `source .venv/bin/activate`; Windows PowerShell: `.venv\\Scripts\\Activate.ps1`.
+4. Activate it: macOS/Linux: `source .venv/bin/activate`; Windows PowerShell: `.venv\Scripts\Activate.ps1`.
 5. Run `python -m pip install -r requirements.txt`.
 6. Launch with `jupyter lab` and open `basics/notebooks/00_python_introduction.ipynb`.
 
