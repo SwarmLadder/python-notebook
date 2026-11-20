@@ -1,0 +1,94 @@
+{
+ "Countdown": [
+  "An iterator returns itself from __iter__.",
+  "__next__ returns the current value and decrements it; raise StopIteration below 0."
+ ],
+ "Squares": [
+  "To be reusable, __iter__ must return a NEW iterator each time.",
+  "Make __iter__ a generator: for i in range(self.n): yield i * i."
+ ],
+ "fibonacci": [
+  "Keep two variables a, b.",
+  "yield a, then a, b = b, a + b, n times."
+ ],
+ "positive_ints": [
+  "Process one line at a time and yield.",
+  "try int(line.strip()) except ValueError: continue; yield only if > 0."
+ ],
+ "flatten_one_level": [
+  "Only one level deep.",
+  "for group in groups: yield from group."
+ ],
+ "take": [
+  "Never call list() on an infinite iterator.",
+  "list(itertools.islice(iterable, n))."
+ ],
+ "make_tax_adder": [
+  "The inner function remembers rate (a closure).",
+  "Define add_tax(price) inside and return it without calling it."
+ ],
+ "make_counter": [
+  "The inner function must change an outer variable.",
+  "Declare `nonlocal count` inside the inner function."
+ ],
+ "trace": [
+  "A decorator returns a wrapper function.",
+  "Use @functools.wraps(func) on the wrapper, print, then return func(*args, **kwargs)."
+ ],
+ "require_minimum": [
+  "Three layers: factory -> decorator -> wrapper.",
+  "The wrapper checks its first argument and raises ValueError if it is below minimum."
+ ],
+ "EventRecorder": [
+  "__exit__ runs even when the block raises.",
+  "Append 'end' in __exit__ and return False so errors propagate."
+ ],
+ "sort_employees": [
+  "Sort by a tuple key.",
+  "key=lambda r: (r['team'], -r['salary'])."
+ ],
+ "power": [
+  "Use the ** operator.",
+  "return base ** exponent."
+ ],
+ "make_square": [
+  "functools.partial fixes some arguments.",
+  "return functools.partial(power, exponent=2)."
+ ],
+ "cached_fib": [
+  "Recursion plus a cache.",
+  "Decorate with @functools.lru_cache(maxsize=None); base case n < 2 returns n."
+ ],
+ "all_variants": [
+  "Every combination of two lists.",
+  "list(itertools.product(colors, sizes))."
+ ],
+ "totals_by_category": [
+  "groupby only groups ADJACENT equal keys.",
+  "Sort by category first, then groupby with the same key and sum the amounts."
+ ],
+ "non_blank": [
+  "Keep it lazy: a generator expression.",
+  "(line.strip() for line in lines if line.strip())."
+ ],
+ "chunked": [
+  "Pull `size` items at a time from ONE iterator.",
+  "it = iter(iterable); while batch := list(islice(it, size)): yield batch."
+ ],
+ "running_total": [
+  "The standard library already has this.",
+  "itertools.accumulate(values)."
+ ],
+ "sliding_window": [
+  "How many windows fit? len(values) - n + 1.",
+  "[tuple(values[i:i + n]) for i in range(len(values) - n + 1)]."
+ ],
+ "once": [
+  "Remember whether the function was called, and its result.",
+  "Use nonlocal variables in the wrapper; only call func the first time."
+ ],
+ "count_calls": [
+  "Functions can have attributes.",
+  "Set wrapper.calls = 0 after defining the wrapper; increment it inside."
+ ]
+}

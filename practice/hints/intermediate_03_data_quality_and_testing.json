@@ -1,0 +1,62 @@
+{
+ "mean_or_none": [
+  "Return None for an empty list.",
+  "Annotate: (values: list[float]) -> Optional[float]."
+ ],
+ "ProductRecord": [
+  "Subclass typing.TypedDict.",
+  "Declare sku: str, name: str, price: float."
+ ],
+ "apply_transform": [
+  "Functions are values; call the one you are given.",
+  "[transform(r) for r in records]."
+ ],
+ "Settings": [
+  "Frozen dataclass with validation.",
+  "In __post_init__, raise ValueError for timeout <= 0 or retries < 0."
+ ],
+ "parse_quantity": [
+  "Convert inside try/except ValueError.",
+  "raise InvalidQuantity(...) from error; also reject negatives."
+ ],
+ "log_request": [
+  "Log what you need for debugging, nothing secret.",
+  "logger.info('GET %s -> %s', url, status). Never include the token."
+ ],
+ "is_order_code": [
+  "search() matches anywhere; you need the whole string.",
+  "re.fullmatch(r'[A-Z]{2}-\\d{4}', text) is not None."
+ ],
+ "extract_date": [
+  "Use named groups.",
+  "(?P<year>\\d{4})-(?P<month>\\d{2})-(?P<day>\\d{2}); convert groupdict() values to int."
+ ],
+ "redact_phones": [
+  "\\b stops a match inside longer numbers.",
+  "re.sub(r'\\b\\d{3}-\\d{4}\\b', '[PHONE]', text)."
+ ],
+ "parse_products": [
+  "Three failure cases: bad JSON, wrong top-level type, missing list.",
+  "Catch json.JSONDecodeError and re-raise as ValueError; check isinstance(data.get('products'), list)."
+ ],
+ "clean_csv": [
+  "The header is line 1, so the first data row is line 2.",
+  "enumerate(csv.DictReader(...), start=2); float() inside try/except (TypeError, ValueError)."
+ ],
+ "slugify": [
+  "Lower-case, then replace runs of non-alphanumerics.",
+  "re.sub(r'[^a-z0-9]+', '-', ...).strip('-')."
+ ],
+ "hashtags": [
+  "re.findall(r'#(\\w+)', text) gets the tags.",
+  "Lower-case them and keep first-seen order: a dict's keys work as an ordered set."
+ ],
+ "parse_settings": [
+  "Skip blank lines and '#' comments.",
+  "Split on the FIRST '=' only: line.split('=', 1). Use enumerate(..., start=1) for line numbers."
+ ],
+ "summarize_sales": [
+  "Skip rows whose amount isn't a number.",
+  "float(row['amount']) in try/except; accumulate per region with dict.get; round to 2."
+ ]
+}

@@ -1,0 +1,70 @@
+{
+ "evens": [
+  "Build a new list; never call remove() on the input.",
+  "A comprehension: [v for v in values if v % 2 == 0]."
+ ],
+ "count_occurrences": [
+  "Use a counter variable and ==.",
+  "Loop through values; add 1 when value == target."
+ ],
+ "second_largest": [
+  "Duplicates of the maximum don't count.",
+  "sorted(set(values)); fewer than 2 items means ValueError; otherwise take [-2]."
+ ],
+ "flatten": [
+  "Two loops: rows, then items in a row.",
+  "Append every item to one result list."
+ ],
+ "distance_from_origin": [
+  "Unpack the tuple: x, y = point.",
+  "Pythagoras: (x**2 + y**2) ** 0.5."
+ ],
+ "unique_cities": [
+  "Normalize before removing duplicates.",
+  "Make a set of city.strip().title(), then sorted()."
+ ],
+ "compare_sets": [
+  "Sets have operators for this.",
+  "& is intersection, a - b is 'only in a'."
+ ],
+ "word_frequencies": [
+  "Lower-case, then remove punctuation.",
+  "text.translate(str.maketrans('', '', string.punctuation)), then count with dict.get(word, 0) + 1."
+ ],
+ "split_pass_fail": [
+  "Start with {'pass': {}, 'fail': {}}.",
+  "score >= threshold passes (equal counts as a pass)."
+ ],
+ "student_averages": [
+  "Empty lists would divide by zero.",
+  "sum(marks) / len(marks), rounded to 1 decimal; 0.0 when marks is empty."
+ ],
+ "pairs_to_dict": [
+  "Compare the lengths first.",
+  "dict(zip(keys, values))."
+ ],
+ "Inventory": [
+  "Store stock in a dict created in __init__ (one per instance).",
+  "Validate before changing anything; delete an item when its stock reaches 0."
+ ],
+ "merge_counts": [
+  "Copy the first dict instead of modifying it.",
+  "merged = dict(first); then add each value from second with .get(key, 0)."
+ ],
+ "invert": [
+  "Values become keys, so they must be unique.",
+  "If a value is already a key in the result, raise ValueError."
+ ],
+ "top_words": [
+  "Reuse word_frequencies.",
+  "Sort the items by (-count, word) and slice [:n]."
+ ],
+ "rotate": [
+  "Rotating by the length changes nothing.",
+  "k %= len(values); then values[-k:] + values[:-k]. Handle the empty list first."
+ ],
+ "chunk": [
+  "Step through the list in jumps of size.",
+  "[values[i:i + size] for i in range(0, len(values), size)]."
+ ]
+}

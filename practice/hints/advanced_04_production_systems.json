@@ -1,0 +1,54 @@
+{
+ "make_event": [
+  "Inject the clock so tests can fix the time.",
+  "Generate a missing correlation_id with str(uuid.uuid4()); timestamp = clock().isoformat()."
+ ],
+ "latency_summary": [
+  "Sort first. Nearest rank is 1-based.",
+  "rank = math.ceil(0.95 * n); p95 = ordered[rank - 1]; statistics.median for the median."
+ ],
+ "availability": [
+  "0 requests means 100% available.",
+  "round(100 * successes / total, 3)."
+ ],
+ "error_budget": [
+  "Allowed failures = volume × (100 − target) / 100.",
+  "Round DOWN with math.floor; add a tiny epsilon against float error."
+ ],
+ "serialize_user": [
+  "Never change v1's output.",
+  "Build {'id', 'name'}; for v2 add user.get('email'); other versions raise ValueError."
+ ],
+ "error_envelope": [
+  "Don't leak internals on server errors.",
+  "For status >= 500 the message becomes 'Internal server error'."
+ ],
+ "iterate_cursor": [
+  "Start with fetch(None).",
+  "Keep a set of seen cursors and raise RuntimeError on a repeat; stop when the cursor is None."
+ ],
+ "IdempotencyStore": [
+  "Look up the key before running the action.",
+  "Store json.dumps(result) only after action() succeeds, inside `with conn:`."
+ ],
+ "should_alert": [
+  "Look only at the last `sustained` samples.",
+  "Fewer samples than `sustained` means no alert; otherwise all of them must be > threshold."
+ ],
+ "readiness": [
+  "A check that raises counts as failed.",
+  "Wrap each probe in try/except; ready = every result is 'ok'."
+ ],
+ "migrate": [
+  "PRAGMA user_version stores the schema version.",
+  "Apply migrations[v:] one at a time, each in `with conn:`, setting user_version = i + 1."
+ ],
+ "parse_version": [
+  "Strip an optional 'v' prefix first.",
+  "Exactly 3 parts, all .isdigit(); return a tuple of ints."
+ ],
+ "is_compatible": [
+  "Major versions must match.",
+  "The server's minor version must be >= the client's."
+ ]
+}

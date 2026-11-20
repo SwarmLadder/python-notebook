@@ -1,0 +1,66 @@
+{
+ "total_cost": [
+  "Convert the text first: float(price_text).",
+  "Multiply the converted price by units and return it (don't print)."
+ ],
+ "circle_measurements": [
+  "Check radius < 0 before any maths and raise ValueError.",
+  "Return a tuple: (math.pi * radius ** 2, 2 * math.pi * radius)."
+ ],
+ "split_minutes": [
+  "Hours are whole groups of 60.",
+  "Use total // 60 for hours and total % 60 for minutes, or divmod(total, 60)."
+ ],
+ "format_price": [
+  "Use an f-string with a format spec.",
+  "{price:.2f} always shows two decimals; put the name and ': $' around it."
+ ],
+ "ends": [
+  "Slicing never raises IndexError, even past the end.",
+  "First four: text[:4]. Last three: text[-3:]."
+ ],
+ "normalize": [
+  "Two string methods, applied in order.",
+  "text.strip() removes outer whitespace; .casefold() is a stronger lower()."
+ ],
+ "hyphenate": [
+  "split() with no argument splits on any run of whitespace.",
+  "'-'.join(words) puts a hyphen between the words."
+ ],
+ "is_csv": [
+  "Compare case-insensitively.",
+  "Lower-case the name, then use .endswith('.csv')."
+ ],
+ "is_valid_score": [
+  "Both ends are allowed.",
+  "Python lets you chain: 0 <= score <= 100."
+ ],
+ "fahrenheit_to_celsius": [
+  "Subtract 32 first, then scale.",
+  "(f - 32) * 5 / 9, then round(..., 1)."
+ ],
+ "parse_order": [
+  "Split the whole string on ',' first, then each entry on ':'.",
+  "Strip each entry, convert quantity with int() and price with float(), add quantity*price to a running total."
+ ],
+ "initials": [
+  "split() gives the words; blank input gives an empty list.",
+  "Take word[0].upper() for each word and join them with ''."
+ ],
+ "clock_time": [
+  "3600 seconds per hour, 60 per minute.",
+  "Use divmod twice, then format each part with :02d."
+ ],
+ "is_palindrome": [
+  "Ignore everything that isn't a letter or digit.",
+  "Build a list of ch.casefold() for ch in text if ch.isalnum(), then compare it to its reverse [::-1]."
+ ],
+ "percent_change": [
+  "Guard against dividing by zero first.",
+  "(new - old) / old * 100, rounded to 1 decimal."
+ ],
+ "mask_card": [
+  "Remove spaces before counting digits.",
+  "Stars for all but the last 4: '*' * (len(digits) - 4) + digits[-4:]."
+ ]
+}

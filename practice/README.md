@@ -33,6 +33,10 @@ No install? Open the repo in **GitHub Codespaces** (see the main README). Everyt
 
 Functions you haven't started count as **to do**, not failures.
 
+**Hints unlock step by step.** The first time a test fails you see hint 1, a nudge. If it fails again you see hint 2, which describes the method. You never see the answer. Your progress is saved locally in `practice/.progress.json`.
+
+**Infinite loop?** Each test is stopped after 10 seconds with an explanation instead of running forever. If Python is stuck inside a built-in like `sum()`, pytest stops after 30 seconds and prints `Timeout` with the exact line of your code.
+
 Tips:
 - Equivalent answers count: a list or a tuple, `5` or `5.0`, and float rounding differences beyond 6 decimals.
 - Read the test file in [`tests/`](tests). It shows every input and every rule, e.g. "the original list must not change".

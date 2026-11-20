@@ -29,6 +29,8 @@ for path in notebooks:
     try:
         notebook = json.loads(path.read_text(encoding="utf-8"))
         namespace = {"__name__": "__main__", "__file__": str(path)}
+        sys.path.insert(0, str(path.parent))  # like Jupyter: import helpers (quiz.py) beside the notebook
+        sys.modules.pop("quiz", None)
         with redirect_stdout(StringIO()), redirect_stderr(StringIO()):
             for cell_number, cell in enumerate(notebook["cells"], start=1):
                 if cell.get("cell_type") != "code":
