@@ -21,6 +21,9 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "practice"))
 from notebook_check import tests_by_exercise  # noqa: E402
 
+sys.path.insert(0, str(ROOT / "tools"))
+from colab_setup import setup_code  # noqa: E402
+
 LEVELS = ("basics", "intermediate", "advanced")
 
 
@@ -67,12 +70,14 @@ def build(workbook: Path, module: str) -> dict:
        "Fill them in, run the cell, then run the `check(...)` cell below it. ✅ means move on. "
        "❌ shows your result and the test input, never the answer, and failing twice unlocks a hint.\n\n"
        f"Prefer a terminal? The same exercises are in [`practice/exercises/{module}.py`](../../practice/exercises/{module}.py).")
+    code(setup_code(workbook.parents[1].name, "exercises"))
     md("## Setup\n\nRun this cell first.")
     future = [line for line in setup if line.startswith("from __future__")]
     rest = [line for line in setup if not line.startswith("from __future__")]
     imports = [line for line in rest if line.startswith(("import ", "from "))]
     others = [line for line in rest if not line.startswith(("import ", "from "))]
-    parts = ["\n".join(future + ["from check import Checker"]), f"check = Checker({module!r})"]
+    parts = ["\n".join(future + ["from check import Checker, ___  # ___ marks the blanks you fill in"]),
+             f"check = Checker({module!r})"]
     if imports:
         parts.append("\n".join(imports))
     parts += others
@@ -91,7 +96,7 @@ def build(workbook: Path, module: str) -> dict:
     code("check.summary()")
     nb = {"cells": [], "metadata": old["metadata"], "nbformat": 4, "nbformat_minor": 5}
     for index, cell in enumerate(cells, start=1):
-        cell["id"] = f"cell-{index:03d}"
+        cell["id"] = "colab-setup" if "".join(cell["source"]).startswith("# Setup: run this first") else f"cell-{index:03d}"
         nb["cells"].append({k: cell[k] for k in ("cell_type", "execution_count", "id", "metadata", "outputs", "source") if k in cell})
     return nb
 
