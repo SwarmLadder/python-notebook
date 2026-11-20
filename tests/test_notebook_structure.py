@@ -14,7 +14,7 @@ IDS = [notebook_id(p) for p in NOTEBOOKS]
 
 
 def test_course_has_notebooks():
-    assert len(NOTEBOOKS) >= 90, "notebook discovery looks broken"
+    assert len(NOTEBOOKS) >= 75, "notebook discovery looks broken"
 
 
 @pytest.mark.parametrize("path", NOTEBOOKS, ids=IDS)
@@ -69,12 +69,21 @@ EXERCISES = [p for p in NOTEBOOKS if p.parent.name == "exercises"]
 
 
 @pytest.mark.parametrize("path", EXERCISES, ids=[notebook_id(p) for p in EXERCISES])
-def test_exercise_workbooks_have_a_matching_solution(path):
-    solution = path.parents[1] / "solutions" / path.name.replace("_exercises", "_solutions")
-    assert solution.exists(), f"missing reference solutions: {solution.name}"
-
-
-@pytest.mark.parametrize("path", EXERCISES, ids=[notebook_id(p) for p in EXERCISES])
 def test_exercise_workbooks_link_to_autograded_practice(path):
     text = "\n".join(cell_source(c) for c in load(path)["cells"])
     assert "practice/" in text, "exercise workbooks should point to their auto-graded practice module"
+
+
+@pytest.mark.parametrize("path", NOTEBOOKS, ids=IDS)
+def test_no_links_to_removed_solutions(path):
+    text = "\n".join(cell_source(c) for c in load(path)["cells"])
+    assert "solutions/" not in text, "reference solutions are private; do not link to them"
+
+
+LESSON_IDS = [notebook_id(p) for p in LESSONS]
+
+
+@pytest.mark.parametrize("path", LESSONS, ids=LESSON_IDS)
+def test_lessons_end_with_a_next_step(path):
+    last = cell_source(load(path)["cells"][-1])
+    assert last.startswith("**Next:**"), "end each lesson with a **Next:** link"

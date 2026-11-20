@@ -1,6 +1,6 @@
 # Level 1 — Python Basics
 
-A complete beginner-friendly Python course with **18 guided lesson notebooks**, **60 independent practice questions**, **4 worked solution notebooks**, and **3 mini-projects**. No prior programming experience is expected.
+A complete beginner-friendly Python course with **18 guided lesson notebooks**, **60 practice questions**, **4 auto-graded practice modules**, and **3 mini-projects**. No prior programming experience is expected.
 
 ## Learning outcomes
 
@@ -47,7 +47,7 @@ By the end you should be able to explain Python's main types, write control flow
 - [Data structures — 15 questions](exercises/03_data_structures_exercises.ipynb)
 - [Functions and files — 15 questions](exercises/04_functions_and_files_exercises.ipynb)
 
-Reference approaches live in [solutions](solutions/README.md). Attempt the matching exercises first.
+Each pack has an auto-graded module in [`practice/`](../practice/README.md). The tests tell you whether your answer is correct without showing the answer.
 
 ## Projects
 
@@ -66,7 +66,7 @@ Reference approaches live in [solutions](solutions/README.md). Attempt the match
 | 5 | Lessons 13–16, functions-and-files practice |
 | 6 | Grade manager project, lesson 17, full review |
 
-**Completion standard:** You can complete at least 80% of the practice questions without peeking, explain the programs you wrote, and run all three projects without exceptions from a fresh kernel. These are learning targets, not automated grades.
+**Completion standard:** You can complete at least 80% of the practice questions without peeking, explain the programs you wrote, and run all three projects without exceptions from a fresh kernel. Use `python -m pytest practice -k basics` to see your progress.
 
 ## Troubleshooting
 

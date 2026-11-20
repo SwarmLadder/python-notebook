@@ -8,7 +8,7 @@ Develop software-building skills after mastering the [Python Basics course](../b
 |---|---:|---|
 | Guided lessons | **20 notebooks** | Explanation, executable examples, design questions, and independent lesson exercises |
 | Exercise workbooks | **4 notebooks, 80 problems** | Longer challenges with acceptance criteria and hints |
-| Reference solutions | **4 notebooks, 24 worked answers** | Representative solutions, tests, and discussion |
+| Auto-graded practice | **4 modules, 102 tests** | Instant feedback; answers stay hidden |
 | Portfolio projects | **3 notebooks** | OOP library, offline HTTP/ETL, SQLite task manager |
 | Additional working application | **1 installable Python package** | CLI with SQLite, packaging metadata, and unit tests |
 
@@ -61,7 +61,7 @@ Before starting, you should be comfortable with conditions, loops, list/dict/set
 - [03 — Data quality, regex, and testing (20 problems)](exercises/03_data_quality_and_testing_exercises.ipynb)
 - [04 — SQL, HTTP, CLI, and performance (20 problems)](exercises/04_sql_http_cli_performance_exercises.ipynb)
 
-Try them before opening the [worked solutions](solutions/README.md). Answers are intentionally provided for a **representative subset** (24 worked examples), not every independent problem.
+Check your work with the matching [auto-graded modules](../practice/README.md): `python -m pytest practice -k intermediate`.
 
 ## Portfolio projects
 
@@ -97,23 +97,13 @@ python -m venv .venv
 source .venv/bin/activate
 # Windows PowerShell:
 # .venv\Scripts\Activate.ps1
-python -m pip install -r requirements.txt
+python -m pip install -r requirements-dev.txt
 jupyter lab
 ```
 
 Open `intermediate/notebooks/00_workflow_and_environments.ipynb`. The root README has setup information. Source notebooks are readable on GitHub, but Jupyter or a compatible Python kernel is needed to run cells.
 
-To check notebook structure and syntax:
-
-```bash
-python tools/validate_notebooks.py
-```
-
-To run the Intermediate cells in a local smoke test, without requiring Jupyter:
-
-```bash
-python tools/smoke_test_intermediate.py
-```
+To check your practice work: `python -m pytest practice -k intermediate`.
 
 ## Completion checklist
 
@@ -124,4 +114,4 @@ python tools/smoke_test_intermediate.py
 - [ ] Run all notebooks with a fresh kernel and resolve hidden-state dependencies.
 - [ ] Complete the [final assessment](ASSESSMENT.md) and explain your design decisions.
 
-After finishing, continue with the [Advanced roadmap](../advanced/README.md). The Advanced section is currently a roadmap, not a completed course.
+After finishing, continue with [Advanced](../advanced/README.md).

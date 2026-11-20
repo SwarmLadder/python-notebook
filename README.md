@@ -1,68 +1,54 @@
 # Python Learning Notebooks 🐍
 
-A practical, structured Python learning course organized into **Basics → Intermediate → Advanced**. The repository emphasizes explanations, runnable code, independent practice, and projects rather than isolated syntax snippets.
+A free, hands-on Python course: **Basics → Intermediate → Advanced**. You read short lessons, run the examples and write your own code. Auto-graded exercises tell you whether you're right without showing the answer.
 
-## Choose your path
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/SwarmLadder/python-notebook)
+[![Launch Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/SwarmLadder/python-notebook/main?urlpath=lab/tree/basics/notebooks/00_python_introduction.ipynb)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SwarmLadder/python-notebook/blob/main/basics/notebooks/00_python_introduction.ipynb)
 
-| Level | Status | Focus |
-| --- | --- | --- |
-| [Basics](basics/README.md) | **Detailed notebooks ready** | Syntax, types, branching, loops, data structures, functions, errors, files, debugging, mini-projects |
-| [Intermediate](intermediate/README.md) | **Detailed notebooks ready** | 20 lessons, 80 extra problems, 24 worked solutions, 3 projects, installable SQLite CLI |
-| [Advanced](advanced/README.md) | **Detailed notebooks ready** | 20 lessons, 80 challenges, 24 worked solutions, 3 capstones and installable event processor CLI |
+**No install needed:** Codespaces gives you everything, including the auto-graded practice. Binder and Colab run the notebooks in your browser.
 
-## Quick start
+| Level | Lessons | Workbook problems | Auto-graded tests | Projects |
+|---|---:|---:|---:|---:|
+| [Basics](basics/README.md) | 18 | 60 | 231 | 3 |
+| [Intermediate](intermediate/README.md) | 20 | 80 | 102 | 3 + CLI package |
+| [Advanced](advanced/README.md) | 20 | 80 | 95 | 3 + CLI package |
 
-1. Install Python 3.11 or newer for **all three levels** (Basics and Intermediate also support Python 3.10).
-2. Clone this repository and open a terminal in its root directory.
-3. Create a virtual environment: `python -m venv .venv`.
-4. Activate it: macOS/Linux: `source .venv/bin/activate`; Windows PowerShell: `.venv\Scripts\Activate.ps1`.
-5. Run `python -m pip install -r requirements-dev.txt` (Jupyter and pytest).
-6. Launch with `jupyter lab` and open `basics/notebooks/00_python_introduction.ipynb`.
+## Start on your computer
 
-You can also read rendered .ipynb files directly on GitHub, but running their cells requires Jupyter or a compatible environment.
-
-## Course design and learning materials
-
-| Level | Guided lessons | Extra exercises | Reference solutions | Projects | Total notebooks |
-|---|---:|---:|---:|---:|---:|
-| Basics | 18 | 60 | Representative solutions | 3 | 29 |
-| Intermediate | 20 | 80 | 24 | 3 | 31 |
-| Advanced | 20 | 80 | 24 | 3 | 31 |
-| **Total** | **58** | **220** | — | **9** | **91** |
-
-Lessons include explanatory Markdown, runnable examples, exercises, and self-check prompts. Sample code uses the standard library, with Jupyter required to execute notebooks. Intermediate and Advanced also include installable example CLI packages and automated tests. Advanced uses Python 3.11+ for structured concurrency.
-
-## Intermediate course
-
-After Basics, open [the Intermediate syllabus](intermediate/README.md) to study 20 guided notebooks, 80 additional exercise challenges, 24 worked examples, offline APIs, testing, SQLite, and packaging. The [final assessment](intermediate/ASSESSMENT.md) includes a 100-point rubric. The Advanced track is also fully developed, with advanced concurrency, performance, security and production engineering notebooks.
-
-## Advanced course
-
-After Intermediate, follow [the Advanced syllabus](advanced/README.md) through 20 detailed notebooks, 80 independent exercises, 24 worked reference examples, and three portfolio capstones. The [final assessment](advanced/ASSESSMENT.md) includes a 100-point rubric and tests for concurrency, security, and transaction behavior.
-
-## Check your work: tests for everything
-
-The course has a test suite. One command runs every check:
+You need Python 3.11+. Basics and Intermediate also work on 3.10.
 
 ```bash
+git clone https://github.com/SwarmLadder/python-notebook.git
+cd python-notebook
+python -m venv .venv
+source .venv/bin/activate        # Windows: .venv\Scripts\Activate.ps1
 python -m pip install -r requirements-dev.txt
-python -m pytest
+jupyter lab                      # open basics/notebooks/00_python_introduction.ipynb
 ```
 
-| Folder | What it checks |
-|---|---|
-| [`practice/`](practice/README.md) | **Auto-graded exercises for learners.** 12 modules (one per exercise workbook) and 240 tests with instant feedback and a progress table. |
-| [`tests/`](tests) | One test for **every notebook**: it runs top-to-bottom from a fresh kernel, has valid syntax, a title, explanations and cleared outputs. Docs links, data files and scripts are also checked. |
-| `*/projects/*_package/tests/` | Unit tests for the installable CLI projects. |
+## How to study
 
-Try the practice loop now: open `practice/exercises/basics_01_fundamentals.py`, implement `split_minutes`, then run `python -m pytest practice -k split_minutes`.
+1. **Read a lesson** and predict each cell's output before you run it.
+2. **Change one input** and explain what happened.
+3. **Do the lesson exercises,** then the level's workbook.
+4. **Check yourself** with the auto-graded module for that workbook:
 
-## Recommended learning workflow
+   ```bash
+   python -m pytest practice -k basics_01
+   ```
 
-Read one lesson at a time. Predict before running examples, then change one input and explain the result. Solve the lesson exercises and complete a matching practice pack. Get its [auto-graded module](practice/README.md) to green with `pytest`. Only then read the worked solutions. Complete each level's projects and final assessment before advancing to the next level.
+   You see "correct" or "not correct yet" with your result and the test's inputs, never the answer. See [practice/README.md](practice/README.md).
+5. **Build the projects** and take the level's assessment before moving up.
 
-## Contributing
+Each lesson ends with a **Next:** link. Restart the kernel and run all cells once you finish a lesson.
 
-Contributions and corrections are welcome. Keep explanations beginner-friendly, code cells executable from a fresh kernel, and dependencies minimal. Run `python -m pytest` before opening a pull request. Clear notebook outputs before committing: the tests check this.
+## For contributors and teachers
 
-See the [Basics syllabus](basics/README.md), [Intermediate syllabus](intermediate/README.md), and [Advanced syllabus](advanced/README.md) for detailed lesson links, projects, and assessments.
+- `python -m pytest` runs every check: each notebook from a fresh kernel, the docs links, the data files, the project packages and the practice tests.
+- See [CONTRIBUTING.md](CONTRIBUTING.md). Questions, typo reports and translations are welcome.
+- Using this course in a class? It's free to use and adapt, with credit (see License).
+
+## License
+
+The lesson text and notebooks are under [CC BY 4.0](LICENSE-CONTENT.md). The code (examples, practice, tests, tools) is under the [MIT License](LICENSE).

@@ -1,57 +1,58 @@
 import pytest
 
+from grader import check
 from practice_loader import module_for
 
 m = module_for(__file__)
 
 
-def test_celsius_to_fahrenheit():
-    assert m.celsius_to_fahrenheit(100) == 212
-    assert m.celsius_to_fahrenheit(-40) == -40
-    assert m.celsius_to_fahrenheit.__doc__, "add a docstring that explains the function"
+@pytest.mark.parametrize("celsius", [100, -40, 0, 37])
+def test_celsius_to_fahrenheit(celsius):
+    check(m.celsius_to_fahrenheit(celsius))
 
 
-def test_min_max():
-    assert tuple(m.min_max([3, -2, 9, 0])) == (-2, 9)
-    assert tuple(m.min_max([5])) == (5, 5)
+@pytest.mark.parametrize("values", [[3, -2, 9, 0], [5]])
+def test_min_max(values):
+    check(m.min_max(values))
+
+
+def test_min_max_empty():
     with pytest.raises(ValueError):
         m.min_max([])
 
 
 def test_average():
-    assert m.average([1, 2, 3, 4]) == 2.5
+    check(m.average([1, 2, 3, 4]))
     with pytest.raises(ValueError):
         m.average([])
 
 
-def test_price_with_tax():
-    assert m.price_with_tax(10) == 12.0
-    assert m.price_with_tax(10, tax_rate=0.05) == 10.5
-    assert m.price_with_tax(0) == 0
+@pytest.mark.parametrize("price, kwargs", [(10, {}), (10, {"tax_rate": 0.05}), (0, {}), (19.99, {})])
+def test_price_with_tax(price, kwargs):
+    check(m.price_with_tax(price, **kwargs), hint="the default rate is 20%")
 
 
-@pytest.mark.parametrize("n, expected", [(-3, False), (0, False), (1, False), (2, True), (3, True), (4, False),
-                                          (17, True), (21, False), (97, True), (7919, True), (7917, False)])
-def test_is_prime(n, expected):
-    assert m.is_prime(n) is expected
+@pytest.mark.parametrize("n", [-3, 0, 1, 2, 3, 4, 17, 21, 97, 7919, 7917])
+def test_is_prime(n):
+    check(m.is_prime(n))
 
 
-@pytest.mark.parametrize("text, expected", [("3.5", 3.5), (" 42 ", 42.0), ("-1e3", -1000.0), ("abc", None), ("", None)])
-def test_parse_number(text, expected):
-    assert m.parse_number(text) == expected
+@pytest.mark.parametrize("text", ["3.5", " 42 ", "-1e3", "abc", ""])
+def test_parse_number(text):
+    check(m.parse_number(text))
 
 
 def test_check_percentage():
-    assert m.check_percentage(0) == 0
-    assert m.check_percentage(100) == 100
+    check(m.check_percentage(0))
+    check(m.check_percentage(100))
     for bad in (-0.5, 100.5):
         with pytest.raises(ValueError):
             m.check_percentage(bad)
 
 
 def test_score_report():
-    assert m.score_report(["Ana", "Ben"], [90, 72]) == ["1. Ana: 90", "2. Ben: 72"]
-    assert m.score_report([], []) == []
+    check(m.score_report(["Ana", "Ben"], [90, 72]))
+    check(m.score_report([], []))
 
 
 def test_roll_dice_is_reproducible():
@@ -71,13 +72,13 @@ def test_write_and_read_lines(tmp_path):
 def test_count_nonblank_lines(tmp_path):
     path = tmp_path / "text.txt"
     path.write_text("one\n\n   \ntwo\n\tthree\n", encoding="utf-8")
-    assert m.count_nonblank_lines(path) == 3
+    check(m.count_nonblank_lines(path))
 
 
 def test_csv_round_trip(tmp_path):
     path = tmp_path / "students.csv"
     m.write_students_csv(path, [{"name": "Ana", "grade": 91}, {"name": "Ben", "grade": 78}])
-    assert path.read_text(encoding="utf-8").splitlines()[0] == "name,grade"
+    check(path.read_text(encoding="utf-8").splitlines()[0], hint="write a header row")
     grades = m.read_grades(path)
     assert grades == {"Ana": 91, "Ben": 78}
     assert all(isinstance(g, int) for g in grades.values()), "convert grades with int()"
@@ -88,3 +89,38 @@ def test_tasks_round_trip(tmp_path):
     assert m.load_tasks(path) == [], "a missing file means there are no tasks yet"
     m.save_tasks(path, ["Buy milk", "Réviser 📚"])
     assert m.load_tasks(path) == ["Buy milk", "Réviser 📚"]
+
+
+@pytest.mark.parametrize("a, b", [(10, 4), (1, 0), (0, 5)])
+def test_safe_divide(a, b):
+    check(m.safe_divide(a, b))
+
+
+@pytest.mark.parametrize("numbers", [(1, 2, 3), (), (10,)])
+def test_describe_star_args(numbers):
+    check(m.describe(*numbers))
+
+
+def test_discount_price_is_keyword_only():
+    check(m.discount_price(50))
+    check(m.discount_price(50, percent=25))
+    with pytest.raises(TypeError):
+        m.discount_price(50, 25)
+    with pytest.raises(ValueError):
+        m.discount_price(50, percent=120)
+
+
+def test_append_log(tmp_path):
+    path = tmp_path / "log.txt"
+    check(m.append_log(path, "started"))
+    check(m.append_log(path, "finished"))
+    assert path.read_text(encoding="utf-8") == "started\nfinished\n"
+
+
+def test_longest_word_in_file(tmp_path):
+    path = tmp_path / "words.txt"
+    path.write_text("the quick brown\nfox jumps over\n\nlazy dogs\n", encoding="utf-8")
+    check(m.longest_word_in_file(path), hint="the first longest word wins ties")
+    empty = tmp_path / "empty.txt"
+    empty.write_text("", encoding="utf-8")
+    check(m.longest_word_in_file(empty))

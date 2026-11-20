@@ -8,7 +8,7 @@ Learn the engineering techniques required to build reliable and maintainable Pyt
 |---|---:|---|
 | Detailed lesson notebooks | **20** | Theory, four executable demonstrations per lesson, design questions, independent exercises |
 | Independent exercise workbooks | **4 / 80 challenges** | Robust programs, concurrency, security, testing and architecture |
-| Worked reference notebooks | **4 / 24 solutions** | Explanations, executable implementations, assertions |
+| Auto-graded practice | **4 modules, 95 tests** | Instant feedback; answers stay hidden |
 | Advanced portfolio projects | **3** | Async crawler simulator, streaming text analytics, transactional event processor |
 | Companion application | **1 installable package** | SQLite event processor CLI with unit tests |
 | Standalone parallelism example | **1 Python script** | Portable ProcessPoolExecutor demonstration |
@@ -56,7 +56,7 @@ The notebooks use the **Python standard library**. **Python 3.11+** is required 
 - [03 — Security, testing, and performance: 20 problems](exercises/03_security_testing_performance_exercises.ipynb)
 - [04 — Production systems: 20 problems](exercises/04_production_systems_exercises.ipynb)
 
-After attempting each workbook, review the [24 worked reference answers](solutions/README.md). Only a selection of exercises have reference answers; independent solution design is part of the learning objective.
+Check your work with the matching [auto-graded modules](../practice/README.md): `python -m pytest practice -k advanced`.
 
 ## Advanced portfolio projects
 

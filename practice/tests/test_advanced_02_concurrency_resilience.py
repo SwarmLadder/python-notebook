@@ -4,6 +4,7 @@ import time
 
 import pytest
 
+from grader import check
 from practice_loader import module_for
 
 m = module_for(__file__)
@@ -15,7 +16,7 @@ async def slow_double(value):
 
 
 def test_gather_in_order_keeps_input_order():
-    assert asyncio.run(m.gather_in_order([1, 2, 3, 4], slow_double)) == [2, 4, 6, 8]
+    check(asyncio.run(m.gather_in_order([1, 2, 3, 4], slow_double)))
 
 
 def test_gather_in_order_runs_concurrently():
@@ -41,7 +42,7 @@ def test_with_timeout():
         quick = await m.with_timeout(asyncio.sleep(0, result="done"), 1)
         slow = await m.with_timeout(asyncio.sleep(5), 0.01)
         return quick, slow
-    assert asyncio.run(main()) == (("ok", "done"), ("timeout", None))
+    check(asyncio.run(main()))
 
 
 def test_run_bounded_limits_concurrency():
@@ -50,18 +51,17 @@ def test_run_bounded_limits_concurrency():
         return value + 1
     results, peak = asyncio.run(m.run_bounded(range(10), work, limit=3))
     assert results == list(range(1, 11))
-    assert peak == 3
+    check(peak)
 
 
 def test_pipeline():
-    assert asyncio.run(m.pipeline(["a", "b", "c"], str.upper, maxsize=1)) == ["A", "B", "C"]
-    assert asyncio.run(m.pipeline([], str.upper)) == []
+    check(asyncio.run(m.pipeline(["a", "b", "c"], str.upper, maxsize=1)))
+    check(asyncio.run(m.pipeline([], str.upper)))
 
 
 def test_run_blocking_uses_a_thread():
     main_thread = threading.get_ident()
-    worker_thread = asyncio.run(m.run_blocking(threading.get_ident))
-    assert worker_thread != main_thread
+    assert asyncio.run(m.run_blocking(threading.get_ident)) != main_thread
 
 
 def test_safe_counter():
@@ -89,7 +89,7 @@ def test_retry_succeeds_after_transient_failures():
         return "ok"
 
     assert m.retry(flaky, attempts=5, base_delay=0.1, sleep=sleeps.append) == "ok"
-    assert sleeps == pytest.approx([0.1, 0.2]), "exponential backoff: base * 2**attempt"
+    check(sleeps, hint="exponential backoff")
 
 
 def test_retry_gives_up():
@@ -100,7 +100,7 @@ def test_retry_gives_up():
 
     with pytest.raises(m.TransientError):
         m.retry(always_down, attempts=3, base_delay=1, sleep=sleeps.append)
-    assert sleeps == [1, 2], "no sleep after the final attempt"
+    check(sleeps, hint="no sleep after the final attempt")
 
 
 def test_retry_does_not_retry_permanent_errors():
@@ -137,3 +137,64 @@ def test_idempotent_payments():
     assert payments.charge("order-2", 25.0) != first
     with pytest.raises(ValueError):
         payments.charge("order-1", 99.0)
+
+
+def test_first_result_cancels_the_rest():
+    cancelled = []
+
+    async def job(name, delay):
+        try:
+            await asyncio.sleep(delay)
+            return name
+        except asyncio.CancelledError:
+            cancelled.append(name)
+            raise
+
+    winner = asyncio.run(m.first_result([job("slow", 1), job("fast", 0.01), job("slower", 2)]))
+    check(winner)
+    check(sorted(cancelled), hint="cancel every task that has not finished")
+
+
+def test_map_threaded():
+    def slow_square(x):
+        time.sleep(0.01 * (5 - x))
+        return x * x
+    check(m.map_threaded(slow_square, [1, 2, 3, 4], workers=4))
+
+
+def test_token_bucket():
+    now = [0.0]
+    bucket = m.TokenBucket(capacity=2, rate=1, clock=lambda: now[0])
+    results = [bucket.allow(), bucket.allow(), bucket.allow()]
+    now[0] = 0.5
+    results.append(bucket.allow())
+    now[0] = 1.0
+    results.append(bucket.allow())
+    now[0] = 100
+    results += [bucket.allow(), bucket.allow(), bucket.allow()]
+    check(results, hint="the bucket never holds more than capacity")
+
+
+def test_circuit_breaker():
+    now = [0.0]
+    breaker = m.CircuitBreaker(threshold=2, reset_after=10, clock=lambda: now[0])
+
+    def fail():
+        raise ConnectionError("down")
+
+    states = []
+    for _ in range(2):
+        with pytest.raises(ConnectionError):
+            breaker.call(fail)
+        states.append(breaker.state)
+    with pytest.raises(m.CircuitOpen):
+        breaker.call(lambda: "never runs")
+    now[0] = 10
+    states.append(breaker.state)
+    with pytest.raises(ConnectionError):
+        breaker.call(fail)  # failed trial re-opens
+    states.append(breaker.state)
+    now[0] = 25
+    check(breaker.call(lambda: "recovered"))
+    states.append(breaker.state)
+    check(states)
