@@ -12,7 +12,7 @@ A practical, structured Python learning course organized into **Basics → Inter
 
 ## Quick start
 
-1. Install Python 3.10 or newer.
+1. Install Python 3.11 or newer for **all three levels** (Basics and Intermediate also support Python 3.10).
 2. Clone this repository and open a terminal in its root directory.
 3. Create a virtual environment: `python -m venv .venv`.
 4. Activate it: macOS/Linux: `source .venv/bin/activate`; Windows PowerShell: `.venv\Scripts\Activate.ps1`.
@@ -21,13 +21,16 @@ A practical, structured Python learning course organized into **Basics → Inter
 
 You can also read rendered .ipynb files directly on GitHub, but running their cells requires Jupyter or a compatible environment.
 
-## Course design
+## Course design and learning materials
 
-- **18** carefully ordered beginner lessons with explanatory Markdown, runnable examples, exercises, and self-check prompts
-- **4** practice workbooks containing **60** additional problems
-- **4** answer workbooks with worked reference approaches
-- **3** Basics mini-projects, **3** Intermediate portfolio projects, and **3** Advanced capstones with installable companion CLI packages
-- Reproducible examples: no network, secret keys, paid services, or third-party libraries required beyond Jupyter itself
+| Level | Guided lessons | Extra exercises | Reference solutions | Projects | Total notebooks |
+|---|---:|---:|---:|---:|---:|
+| Basics | 18 | 60 | Representative solutions | 3 | 29 |
+| Intermediate | 20 | 80 | 24 | 3 | 31 |
+| Advanced | 20 | 80 | 24 | 3 | 31 |
+| **Total** | **58** | **220** | — | **9** | **91** |
+
+Lessons include explanatory Markdown, runnable examples, exercises, and self-check prompts. Sample code uses the standard library, with Jupyter required to execute notebooks. Intermediate and Advanced also include installable example CLI packages and automated tests. Advanced uses Python 3.11+ for structured concurrency.
 
 ## Intermediate course
 
@@ -39,7 +42,7 @@ After Intermediate, follow [the Advanced syllabus](advanced/README.md) through 2
 
 ## Recommended learning workflow
 
-Read one lesson at a time. Predict before running examples, then change one input and explain the result. Solve the lesson exercises, complete a matching practice pack, and only then read the worked solutions. Complete the three projects and the final assessment before moving to Intermediate.
+Read one lesson at a time. Predict before running examples, then change one input and explain the result. Solve the lesson exercises, complete a matching practice pack, and only then read the worked solutions. Complete each level's projects and final assessment before advancing to the next level.
 
 ## Contributing
 
