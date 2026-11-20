@@ -46,6 +46,8 @@ for path in notebooks:
                     exec(compile(source, f"{path}:{cell_number}", "exec"), namespace)
                     executed += 1
                 except Exception as error:
+                    if "___" in source:
+                        continue  # fill-in exercise left blank on purpose
                     failures.append((path, cell_number, f"{type(error).__name__}: {error}"))
                     break
         print(f"{'FAIL' if failures and failures[-1][0] == path else 'PASS'} "
