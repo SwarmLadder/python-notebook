@@ -1,13 +1,16 @@
-name: Validate notebooks
+name: Validate Python learning notebooks
 on:
   push:
   pull_request:
 jobs:
-  structure-and-syntax:
+  validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: python tools/validate_notebooks.py
+      - name: Validate notebook structure and syntax
+        run: python tools/validate_notebooks.py
+      - name: Execute intermediate lesson and project examples
+        run: python tools/smoke_test_intermediate.py

@@ -1,0 +1,28 @@
+{
+  "products": [
+    {
+      "sku": "P100",
+      "name": "Notebook",
+      "category": "stationery",
+      "price": 12.5
+    },
+    {
+      "sku": "P200",
+      "name": "Pen",
+      "category": "stationery",
+      "price": 2.25
+    },
+    {
+      "sku": "P300",
+      "name": "Python Book",
+      "category": "books",
+      "price": 39.9
+    },
+    {
+      "sku": "P400",
+      "name": "Desk Lamp",
+      "category": "hardware",
+      "price": 55
+    }
+  ]
+}

@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-notebooks = sorted((ROOT / "basics").rglob("*.ipynb"))
+notebooks = sorted(path for level in ("basics", "intermediate") for path in (ROOT / level).rglob("*.ipynb"))
 if not notebooks:
     raise SystemExit("No notebooks found")
 errors = []

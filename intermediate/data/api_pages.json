@@ -1,0 +1,31 @@
+{
+  "pages": [
+    {
+      "page": 1,
+      "items": [
+        {
+          "sku": "P100",
+          "category": "stationery",
+          "price": 12.5
+        },
+        {
+          "sku": "P200",
+          "category": "stationery",
+          "price": 2.25
+        }
+      ],
+      "next": 2
+    },
+    {
+      "page": 2,
+      "items": [
+        {
+          "sku": "P300",
+          "category": "books",
+          "price": 39.9
+        }
+      ],
+      "next": null
+    }
+  ]
+}
