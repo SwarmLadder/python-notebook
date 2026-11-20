@@ -6,4 +6,4 @@ _practice = Path(__file__).resolve().parents[2] / "practice"
 if str(_practice) not in sys.path:
     sys.path.insert(0, str(_practice))
 
-from notebook_check import Checker  # noqa: E402,F401
+from notebook_check import Checker, ___  # noqa: E402,F401

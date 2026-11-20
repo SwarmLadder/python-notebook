@@ -30,6 +30,35 @@ if str(HERE) not in sys.path:
 import grader  # noqa: E402
 import practice_loader  # noqa: E402
 
+ANSI = __import__("re").compile(r"\x1b\[[0-9;]*m")
+
+
+class BlankNotFilled(NotImplementedError):
+    """Raised when an exercise uses a ___ blank that hasn't been filled in."""
+
+    def __init__(self):
+        super().__init__("fill in the ___ blanks")
+
+
+class _Blank:
+    """The ___ placeholder. IPython already defines ___ (an old output), so the workbooks
+    import this one: any use of it stops with BlankNotFilled, which the checks report as "to do"."""
+
+    def _stop(self, *args, **kwargs):
+        raise BlankNotFilled()
+
+    __call__ = __getattr__ = __getitem__ = __iter__ = __next__ = __len__ = __bool__ = __index__ = _stop
+    __add__ = __radd__ = __sub__ = __rsub__ = __mul__ = __rmul__ = __truediv__ = __rtruediv__ = _stop
+    __floordiv__ = __rfloordiv__ = __mod__ = __rmod__ = __pow__ = __rpow__ = __neg__ = _stop
+    __lt__ = __le__ = __gt__ = __ge__ = __eq__ = __ne__ = __contains__ = __format__ = _stop
+    __int__ = __float__ = __enter__ = __exit__ = __hash__ = _stop
+
+    def __repr__(self):
+        return "___"
+
+
+___ = _Blank()
+
 
 def _top_level_names(module: str) -> list[str]:
     tree = ast.parse((HERE / "exercises" / f"{module}.py").read_text(encoding="utf-8"))
@@ -61,13 +90,13 @@ class _Collector:
 
 
 def _failure_text(report) -> str:
-    text = str(report.longrepr)
+    text = ANSI.sub("", str(report.longrepr))
     keep = [line[1:].strip() for line in text.splitlines() if line.startswith("E ")]
     keep = [line.removeprefix("AssertionError: ") for line in keep if line]
     message = "\n".join(keep[:8]) or text.splitlines()[-1]
     for title, content in report.sections:
         if title.endswith("hints"):
-            message += "\n" + content
+            message += "\n" + ANSI.sub("", content)
     return message
 
 
@@ -107,11 +136,15 @@ class Checker:
                 pytest.main(args, plugins=[collector])
 
         # A worker thread has no running event loop, so tests may call asyncio.run()
-        # even though Jupyter itself runs one in the main thread.
-        worker = threading.Thread(target=run, daemon=True)
+        # even though Jupyter itself runs one in the main thread. Where threads are not
+        # available (e.g. Python in the browser via Pyodide) run the tests directly.
         try:
-            worker.start()
-            worker.join()
+            try:
+                worker = threading.Thread(target=run, daemon=True)
+                worker.start()
+                worker.join()
+            except RuntimeError:  # "can't start new thread"
+                run()
         finally:
             practice_loader.OVERRIDES.pop(self.module, None)
         return self._report(name, collector.reports)

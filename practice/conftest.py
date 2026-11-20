@@ -79,14 +79,20 @@ _progress: dict[str, dict[str, int]] = defaultdict(lambda: {"passed": 0, "failed
 
 def _not_started(error: BaseException | None) -> bool:
     """True if an unfilled ___ blank (or a NotImplementedError) caused this error."""
-    seen = set()
-    while error is not None and id(error) not in seen:
-        if isinstance(error, NotImplementedError):
+    pending, seen = [error], set()
+    while pending:
+        current = pending.pop()
+        if current is None or id(current) in seen:
+            continue
+        seen.add(id(current))
+        if isinstance(current, NotImplementedError):
             return True
-        if isinstance(error, NameError) and getattr(error, "name", None) == "___":
+        if isinstance(current, NameError) and getattr(current, "name", None) == "___":
             return True
-        seen.add(id(error))
-        error = error.__cause__ or error.__context__
+        if isinstance(current, (TypeError, AttributeError)) and ("_Blank" in str(current) or "___" in str(current)):
+            return True  # a builtin refused the ___ placeholder, e.g. next(___) or heapq.heappush(___, ...)
+        pending.extend(getattr(current, "exceptions", ()) or ())  # e.g. asyncio TaskGroup errors
+        pending += [current.__cause__, current.__context__]
     return False
 
 
@@ -101,7 +107,8 @@ def pytest_runtest_makereport(item, call):
     if not (report.when == "call" or (report.when == "setup" and report.failed)):
         return
     module = path.stem.removeprefix("test_")
-    if call.excinfo is not None and _not_started(call.excinfo.value) and not grader.RECORDING:
+    blank_in_failure = report.failed and "___" in str(report.longrepr)  # e.g. "assert ___ is <obj>"
+    if call.excinfo is not None and (_not_started(call.excinfo.value) or blank_in_failure) and not grader.RECORDING:
         report.outcome = "skipped"
         report.longrepr = (str(path), item.location[1], "TO DO: fill in the ___ blanks")
         _progress[module]["todo"] += 1

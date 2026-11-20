@@ -79,9 +79,22 @@ def _answer_key(module: str) -> dict[str, str]:
     return _keys[module]
 
 
+def _contains_blank(value, depth: int = 0) -> bool:
+    """True if a ___ placeholder (from a notebook workbook) is in the value."""
+    if type(value).__name__ == "_Blank":
+        return True
+    if depth < 4 and isinstance(value, (list, tuple, set, frozenset)):
+        return any(_contains_blank(v, depth + 1) for v in value)
+    if depth < 4 and isinstance(value, dict):
+        return any(_contains_blank(k, depth + 1) or _contains_blank(v, depth + 1) for k, v in value.items())
+    return False
+
+
 def check(actual, hint: str = "") -> None:
     """Pass if `actual` is the correct value for this point of the test."""
     __tracebackhide__ = True  # show the learner's test line, not grader internals
+    if _contains_blank(actual):
+        raise NotImplementedError("fill in the ___ blanks")
     module, test_name = _current_test()
     _counters[test_name] += 1
     key = f"{test_name}#{_counters[test_name]}"

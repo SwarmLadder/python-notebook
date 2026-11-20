@@ -87,3 +87,14 @@ LESSON_IDS = [notebook_id(p) for p in LESSONS]
 def test_lessons_end_with_a_next_step(path):
     last = cell_source(load(path)["cells"][-1])
     assert last.startswith("**Next:**"), "end each lesson with a **Next:** link"
+
+
+@pytest.mark.parametrize("path", NOTEBOOKS, ids=IDS)
+def test_first_code_cell_is_the_colab_setup(path):
+    """Colab opens one notebook alone; the setup cell fetches the helpers and data it needs."""
+    import sys
+    sys.path.insert(0, str(path.parents[2] / "tools"))
+    from colab_setup import setup_code
+    code_cells = [c for c in load(path)["cells"] if c["cell_type"] == "code"]
+    assert code_cells and cell_source(code_cells[0]) == setup_code(path.parts[-3], path.parts[-2]), \
+        "first code cell must be tools/colab_setup.setup_code(level, folder)"
