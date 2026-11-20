@@ -19,6 +19,7 @@ import dataclasses
 import hashlib
 import json
 import math
+import sys
 import threading
 
 
@@ -87,6 +88,9 @@ def _norm(value):
 
 def run(coroutine):
     """asyncio.run() that also works inside Jupyter, where a loop is already running."""
+    if sys.platform == "emscripten":  # Python in the browser (Pyodide): no threads, but run_sync
+        from pyodide.ffi import run_sync
+        return run_sync(coroutine)
     try:
         asyncio.get_running_loop()
     except RuntimeError:
