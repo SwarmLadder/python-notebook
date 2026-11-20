@@ -1,3 +1,5 @@
-# Advanced Python Course
+# Advanced Python Course Status
 
-Course material is being created in this repository. The syllabus, lessons, exercises, worked solutions, and projects are added in subsequent commits.
+**Published:** 20 detailed lessons, 80 practice challenges, 24 worked references, 3 capstone notebooks, plus an installable event processor CLI.
+
+Start at [the Advanced README](README.md). The course's automated notebook validation and source-package tests are described there.

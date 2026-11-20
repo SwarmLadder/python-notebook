@@ -16,3 +16,9 @@ jobs:
         run: python tools/smoke_test_intermediate.py
       - name: Run packaged CLI unit tests
         run: PYTHONPATH=intermediate/projects/task_manager_package/src python -m unittest discover -s intermediate/projects/task_manager_package/tests -v
+      - name: Run Advanced notebook code cells
+        run: python tools/smoke_test_advanced.py
+      - name: Run Advanced event processor package tests
+        run: PYTHONPATH=advanced/projects/event_processor_package/src python -m unittest discover -s advanced/projects/event_processor_package/tests -v
+      - name: Run portable process-pool example
+        run: python advanced/examples/process_pool_demo.py

@@ -1,0 +1,21 @@
+{
+  "/": {
+    "links": [
+      "/about",
+      "/learn"
+    ],
+    "text": "Welcome"
+  },
+  "/about": {
+    "links": [
+      "/"
+    ],
+    "text": "About"
+  },
+  "/learn": {
+    "links": [
+      "/about"
+    ],
+    "text": "Learning resources"
+  }
+}

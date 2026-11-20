@@ -1,0 +1,19 @@
+{
+  "events": [
+    {
+      "event_id": "E100",
+      "category": "books",
+      "amount": 8
+    },
+    {
+      "event_id": "E101",
+      "category": "pens",
+      "amount": 3
+    },
+    {
+      "event_id": "E102",
+      "category": "books",
+      "amount": 5
+    }
+  ]
+}

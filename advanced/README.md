@@ -1,26 +1,126 @@
-# Level 3 — Advanced Python (Curriculum Roadmap)
+# Level 3 — Advanced Python: Complete Practical Course
 
-**Status:** Roadmap only. Detailed Advanced notebooks have not yet been authored; complete [Basics](../basics/README.md) and then [Intermediate](../intermediate/README.md).
+Learn the engineering techniques required to build reliable and maintainable Python systems. This course builds on the [Basics](../basics/README.md) and [Intermediate](../intermediate/README.md) levels.
 
-## Proposed lesson sequence
+## At a glance
 
-1. Python data model: dunder methods, protocols, descriptors, metaclasses (conceptual)
-2. Memory model: mutability, references, garbage collection, weakrefs
-3. Advanced typing: protocols, variance, type aliases, overloads
-4. Async programming: asyncio, tasks, cancellation, structured concurrency
-5. Parallelism and concurrency: threads, processes, GIL, queues
-6. Networking robustness: timeouts, retries, rate limits, idempotency
-7. Profiling and optimization: cProfile, tracemalloc, benchmarks
-8. Algorithms, complexity, caching, and data structures
-9. Architectural patterns, dependency injection, boundaries, maintainability
-10. Security practices: safe parsing, secrets, dependency risks
-11. Testing at scale: property-based tests, integration tests, CI/CD
-12. Production engineering: observability, deployment, and performance budgets
+| Material | Count | Purpose |
+|---|---:|---|
+| Detailed lesson notebooks | **20** | Theory, four executable demonstrations per lesson, design questions, independent exercises |
+| Independent exercise workbooks | **4 / 80 challenges** | Robust programs, concurrency, security, testing and architecture |
+| Worked reference notebooks | **4 / 24 solutions** | Explanations, executable implementations, assertions |
+| Advanced portfolio projects | **3** | Async crawler simulator, streaming text analytics, transactional event processor |
+| Companion application | **1 installable package** | SQLite event processor CLI with unit tests |
+| Standalone parallelism example | **1 Python script** | Portable ProcessPoolExecutor demonstration |
 
-## Suggested portfolio projects
+The notebooks use the **Python standard library**. **Python 3.11+** is required for TaskGroup and ExceptionGroup examples (CI uses Python 3.12). No API keys or live network services are required.
 
-- An asynchronous crawler with bounded concurrency and rate limiting
-- A benchmark-driven text processing service
-- A production-style API with observability and automated tests
+## Detailed lesson index
 
-**Prerequisites:** Solid OOP, testing, packaging, and SQL fundamentals.
+| Lesson | Topic |
+|---:|---|
+| 00 | [Python data model and special methods](notebooks/00_python_data_model.ipynb) |
+| 01 | [Descriptors, properties, metaclass concepts](notebooks/01_descriptors_and_metaclasses.ipynb) |
+| 02 | [Memory, references, copying, and weakrefs](notebooks/02_memory_references_weakrefs.ipynb) |
+| 03 | [Generics, overloads, and Protocols](notebooks/03_advanced_typing.ipynb) |
+| 04 | [Imports, introspection, and plugins](notebooks/04_imports_introspection_plugins.ipynb) |
+| 05 | [asyncio event loops and coroutines](notebooks/05_asyncio_event_loop.ipynb) |
+| 06 | [TaskGroup, cancellation, and timeouts](notebooks/06_taskgroups_cancellation_timeouts.ipynb) |
+| 07 | [Threading, locks, and queues](notebooks/07_threading_locks_queues.ipynb) |
+| 08 | [Process pools and parallelism](notebooks/08_multiprocessing_and_parallelism.ipynb) |
+| 09 | [Retries, rate limiting, and idempotency](notebooks/09_retries_rate_limits_idempotency.ipynb) |
+| 10 | [Profiling and memory measurement](notebooks/10_profiling_memory_benchmarks.ipynb) |
+| 11 | [Algorithms, heaps, and caching](notebooks/11_algorithms_complexity_caching.ipynb) |
+| 12 | [Ports, adapters, and dependency injection](notebooks/12_architecture_dependency_injection.ipynb) |
+| 13 | [Security and untrusted input boundaries](notebooks/13_security_safe_parsing_secrets.ipynb) |
+| 14 | [Property-style testing and integration tests](notebooks/14_testing_property_integration.ipynb) |
+| 15 | [Observability, SLIs, and SLOs](notebooks/15_observability_and_slos.ipynb) |
+| 16 | [API contracts and versioning](notebooks/16_api_design_versioning_contracts.ipynb) |
+| 17 | [Transactions, integrity, and idempotency](notebooks/17_sqlite_transactions_integrity.ipynb) |
+| 18 | [Packaging, CI, and deployment hygiene](notebooks/18_production_quality_ci_deployment.ipynb) |
+| 19 | [Advanced review and capstone preparation](notebooks/19_advanced_review_capstone.ipynb) |
+
+## Learning modules
+
+| Module | Lessons | Core mastery |
+|---|---|---|
+| Python internals | 00–04 | Data model, class mechanics, object lifetime, generic contracts, trusted plugins |
+| Concurrency and reliability | 05–09 | asyncio, TaskGroup, cancellation, threads, processes, bounded retries |
+| Correctness and systems design | 10–14 | profiling, algorithms, injection, secure parsing, tests and integration |
+| Production engineering | 15–19 | SLIs/SLOs, API evolution, transactional idempotency, CI and capstone |
+
+## Exercise workbooks — 80 independent challenges
+
+- [01 — Internals, typing, and architecture: 20 problems](exercises/01_internals_typing_architecture_exercises.ipynb)
+- [02 — Concurrency, async, and resilience: 20 problems](exercises/02_concurrency_resilience_exercises.ipynb)
+- [03 — Security, testing, and performance: 20 problems](exercises/03_security_testing_performance_exercises.ipynb)
+- [04 — Production systems: 20 problems](exercises/04_production_systems_exercises.ipynb)
+
+After attempting each workbook, review the [24 worked reference answers](solutions/README.md). Only a selection of exercises have reference answers; independent solution design is part of the learning objective.
+
+## Advanced portfolio projects
+
+1. [Bounded asynchronous crawler simulator](projects/01_async_crawler_simulator.ipynb) — TaskGroup, deduplication, bounded concurrency, failure reports, fake offline pages.
+2. [Streaming text analytics and performance lab](projects/02_streaming_text_analytics.ipynb) — generators, normalized tokenization, Counter, timeit, tracemalloc, tests.
+3. [Transactional event processor](projects/03_transactional_event_processor.ipynb) — SQLite uniqueness, idempotent processing, safe metrics, rollback tests.
+   - [Installable event-processor CLI package](projects/event_processor_package/README.md) — pyproject.toml, src layout, tests.
+
+For portable multiprocessing, run [the standalone process-pool demonstration](examples/process_pool_demo.py) from the terminal rather than from a notebook cell.
+
+## Study schedule — 10 weeks
+
+| Week | Course work | Deliverable |
+|---|---|---|
+| 1 | Lessons 00–02 | Value object, descriptor, memory case study |
+| 2 | Lessons 03–04 | Type-safe plugin interface; workbook 1 |
+| 3 | Lessons 05–06 | Cancel-safe TaskGroup pipeline |
+| 4 | Lessons 07–09 | Concurrency and retries; workbook 2 |
+| 5 | Lessons 10–11 | Profiling report and algorithm review |
+| 6 | Lessons 12–13 | Architecture and security assessment |
+| 7 | Lesson 14 | Tests and workbook 3 |
+| 8 | Lessons 15–16 | SLO metrics and versioned API |
+| 9 | Lessons 17–18 | Transactional application and workbook 4 |
+| 10 | Lesson 19 | Portfolio project completion and final assessment |
+
+See [CURRICULUM.md](CURRICULUM.md) for module checkpoints and [ASSESSMENT.md](ASSESSMENT.md) for a 100-point rubric.
+
+## Quick start
+
+From the repository root:
+
+```bash
+python -m venv .venv
+# macOS/Linux:
+source .venv/bin/activate
+# Windows PowerShell:
+# .venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+jupyter lab
+```
+
+Open `advanced/notebooks/00_python_data_model.ipynb`.
+
+To validate syntax and run deterministic examples:
+
+```bash
+python tools/validate_notebooks.py
+python tools/smoke_test_advanced.py
+```
+
+To test the installable CLI's core directly without installation:
+
+```bash
+PYTHONPATH=advanced/projects/event_processor_package/src python -m unittest discover -s advanced/projects/event_processor_package/tests -v
+```
+
+## Graduation criteria
+
+- [ ] All 20 notebooks can be explained and run from a fresh kernel.
+- [ ] At least 80% of the 80 practice challenges solved independently.
+- [ ] Completed and tested all three capstone projects.
+- [ ] Can reason about cancellation, rate limits, rollback, and idempotency.
+- [ ] Can justify benchmarks with measured evidence, not assumptions.
+- [ ] Can demonstrate secure input validation and secret-free logging.
+- [ ] Completed the [final assessment](ASSESSMENT.md).
+
+**Note:** These lessons are educational simulations. They are not production-deployment advice for high-risk financial, medical, or security systems without specialist review.

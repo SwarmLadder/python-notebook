@@ -1,0 +1,3 @@
+Python is expressive and flexible.
+Streaming text processing can reduce peak memory.
+Reliable Python services need testing, observability, and safe storage.
