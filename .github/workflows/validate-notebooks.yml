@@ -5,20 +5,23 @@ on:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.13']
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Validate notebook structure and syntax
-        run: python tools/validate_notebooks.py
-      - name: Execute intermediate lesson and project examples
-        run: python tools/smoke_test_intermediate.py
-      - name: Run packaged CLI unit tests
-        run: PYTHONPATH=intermediate/projects/task_manager_package/src python -m unittest discover -s intermediate/projects/task_manager_package/tests -v
-      - name: Run Advanced notebook code cells
-        run: python tools/smoke_test_advanced.py
-      - name: Run Advanced event processor package tests
-        run: PYTHONPATH=advanced/projects/event_processor_package/src python -m unittest discover -s advanced/projects/event_processor_package/tests -v
-      - name: Run portable process-pool example
-        run: python advanced/examples/process_pool_demo.py
+          python-version: ${{ matrix.python-version }}
+      - name: Install test tools
+        run: python -m pip install "pytest>=7.0"
+      - name: Test every notebook, doc, data file, script and project package
+        run: python -m pytest
+      - name: Grade the reference solutions with the practice tests
+        run: python -m pytest practice --solutions
+      - name: Legacy smoke tests
+        run: |
+          python tools/validate_notebooks.py
+          python tools/smoke_test_intermediate.py
+          python tools/smoke_test_advanced.py

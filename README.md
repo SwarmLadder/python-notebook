@@ -16,7 +16,7 @@ A practical, structured Python learning course organized into **Basics → Inter
 2. Clone this repository and open a terminal in its root directory.
 3. Create a virtual environment: `python -m venv .venv`.
 4. Activate it: macOS/Linux: `source .venv/bin/activate`; Windows PowerShell: `.venv\Scripts\Activate.ps1`.
-5. Run `python -m pip install -r requirements.txt`.
+5. Run `python -m pip install -r requirements-dev.txt` (Jupyter and pytest).
 6. Launch with `jupyter lab` and open `basics/notebooks/00_python_introduction.ipynb`.
 
 You can also read rendered .ipynb files directly on GitHub, but running their cells requires Jupyter or a compatible environment.
@@ -40,12 +40,29 @@ After Basics, open [the Intermediate syllabus](intermediate/README.md) to study 
 
 After Intermediate, follow [the Advanced syllabus](advanced/README.md) through 20 detailed notebooks, 80 independent exercises, 24 worked reference examples, and three portfolio capstones. The [final assessment](advanced/ASSESSMENT.md) includes a 100-point rubric and tests for concurrency, security, and transaction behavior.
 
+## Check your work: tests for everything
+
+The course has a test suite. One command runs every check:
+
+```bash
+python -m pip install -r requirements-dev.txt
+python -m pytest
+```
+
+| Folder | What it checks |
+|---|---|
+| [`practice/`](practice/README.md) | **Auto-graded exercises for learners.** 12 modules (one per exercise workbook) and 240 tests with instant feedback and a progress table. |
+| [`tests/`](tests) | One test for **every notebook**: it runs top-to-bottom from a fresh kernel, has valid syntax, a title, explanations and cleared outputs. Docs links, data files and scripts are also checked. |
+| `*/projects/*_package/tests/` | Unit tests for the installable CLI projects. |
+
+Try the practice loop now: open `practice/exercises/basics_01_fundamentals.py`, implement `split_minutes`, then run `python -m pytest practice -k split_minutes`.
+
 ## Recommended learning workflow
 
-Read one lesson at a time. Predict before running examples, then change one input and explain the result. Solve the lesson exercises, complete a matching practice pack, and only then read the worked solutions. Complete each level's projects and final assessment before advancing to the next level.
+Read one lesson at a time. Predict before running examples, then change one input and explain the result. Solve the lesson exercises and complete a matching practice pack. Get its [auto-graded module](practice/README.md) to green with `pytest`. Only then read the worked solutions. Complete each level's projects and final assessment before advancing to the next level.
 
 ## Contributing
 
-Contributions and corrections are welcome. Keep explanations beginner-friendly, code cells executable from a fresh kernel, and dependencies minimal.
+Contributions and corrections are welcome. Keep explanations beginner-friendly, code cells executable from a fresh kernel, and dependencies minimal. Run `python -m pytest` before opening a pull request. Clear notebook outputs before committing: the tests check this.
 
 See the [Basics syllabus](basics/README.md), [Intermediate syllabus](intermediate/README.md), and [Advanced syllabus](advanced/README.md) for detailed lesson links, projects, and assessments.

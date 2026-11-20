@@ -1,0 +1,3 @@
+# Tools for checking your work and for contributors.
+-r requirements.txt
+pytest>=7.0
