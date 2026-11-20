@@ -14,3 +14,5 @@ jobs:
         run: python tools/validate_notebooks.py
       - name: Execute intermediate lesson and project examples
         run: python tools/smoke_test_intermediate.py
+      - name: Run packaged CLI unit tests
+        run: PYTHONPATH=intermediate/projects/task_manager_package/src python -m unittest discover -s intermediate/projects/task_manager_package/tests -v
