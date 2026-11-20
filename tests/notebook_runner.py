@@ -12,6 +12,7 @@ import contextlib
 import io
 import json
 import os
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -86,6 +87,7 @@ def run_notebook(path: Path) -> RunResult:
     previous_cwd = Path.cwd()
     original_input = builtins.input
     builtins.input = _no_input
+    sys.path.insert(0, str(path.parent))  # Jupyter can import helpers (quiz.py) next to the notebook
     try:
         os.chdir(path.parent)  # relative data paths behave as they do in Jupyter
         for number, source in code_cells(notebook):
@@ -107,6 +109,8 @@ def run_notebook(path: Path) -> RunResult:
     finally:
         builtins.input = original_input
         os.chdir(previous_cwd)
+        sys.path.remove(str(path.parent))
+        sys.modules.pop("quiz", None)
     return RunResult(executed, stdout.getvalue())
 
 

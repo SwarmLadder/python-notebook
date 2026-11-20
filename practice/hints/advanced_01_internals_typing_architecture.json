@@ -1,0 +1,58 @@
+{
+ "ReadOnlyBag": [
+  "Copy the input into a tuple.",
+  "Implement __len__, __iter__, __contains__; the repr shows at most 3 items, then ', ...'."
+ ],
+ "Ticket": [
+  "Compare with a (priority, sequence) key.",
+  "Return NotImplemented for non-Tickets; define __hash__ with the same key as __eq__."
+ ],
+ "PositiveInt": [
+  "__set_name__ tells the descriptor its attribute name.",
+  "Store values in instance.__dict__[self.name]; reject bools explicitly (bool is a subclass of int)."
+ ],
+ "Stack": [
+  "Wrap a list.",
+  "push = append; pop raises IndexError('pop from empty stack') when empty."
+ ],
+ "first_or_none": [
+  "An empty sequence is falsy.",
+  "values[0] if values else None."
+ ],
+ "PluginRegistry": [
+  "Check the allowlist at registration time.",
+  "register raises ValueError for unknown names; run raises KeyError if not registered."
+ ],
+ "parameter_defaults": [
+  "inspect.signature(func).parameters.",
+  "p.default is inspect.Parameter.empty means 'no default': use None."
+ ],
+ "InMemoryUserRepository": [
+  "No inheritance needed: matching methods are enough.",
+  "Keep a dict id -> copy of the user."
+ ],
+ "rename_user": [
+  "Validate the name first, then load.",
+  "Raise KeyError if repo.get returns None; save a NEW dict with the stripped name."
+ ],
+ "Session": [
+  "Never call datetime.now() directly; use self.clock().",
+  "Expired when clock() >= created_at + ttl."
+ ],
+ "Vector": [
+  "__rmul__ handles 2 * v.",
+  "Return NotImplemented for unsupported operands; add __slots__ = ('x', 'y')."
+ ],
+ "LRUCache": [
+  "collections.OrderedDict remembers order.",
+  "move_to_end on get and put; popitem(last=False) evicts the oldest."
+ ],
+ "Plugin": [
+  "__init_subclass__ runs when a subclass is created.",
+  "Read cls.__dict__.get('name'); raise TypeError if it's missing or a duplicate; otherwise add it to Plugin.registry."
+ ],
+ "enforce_types": [
+  "signature.bind(*args, **kwargs).arguments maps names to values.",
+  "Check only annotations that are real classes, and skip inspect.Parameter.empty."
+ ]
+}

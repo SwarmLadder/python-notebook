@@ -1,0 +1,58 @@
+{
+ "parse_limited_json": [
+  "Check the size BEFORE parsing; measure UTF-8 bytes.",
+  "len(text.encode('utf-8')) > max_bytes raises ValueError('payload too large'); then check isinstance(data, dict)."
+ ],
+ "make_token": [
+  "The random module is predictable: use secrets.",
+  "secrets.token_urlsafe(32)."
+ ],
+ "tokens_match": [
+  "== can leak timing information.",
+  "hmac.compare_digest(a.encode(), b.encode())."
+ ],
+ "grep_command": [
+  "Return a list of arguments, not a string.",
+  "'--' goes before the pattern so it can't be read as an option."
+ ],
+ "redact": [
+  "Return a copy and recurse into nested dicts.",
+  "Compare key.lower() against SENSITIVE_KEYS."
+ ],
+ "limit_text": [
+  "Reject before doing any work.",
+  "len(text) > max_chars raises ValueError."
+ ],
+ "StablePriorityQueue": [
+  "heapq compares whole tuples.",
+  "Push (priority, next(counter), item) so ties break by insertion order and items are never compared."
+ ],
+ "find_index": [
+  "bisect_left finds where target would go.",
+  "Check that the index is in range and that the value there equals target; otherwise -1."
+ ],
+ "add_users": [
+  "One transaction for all inserts.",
+  "Validate each email inside `with conn:`; IntegrityError becomes ValueError, and the with block rolls back."
+ ],
+ "hash_password": [
+  "Use a slow key-derivation function, not plain sha256.",
+  "hashlib.pbkdf2_hmac('sha256', password.encode(), salt, iterations).hex()."
+ ],
+ "verify_password": [
+  "Recompute with the same salt and iterations.",
+  "Compare with hmac.compare_digest."
+ ],
+ "safe_join": [
+  "Resolve the path BEFORE checking it.",
+  "(Path(base).resolve() / user_path).resolve(), then .is_relative_to(root)."
+ ],
+ "merge_sorted": [
+  "Every input is already sorted.",
+  "list(heapq.merge(*sequences))."
+ ],
+ "top_k": [
+  "No need to sort everything.",
+  "heapq.nlargest(k, values)."
+ ]
+}

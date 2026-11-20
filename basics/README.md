@@ -78,3 +78,8 @@ Each pack has an auto-graded module in [`practice/`](../practice/README.md). The
 ## Next level
 
 Read the [Intermediate roadmap](../intermediate/README.md) after completing the Basics capstone.
+
+## Worked examples and quizzes
+
+- [Worked examples](worked_examples/01_worked_examples.ipynb): six problems solved step by step (plan → code → why → common mistake → your turn).
+- Every lesson ends with a **Quick quiz** of three questions. Answers are hidden but checked when you run the cell.

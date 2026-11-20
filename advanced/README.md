@@ -124,3 +124,8 @@ PYTHONPATH=advanced/projects/event_processor_package/src python -m unittest disc
 - [ ] Completed the [final assessment](ASSESSMENT.md).
 
 **Note:** These lessons are educational simulations. They are not production-deployment advice for high-risk financial, medical, or security systems without specialist review.
+
+## Worked examples and quizzes
+
+- [Worked examples](worked_examples/01_worked_examples.ipynb): six problems solved step by step (plan → code → why → common mistake → your turn).
+- Every lesson ends with a **Quick quiz** of three questions. Answers are hidden but checked when you run the cell.

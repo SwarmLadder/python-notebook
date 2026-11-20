@@ -70,3 +70,17 @@ def test_every_check_call_has_an_answer(stub):
                    and any(isinstance(c, ast.Call) and getattr(c.func, "id", "") == "check" for c in ast.walk(n))}
     missing = using_check - recorded
     assert not missing, f"rebuild the answer key (missing {sorted(missing)})"
+
+
+NO_HINT_NEEDED = {"TransientError", "PermanentError", "CircuitOpen", "InvalidQuantity", "UserRepository"}
+
+
+@pytest.mark.parametrize("stub", EXERCISES, ids=STUB_IDS)
+def test_every_exercise_has_step_by_step_hints(stub):
+    hints = json.loads((PRACTICE / "hints" / f"{stub.stem}.json").read_text(encoding="utf-8"))
+    tree = ast.parse(stub.read_text(encoding="utf-8"))
+    names = {n.name for n in tree.body if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
+             and not n.name.startswith("_")} - NO_HINT_NEEDED
+    missing = sorted(n for n in names if len(hints.get(n, [])) < 2)
+    assert not missing, f"add two hints (nudge, then method) for: {missing}"
+    assert set(hints) <= names | NO_HINT_NEEDED, f"hints for unknown names: {sorted(set(hints) - names)}"

@@ -1,0 +1,78 @@
+{
+ "discounted": [
+  "Validate everything before transforming.",
+  "[round(p * (1 - percent / 100), 2) for p in prices]."
+ ],
+ "index_by_sku": [
+  "A dict comprehension would hide duplicates.",
+  "Loop, and raise ValueError if the sku is already a key."
+ ],
+ "unique_usernames": [
+  "Normalize, skip blanks, deduplicate, sort.",
+  "sorted({n.strip().casefold() for n in names if n.strip()})."
+ ],
+ "flatten_grid": [
+  "Write the nested loops first, then turn them into a comprehension.",
+  "[v for row in rows for v in row]: the loops appear in the same order."
+ ],
+ "sum_even_squares": [
+  "A generator expression avoids building a list.",
+  "sum(x * x for x in range(0, n, 2))."
+ ],
+ "Book": [
+  "Store the loan state on the instance.",
+  "borrow() raises RuntimeError if already on loan; return_book() does the opposite."
+ ],
+ "Account": [
+  "Keep the balance in _balance and expose a @property without a setter.",
+  "Validate the amount (> 0, enough funds) before changing anything."
+ ],
+ "Product": [
+  "Validation goes in __post_init__.",
+  "total_value is a @property returning price * quantity."
+ ],
+ "Playlist": [
+  "A mutable default would be shared by every instance.",
+  "tracks: list[str] = field(default_factory=list)."
+ ],
+ "Coordinate": [
+  "Frozen dataclasses are immutable and hashable.",
+  "@dataclass(frozen=True)."
+ ],
+ "Temperature": [
+  "Store celsius; compute fahrenheit.",
+  "Give both properties setters; validate in the celsius setter so every path is checked."
+ ],
+ "Inventory": [
+  "Key the products by sku.",
+  "total_value sums p.total_value; __len__ returns the number of products."
+ ],
+ "transpose": [
+  "The new row i is column i of the old matrix.",
+  "[[row[c] for row in matrix] for c in range(len(matrix[0]))]; [] for an empty matrix."
+ ],
+ "Money": [
+  "__add__ should handle Money only.",
+  "Return NotImplemented for other types; raise ValueError for a currency mismatch; round to 2."
+ ],
+ "Shape": [
+  "describe() calls self.area(), whichever subclass self is.",
+  "type(self).__name__ gives the class name."
+ ],
+ "Rectangle": [
+  "Subclass Shape and override area().",
+  "width * height."
+ ],
+ "Circle": [
+  "Subclass Shape and override area().",
+  "math.pi * radius ** 2."
+ ],
+ "total_area": [
+  "Polymorphism: don't check types.",
+  "sum(shape.area() for shape in shapes)."
+ ],
+ "ShoppingCart": [
+  "Store name -> [unit_price, quantity] in a dict (dicts keep insertion order).",
+  "__len__ sums quantities; __iter__ iterates the names; __contains__ checks the dict."
+ ]
+}

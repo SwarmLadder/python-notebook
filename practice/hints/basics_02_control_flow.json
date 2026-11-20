@@ -1,0 +1,74 @@
+{
+ "classify_temperature": [
+  "Test the coldest band first and use elif for the rest.",
+  "Read the docstring boundaries carefully: freezing uses <= 0, the others use <."
+ ],
+ "divisible_by_3_and_5": [
+  "'Divisible by' means the remainder is 0.",
+  "number % 3 == 0 and number % 5 == 0."
+ ],
+ "greatest_of_three": [
+  "Keep a 'largest so far' variable.",
+  "Start with a, then replace it if b is bigger, then if c is bigger."
+ ],
+ "letter_grade": [
+  "Reject out-of-range scores before grading.",
+  "Check bands from the top: >= 90 'A', >= 80 'B', ... else 'F'."
+ ],
+ "is_valid_password": [
+  "Two conditions must both be true.",
+  "len(password) >= min_length and any(ch.isdigit() for ch in password)."
+ ],
+ "sum_to": [
+  "Use an accumulator that starts at 0.",
+  "for value in range(1, n + 1): total += value."
+ ],
+ "factorial": [
+  "0! is 1; negative n is an error.",
+  "Start result = 1 and multiply while n > 1, decreasing n each time."
+ ],
+ "count_vowels": [
+  "Lower-case first so 'A' counts.",
+  "Count characters where ch in 'aeiou'."
+ ],
+ "first_above": [
+  "Stop as soon as you find it.",
+  "Loop and `return value` when value > limit; return None after the loop."
+ ],
+ "count_signs": [
+  "Start a dict with all three keys at 0.",
+  "Use if/elif/else on > 0, < 0 and the rest (zero)."
+ ],
+ "triangle": [
+  "Row i has i stars.",
+  "Build each row as '*' * i, then '\\n'.join(rows). 0 rows gives ''."
+ ],
+ "multiples_of_seven": [
+  "The k-th multiple is 7 * k, starting at k = 1.",
+  "[7 * k for k in range(1, n + 1)]."
+ ],
+ "fizzbuzz": [
+  "Check 'both' (divisible by 15) first.",
+  "Return strings: str(value) for ordinary numbers."
+ ],
+ "is_leap_year": [
+  "Three rules: by 4, not by 100, unless by 400.",
+  "year % 4 == 0 and (year % 100 != 0 or year % 400 == 0)."
+ ],
+ "digit_sum": [
+  "Work with abs(n).",
+  "Loop while n > 0: add n % 10, then n //= 10."
+ ],
+ "collatz_steps": [
+  "Count steps until n == 1; n = 1 needs 0 steps.",
+  "Even: n // 2. Odd: 3 * n + 1. Raise ValueError for n < 1."
+ ],
+ "primes_up_to": [
+  "Try divisors from 2 up to the square root.",
+  "Use for ... else: the else runs only if the inner loop didn't break."
+ ],
+ "number_pyramid": [
+  "Row r contains 1..r.",
+  "' '.join(str(i) for i in range(1, r + 1)) for each row."
+ ]
+}

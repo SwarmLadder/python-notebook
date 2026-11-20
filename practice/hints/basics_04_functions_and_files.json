@@ -1,0 +1,86 @@
+{
+ "celsius_to_fahrenheit": [
+  "F = C × 9/5 + 32.",
+  "Return the number; add a one-line docstring."
+ ],
+ "min_max": [
+  "An empty list has no minimum.",
+  "Raise ValueError when not values; otherwise return (min(values), max(values))."
+ ],
+ "average": [
+  "Handle the empty list explicitly.",
+  "sum(values) / len(values)."
+ ],
+ "price_with_tax": [
+  "Use a default parameter: tax_rate=0.2.",
+  "round(price * (1 + tax_rate), 2)."
+ ],
+ "is_prime": [
+  "Numbers below 2 are not prime.",
+  "Try divisors d while d * d <= n; any n % d == 0 means not prime."
+ ],
+ "parse_number": [
+  "float() raises ValueError on bad text.",
+  "Wrap it in try/except ValueError and return None in the except."
+ ],
+ "check_percentage": [
+  "Valid means 0 <= value <= 100.",
+  "raise ValueError(...) otherwise; return the value when valid."
+ ],
+ "score_report": [
+  "zip pairs names with scores; enumerate numbers them.",
+  "enumerate(zip(names, scores), start=1) gives (i, (name, score))."
+ ],
+ "roll_dice": [
+  "Don't use the global random functions.",
+  "rng = random.Random(seed); rng.randint(1, 6) for each roll."
+ ],
+ "write_lines": [
+  "Always pass encoding='utf-8'.",
+  "Join the lines with '\\n' (and end with one), then write_text."
+ ],
+ "read_lines": [
+  "splitlines() drops the newline characters.",
+  "Path(path).read_text(encoding='utf-8').splitlines()."
+ ],
+ "count_nonblank_lines": [
+  "'   ' is blank too.",
+  "Count lines where line.strip() is truthy."
+ ],
+ "write_students_csv": [
+  "csv.DictWriter needs fieldnames.",
+  "Open with newline='' and encoding='utf-8'; call writeheader() then writerows()."
+ ],
+ "read_grades": [
+  "DictReader gives every value as text.",
+  "{row['name']: int(row['grade']) for row in csv.DictReader(handle)}."
+ ],
+ "save_tasks": [
+  "One task per line.",
+  "Reuse write_lines."
+ ],
+ "load_tasks": [
+  "A missing file isn't an error here.",
+  "Return [] if not path.exists(); otherwise read_lines and drop empty lines."
+ ],
+ "safe_divide": [
+  "Dividing by zero raises an exception.",
+  "try: return a / b; except ZeroDivisionError: return None."
+ ],
+ "describe": [
+  "*numbers collects every argument into a tuple.",
+  "count = len(numbers); mean is total / count, or 0 when count is 0."
+ ],
+ "discount_price": [
+  "A bare * in the signature makes later parameters keyword-only.",
+  "def discount_price(price, *, percent=10); validate, then round(price * (1 - percent / 100), 2)."
+ ],
+ "append_log": [
+  "Mode 'a' appends and creates the file if needed.",
+  "Write message + '\\n', then count the lines with read_lines."
+ ],
+ "longest_word_in_file": [
+  "Track the longest word seen so far.",
+  "Replace it only if a word is strictly longer, so the first one wins ties."
+ ]
+}

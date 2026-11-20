@@ -1,0 +1,54 @@
+{
+ "gather_in_order": [
+  "Keep the task objects in input order.",
+  "Create the tasks inside `async with asyncio.TaskGroup()`, then return [t.result() for t in tasks]."
+ ],
+ "with_timeout": [
+  "asyncio.timeout is an async context manager.",
+  "Catch TimeoutError and return ('timeout', None)."
+ ],
+ "run_bounded": [
+  "A Semaphore caps how many run at once.",
+  "Track active/peak counters inside `async with semaphore`; decrement in finally."
+ ],
+ "pipeline": [
+  "A None sentinel tells the consumer to stop.",
+  "The producer puts every item, then None; the consumer loops until it gets None."
+ ],
+ "run_blocking": [
+  "Don't block the event loop.",
+  "await asyncio.to_thread(func, *args)."
+ ],
+ "SafeCounter": [
+  "+= on shared data isn't atomic across threads.",
+  "Guard the increment with `with self._lock:`."
+ ],
+ "retry": [
+  "Only TransientError is retried.",
+  "Sleep base_delay * 2 ** attempt between attempts, but not after the last one; then re-raise."
+ ],
+ "jittered_delays": [
+  "Use a seeded random.Random for repeatable results.",
+  "rng.uniform(0, base * 2 ** n) for n in range(attempts)."
+ ],
+ "IdempotentPayments": [
+  "Store key -> (amount, receipt).",
+  "On a repeated key, return the stored receipt, or raise ValueError if the amount differs."
+ ],
+ "first_result": [
+  "asyncio.wait with return_when=FIRST_COMPLETED.",
+  "Cancel every task in finally, then await them with gather(..., return_exceptions=True)."
+ ],
+ "map_threaded": [
+  "ThreadPoolExecutor.map keeps the input order.",
+  "with ThreadPoolExecutor(max_workers=workers) as pool: return list(pool.map(func, items))."
+ ],
+ "TokenBucket": [
+  "Refill by elapsed time * rate, capped at capacity.",
+  "Remember the last clock reading; allow() spends 1 token if at least 1 is available."
+ ],
+ "CircuitBreaker": [
+  "Store when it opened; state is computed from the clock.",
+  "'half-open' once reset_after has passed; a failure then re-opens it, a success resets everything."
+ ]
+}

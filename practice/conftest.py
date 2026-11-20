@@ -8,6 +8,9 @@ Unstarted functions (still raising NotImplementedError) are reported as
 """
 from __future__ import annotations
 
+import ast
+import inspect
+import json
 import sys
 from collections import defaultdict
 from pathlib import Path
@@ -35,6 +38,40 @@ def pytest_configure(config):
             raise pytest.UsageError(f"--record-answers: {path} is not a directory")
         practice_loader.SOURCE_DIR = path
         grader.RECORDING = True
+
+
+PROGRESS_FILE = HERE / ".progress.json"  # local only (git-ignored): failure counts and passed tests
+_hints_cache: dict[str, dict[str, list[str]]] = {}
+
+
+def _load_progress() -> dict:
+    try:
+        return json.loads(PROGRESS_FILE.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {"failures": {}, "passed": []}
+
+
+_saved = _load_progress()
+_passed_now: set[str] = set()
+
+
+def _hints_for(item) -> list[tuple[str, list[str]]]:
+    """Hints for the practice functions this test uses (m.<name> references)."""
+    module = Path(str(item.fspath)).stem.removeprefix("test_")
+    if module not in _hints_cache:
+        path = HERE / "hints" / f"{module}.json"
+        _hints_cache[module] = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+    hints = _hints_cache[module]
+    try:
+        tree = ast.parse(inspect.getsource(item.function).lstrip())
+    except (OSError, TypeError, SyntaxError):
+        return []
+    names = []
+    for node in ast.walk(tree):
+        if (isinstance(node, ast.Attribute) and isinstance(node.value, ast.Name)
+                and node.value.id == "m" and node.attr in hints and node.attr not in names):
+            names.append(node.attr)
+    return [(name, hints[name]) for name in names]
 
 
 _progress: dict[str, dict[str, int]] = defaultdict(lambda: {"passed": 0, "failed": 0, "todo": 0})
@@ -68,8 +105,20 @@ def pytest_runtest_makereport(item, call):
         _progress[module]["todo"] += 1
     elif report.passed:
         _progress[module]["passed"] += 1
+        _passed_now.add(item.nodeid)
     elif report.failed:
         _progress[module]["failed"] += 1
+        if not grader.RECORDING:
+            failures = _saved["failures"].get(item.nodeid, 0) + 1
+            _saved["failures"][item.nodeid] = failures
+            lines = []
+            for name, steps in _hints_for(item):
+                for number, text in enumerate(steps[:failures], start=1):
+                    lines.append(f"{name} hint {number}/{len(steps)}: {text}")
+            if lines:
+                if failures < max(len(steps) for _, steps in _hints_for(item)):
+                    lines.append("(Fail again to unlock the next hint.)")
+                report.sections.append(("hints", "\n".join(lines)))
 
 
 _partial_modules: set[str] = set()
@@ -82,6 +131,15 @@ def pytest_deselected(items):
 
 
 def pytest_sessionfinish(session, exitstatus):
+    if not grader.RECORDING and _progress:
+        passed = (set(_saved.get("passed", [])) | _passed_now)
+        _saved["passed"] = sorted(passed)
+        for nodeid in _passed_now:
+            _saved["failures"].pop(nodeid, None)
+        try:
+            PROGRESS_FILE.write_text(json.dumps(_saved, indent=1) + "\n", encoding="utf-8")
+        except OSError:
+            pass
     if grader.RECORDING:
         if exitstatus == 0:
             for module in _partial_modules:
@@ -104,6 +162,9 @@ def pytest_terminal_summary(terminalreporter):
         filled = round(20 * done / total)
         status = "complete!" if done == total else f"{counts['failed']} failing, {counts['todo']} to do"
         tr.write_line(f"{module:<42} [{'#' * filled}{'-' * (20 - filled)}] {done:>3}/{total:<3} {status}")
-    if not grader.RECORDING and any(c["failed"] or c["todo"] for c in _progress.values()):
+    if not grader.RECORDING:
+        ever = len(set(_saved.get("passed", [])) | _passed_now)
         tr.write_line("")
-        tr.write_line("Next: pick one module, e.g.  python -m pytest practice -k basics_01 -q")
+        tr.write_line(f"Tests you have solved so far (all runs): {ever}")
+        if any(c["failed"] or c["todo"] for c in _progress.values()):
+            tr.write_line("Next: pick one module, e.g.  python -m pytest practice -k basics_01 -q")
