@@ -15,7 +15,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install test tools
-        run: python -m pip install "pytest>=7.0"
+        run: python -m pip install "pytest>=7.0" "jupyter-client>=8" "ipykernel>=6"
       - name: Test every notebook, doc, data file, script, project package and practice module
         run: python -m pytest
       - name: Legacy smoke tests
