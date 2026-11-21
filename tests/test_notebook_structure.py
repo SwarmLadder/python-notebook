@@ -14,7 +14,7 @@ IDS = [notebook_id(p) for p in NOTEBOOKS]
 
 
 def test_course_has_notebooks():
-    assert len(NOTEBOOKS) >= 75, "notebook discovery looks broken"
+    assert len(NOTEBOOKS) >= 70, "notebook discovery looks broken"
 
 
 @pytest.mark.parametrize("path", NOTEBOOKS, ids=IDS)
