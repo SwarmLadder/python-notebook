@@ -38,7 +38,7 @@ def test_numbered_exercises_have_a_grader_and_unfinished_work(path):
         assert isinstance(call, ast.Call) and call.args[0].value == number
         assert ast.unparse(call.func) == "check"
         if any(keyword.arg == "observe" for keyword in call.keywords):
-            assert cell["metadata"]["practice_mode"] == "partial implementation"
+            assert cell["metadata"]["practice_mode"] in {"partial implementation", "debugging"}
             assert any(isinstance(node, ast.Raise) for node in ast.walk(tree))
         else:
             assert any(isinstance(node, ast.Name) and node.id == "___" for node in ast.walk(tree))
