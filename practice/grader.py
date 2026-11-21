@@ -23,6 +23,7 @@ from pathlib import Path
 ANSWERS_DIR = Path(__file__).resolve().parent / "answers"
 SALT = "python-notebook-practice/v1"
 
+SHOW_HINTS = True
 RECORDING = False  # set by conftest when a maintainer rebuilds the answer keys
 _keys: dict[str, dict[str, str]] = {}
 _recorded: dict[str, dict[str, str]] = defaultdict(dict)
@@ -115,7 +116,7 @@ def check(actual, hint: str = "") -> None:
         message = [f"Not correct yet: {line}", f"  your result: {actual!r}"]
         if inputs:
             message.append("  test inputs: " + ", ".join(f"{k}={v!r}" for k, v in inputs.items()))
-        if hint:
+        if hint and SHOW_HINTS:
             message.append(f"  hint: {hint}")
         message.append("  (The correct answer is hidden. Re-read the docstring and try a small example by hand.)")
         raise AssertionError("\n".join(message))

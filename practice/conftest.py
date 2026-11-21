@@ -117,7 +117,7 @@ def pytest_runtest_makereport(item, call):
         _passed_now.add(item.nodeid)
     elif report.failed:
         _progress[module]["failed"] += 1
-        if not grader.RECORDING:
+        if not grader.RECORDING and grader.SHOW_HINTS:
             failures = _saved["failures"].get(item.nodeid, 0) + 1
             _saved["failures"][item.nodeid] = failures
             lines = []
@@ -140,7 +140,7 @@ def pytest_deselected(items):
 
 
 def pytest_sessionfinish(session, exitstatus):
-    if not grader.RECORDING and _progress:
+    if not grader.RECORDING and grader.SHOW_HINTS and _progress:
         passed = (set(_saved.get("passed", [])) | _passed_now)
         _saved["passed"] = sorted(passed)
         for nodeid in _passed_now:

@@ -106,9 +106,10 @@ class Checker:
         self.assignment = tests_by_exercise(module)
         self.passed: set[str] = set()
 
-    def __call__(self, name: str, namespace: dict | None = None) -> bool | None:
+    def __call__(self, name: str, namespace: dict | None = None, *, independent: bool = False) -> bool | None:
         if namespace is None:
             namespace = sys._getframe(1).f_globals
+        self.passed.discard(name)
         tests = self.assignment.get(name)
         if tests is None:
             print(f"Unknown exercise {name!r}. Exercises: {', '.join(self.assignment)}")
@@ -131,13 +132,17 @@ class Checker:
         args = [f"{test_file}::{t}" for t in tests] + [
             "-q", "-p", "no:cacheprovider", "--color=no", "--tb=short",
             f"--rootdir={ROOT}", "-c", str(ROOT / "pytest.ini")]
+        status = []
+
         def run():
             with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
-                pytest.main(args, plugins=[collector])
+                status.append(pytest.main(args, plugins=[collector]))
 
         # A worker thread has no running event loop, so tests may call asyncio.run()
         # even though Jupyter itself runs one in the main thread. Where threads are not
         # available (e.g. Python in the browser via Pyodide) run the tests directly.
+        previous = grader.SHOW_HINTS
+        grader.SHOW_HINTS = not independent
         try:
             try:
                 worker = threading.Thread(target=run, daemon=True)
@@ -146,14 +151,20 @@ class Checker:
             except RuntimeError:  # "can't start new thread"
                 run()
         finally:
+            grader.SHOW_HINTS = previous
             practice_loader.OVERRIDES.pop(self.module, None)
-        return self._report(name, collector.reports)
+        if not status or status[0] not in (0, 1) or not collector.reports:
+            print(f"❌ {name}: tests did not complete. Check the test environment and retry.")
+            if os.environ.get("PRACTICE_STRICT") == "1":
+                raise AssertionError(f"{self.module}.{name} did not complete")
+            return False
+        return self._report(name, collector.reports, status[0] == 0)
 
-    def _report(self, name: str, reports) -> bool:
+    def _report(self, name: str, reports, run_ok=True) -> bool:
         total = len(reports)
         todo = [r for r in reports if r.skipped]
         failed = [r for r in reports if r.failed]
-        if not failed and not todo and total:
+        if run_ok and not failed and not todo and total:
             self.passed.add(name)
             checks = "check" if total == 1 else f"{total} checks"
             print(f"✅ {name}: {'the' if total == 1 else 'all'} {checks} passed. Move on to the next exercise!")
@@ -163,7 +174,7 @@ class Checker:
             ok = False
         else:
             print(f"❌ {name}: {total - len(failed) - len(todo)} of {total} checks passed. First problem:\n")
-            print(_failure_text(failed[0]))
+            print(_failure_text(failed[0]) if failed else "The test run did not finish successfully.")
             ok = False
         if os.environ.get("PRACTICE_STRICT") == "1":
             raise AssertionError(f"{self.module}.{name} did not pass its checks")

@@ -16,6 +16,7 @@ loop) and in plain Python.
 from __future__ import annotations
 
 import asyncio
+import ast
 import dataclasses
 import hashlib
 import json
@@ -119,8 +120,45 @@ def fingerprint(lesson_id: str, number: int, value) -> str:
     return hashlib.sha256(f"python-notebook-lesson|{lesson_id}|{number}|{canonical}".encode()).hexdigest()[:16]
 
 
+def pending_exercise(source):
+    """Identify an unanswered numbered cell without executing a partial program."""
+    if "___" not in source or "check(" not in source:
+        return None
+    try:
+        tree = ast.parse(source)
+    except SyntaxError:
+        return None
+    if not tree.body or not isinstance(tree.body[-1], ast.Expr):
+        return None
+    call = tree.body[-1].value
+    if not (isinstance(call, ast.Call) and isinstance(call.func, ast.Name)
+            and call.func.id == "check" and call.args and isinstance(call.args[0], ast.Constant)
+            and type(call.args[0].value) is int):
+        return None
+    if any(isinstance(node, ast.Name) and node.id == "___" for node in ast.walk(tree)):
+        return call.args[0].value
+    return None
+
+
+def _pending_input(lines):
+    shell = sys.modules["IPython"].get_ipython()
+    if not isinstance(shell.user_ns.get("check"), Exercises):
+        return lines
+    number = pending_exercise("".join(lines))
+    if number is None:
+        return lines
+    return [f"check.pending({number})\n"]
+
+
 class Exercises:
-    def __init__(self, lesson_id: str, answers: dict[int, str], practice: str | None = None):
+    def __init__(self, lesson_id: str, answers: dict[int, str], practice: str | None = None, independent: str | None = None):
+        self.independent = independent
+        self.mastery_result = None
+        self.last_result = None
+        self._attempts = {}
+        shell = getattr(sys.modules.get("IPython"), "get_ipython", lambda: None)()
+        if shell is not None and _pending_input not in shell.input_transformers_post:
+            shell.input_transformers_post.append(_pending_input)
         self.lesson_id = lesson_id
         self._answers = answers
         self.practice = practice  # the practice module whose tests grade this lesson's challenges
@@ -134,11 +172,18 @@ class Exercises:
         name() defined in the notebook against the practice tests.
         """
         if isinstance(number, str):
+            if number == self.independent:
+                self.mastery_result = self.last_result = False
             self.last_result = self._challenge(number, sys._getframe(1).f_globals)
+            if number == self.independent:
+                self.mastery_result = self.last_result is True
             return
         self.last_result = self._grade(number, value)
 
     def _challenge(self, name: str, namespace: dict):
+        if name == self.independent and name not in namespace:
+            print(f"✏️  Define {name} in the independent build cell, then run its check.")
+            return False
         if not self.practice:
             print(f"There is no challenge {name!r} in this lesson.")
             return None
@@ -149,12 +194,38 @@ class Exercises:
                 sys.path.insert(0, str(practice))
             from notebook_check import Checker
             self._checker = Checker(self.practice)
-        return self._checker(name, namespace)
+        return self._checker(name, namespace, independent=name == self.independent)
+
+    def pending(self, number):
+        self.passed.discard(number)
+        self.last_result = None
+        print(f"✏️  Exercise {number}: fill in every ___ blank first.")
+
+    def assess(self, name, cases):
+        """Run public acceptance cases on the current submission, without hints."""
+        self.mastery_result = self.last_result = False
+        if not __debug__:
+            print("Enable Python assertions to assess an independent build.")
+            return
+        namespace = sys._getframe(1).f_globals
+        if name not in namespace:
+            print(f"✏️  Define {name} in the independent build cell, then rerun the check.")
+            return
+        try:
+            cases(namespace[name])
+        except (BlankNotFilled, NotImplementedError):
+            print(f"✏️  Finish {name}, run its definition, then rerun the check.")
+        except Exception as error:
+            print(f"❌ {name}: {type(error).__name__}: {error}")
+        else:
+            self.mastery_result = self.last_result = True
+            print(f"✅ {name}: independent acceptance cases passed.")
 
     def _grade(self, number: int, value) -> bool | None:
         if number not in self._answers:
             print(f"There is no exercise {number} here.")
             return None
+        self.passed.discard(number)
         if _contains_blank(value):
             print(f"✏️  Exercise {number}: fill in every ___ blank first.")
             return None
@@ -162,8 +233,12 @@ class Exercises:
             self.passed.add(number)
             print(f"✅ Exercise {number}: correct! ({len(self.passed)}/{len(self._answers)} done)")
             return True
+        self._attempts[number] = self._attempts.get(number, 0) + 1
+        steps = getattr(self, "hints", {}).get(number, ())
         shown = repr(value)
         shown = shown if len(shown) < 200 else shown[:200] + "..."
         print(f"❌ Exercise {number}: not yet. Your result: {shown}\n"
               "   Re-read the example above this section, change one blank, and run the cell again.")
+        if steps:
+            print(steps[min(self._attempts[number], len(steps)) - 1])
         return False
