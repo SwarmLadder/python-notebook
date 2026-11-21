@@ -182,7 +182,7 @@ class Exercises:
         self._checker = None
         self.passed: set[int] = set()
 
-    def __call__(self, number, value=None) -> None:
+    def __call__(self, number, value=None, *, observe=None) -> None:
         """Print whether `value` is right. Returns None so Jupyter shows only the message.
 
         check(3, value) grades exercise 3; check("name") grades the challenge function
@@ -198,7 +198,24 @@ class Exercises:
         if _unfilled_code(sys._getframe(1).f_code):
             self.pending(number)
             return
-        self.last_result = self._grade(number, value)
+        if observe is None:
+            self.last_result = self._grade(number, value)
+        else:
+            self._component(number, value, observe)
+
+    def _component(self, number, implementation, observe):
+        """Grade the current implementation on fresh examples, including exceptions."""
+        self.passed.discard(number)
+        self.last_result = False
+        try:
+            value = observe(implementation)
+        except (BlankNotFilled, NotImplementedError):
+            self.last_result = None
+            print(f"✏️  Exercise {number}: Not attempted — implement the function and run again.")
+        except Exception as error:
+            print(f"❌ Exercise {number}: Needs improvement. {type(error).__name__}: {error}")
+        else:
+            self.last_result = self._grade(number, value)
 
     def _challenge(self, name: str, namespace: dict):
         if not self.practice:

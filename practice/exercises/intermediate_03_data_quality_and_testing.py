@@ -19,7 +19,7 @@ from typing import Optional, TypedDict
 
 def mean_or_none(values: list[float]) -> Optional[float]:
     """Return the arithmetic mean, or None for an empty list."""
-    return ___
+    ___
 
 
 class ProductRecord(TypedDict):
@@ -68,7 +68,7 @@ def parse_quantity(text: str) -> int:
 
 def log_request(logger: logging.Logger, url: str, token: str, status: int) -> None:
     """Log 'GET <url> -> <status>' at INFO level. The token must never appear in logs."""
-    logger.info("GET %s -> %s", ___)
+    ___
 
 
 ORDER_CODE = re.compile(r"[A-Z]{2}-\d{4}")
@@ -113,13 +113,7 @@ def clean_csv(text: str) -> tuple[list[dict], list[int]]:
 
     Valid rows have price converted to float. Line numbers count the header as line 1.
     """
-    rows, rejected = ___
-    for line_number, row in ___:
-        try:
-            rows.append({"name": row["name"], "price": float(row["price"])})
-        except (TypeError, ValueError):
-            rejected.append(line_number)
-    return rows, rejected
+    ___
 
 
 def slugify(title: str) -> str:
@@ -127,15 +121,12 @@ def slugify(title: str) -> str:
 
     'Hello, World!  2024' -> 'hello-world-2024'
     """
-    return ___
+    ___
 
 
 def hashtags(text: str) -> list[str]:
     """Unique hashtags (without '#'), lowercase, in first-seen order. '#Py #py #AI' -> ['py', 'ai']."""
-    seen: dict[str, None] = {}
-    for tag in ___:
-        seen.setdefault(tag.lower(), None)
-    return ___
+    ___
 
 
 def parse_settings(text: str) -> dict[str, str]:
@@ -143,16 +134,7 @@ def parse_settings(text: str) -> dict[str, str]:
 
     Raise ValueError mentioning the line number (e.g. 'line 3') for a line without '='.
     """
-    settings = {}
-    for number, line in ___:
-        stripped = line.strip()
-        if ___:
-            continue
-        if ___:
-            raise ValueError(f"line {number}: expected key = value")
-        key, value = stripped.split("=", 1)
-        settings[key.strip()] = value.strip()
-    return settings
+    ___
 
 
 def summarize_sales(rows: list[dict]) -> dict[str, float]:
