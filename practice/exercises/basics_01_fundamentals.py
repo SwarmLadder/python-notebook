@@ -1,11 +1,11 @@
 # Fill in every ___ so the function does what its docstring says.
-# Check your work:  python -m pytest practice -k basics_01_fundamentals   (or use the workbook notebook)
+# Check your work:  python -m pytest practice -k basics_01_fundamentals   (or run check() in the lesson)
 # Stuck? Fail a check twice to unlock the hints.
 # Reset this file:  git checkout -- practice/exercises/basics_01_fundamentals.py
 
 """Basics practice 1 — Fundamentals (variables, numbers, strings, booleans).
 
-Companion to basics/exercises/01_fundamentals_exercises.ipynb and lessons 01–04.
+Graded by the challenges in lessons 01–04.
 """
 import math
 

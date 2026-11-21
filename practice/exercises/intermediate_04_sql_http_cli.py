@@ -1,12 +1,11 @@
 # Fill in every ___ so the function does what its docstring says.
-# Check your work:  python -m pytest practice -k intermediate_04_sql_http_cli   (or use the workbook notebook)
+# Check your work:  python -m pytest practice -k intermediate_04_sql_http_cli   (or run check() in the lesson)
 # Stuck? Fail a check twice to unlock the hints.
 # Reset this file:  git checkout -- practice/exercises/intermediate_04_sql_http_cli.py
 
 """Intermediate practice 4 — SQLite, HTTP clients, pagination and argparse.
 
-Companion to intermediate/exercises/04_sql_http_cli_performance_exercises.ipynb and
-lessons 15–17. Everything is offline: tests pass in-memory databases and fake openers.
+Graded by the challenges in lessons 15–17. Everything is offline: tests pass in-memory databases and fake openers.
 """
 import argparse
 import json

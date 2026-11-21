@@ -1,11 +1,11 @@
 # Fill in every ___ so the function does what its docstring says.
-# Check your work:  python -m pytest practice -k basics_02_control_flow   (or use the workbook notebook)
+# Check your work:  python -m pytest practice -k basics_02_control_flow   (or run check() in the lesson)
 # Stuck? Fail a check twice to unlock the hints.
 # Reset this file:  git checkout -- practice/exercises/basics_02_control_flow.py
 
 """Basics practice 2 — Control flow (if/elif/else, for, while, break).
 
-Companion to basics/exercises/02_control_flow_exercises.ipynb and lessons 05–06.
+Graded by the challenges in lessons 05–06.
 """
 
 

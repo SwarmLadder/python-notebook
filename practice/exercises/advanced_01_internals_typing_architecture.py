@@ -1,12 +1,11 @@
 # Fill in every ___ so the function does what its docstring says.
-# Check your work:  python -m pytest practice -k advanced_01_internals_typing_architecture   (or use the workbook notebook)
+# Check your work:  python -m pytest practice -k advanced_01_internals_typing_architecture   (or run check() in the lesson)
 # Stuck? Fail a check twice to unlock the hints.
 # Reset this file:  git checkout -- practice/exercises/advanced_01_internals_typing_architecture.py
 
 """Advanced practice 1 — Data model, descriptors, generics, plugins, dependency injection.
 
-Companion to advanced/exercises/01_internals_typing_architecture_exercises.ipynb and
-lessons 00–04 and 12.
+Graded by the challenges in lessons 00–04 and 12.
 """
 from __future__ import annotations
 

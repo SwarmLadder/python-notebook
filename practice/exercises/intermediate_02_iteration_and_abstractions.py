@@ -1,12 +1,11 @@
 # Fill in every ___ so the function does what its docstring says.
-# Check your work:  python -m pytest practice -k intermediate_02_iteration_and_abstractions   (or use the workbook notebook)
+# Check your work:  python -m pytest practice -k intermediate_02_iteration_and_abstractions   (or run check() in the lesson)
 # Stuck? Fail a check twice to unlock the hints.
 # Reset this file:  git checkout -- practice/exercises/intermediate_02_iteration_and_abstractions.py
 
 """Intermediate practice 2 — Iterators, generators, closures, decorators, itertools.
 
-Companion to intermediate/exercises/02_iteration_and_abstractions_exercises.ipynb
-and lessons 05–09.
+Graded by the challenges in the lessons.and lessons 05–09.
 """
 import functools
 import itertools

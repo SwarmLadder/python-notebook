@@ -1,12 +1,11 @@
 # Fill in every ___ so the function does what its docstring says.
-# Check your work:  python -m pytest practice -k intermediate_03_data_quality_and_testing   (or use the workbook notebook)
+# Check your work:  python -m pytest practice -k intermediate_03_data_quality_and_testing   (or run check() in the lesson)
 # Stuck? Fail a check twice to unlock the hints.
 # Reset this file:  git checkout -- practice/exercises/intermediate_03_data_quality_and_testing.py
 
 """Intermediate practice 3 — Type hints, validation, errors, regex, JSON/CSV, logging.
 
-Companion to intermediate/exercises/03_data_quality_and_testing_exercises.ipynb and
-lessons 10–14. (The tests in practice/tests/ are themselves examples of pytest style.)
+Graded by the challenges in lessons 10–14. (The tests in practice/tests/ are themselves examples of pytest style.)
 """
 import csv
 import io

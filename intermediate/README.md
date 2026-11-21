@@ -6,8 +6,9 @@ Develop software-building skills after mastering the [Python Basics course](../b
 
 | Resource | Count | Purpose |
 |---|---:|---|
-| Guided lessons | **20 notebooks** | Explanation, executable examples, design questions, and independent lesson exercises |
-| Exercise workbooks | **4 notebooks, 73 exercises** | Fill-in-the-blank code with automatic checks and hints |
+| Lessons | **20 notebooks** | Short rules, a demo, then graded exercises from easy to hard |
+| Fill-in exercises | **185** | Each one checked as soon as you run it |
+| Challenges | **73** | Functions and classes in the lessons, graded by the practice tests |
 | Auto-graded practice | **4 modules, 102 tests** | Instant feedback; answers stay hidden |
 | Portfolio projects | **3 notebooks** | OOP library, offline HTTP/ETL, SQLite task manager |
 | Additional working application | **1 installable Python package** | CLI with SQLite, packaging metadata, and unit tests |
@@ -54,14 +55,13 @@ Before starting, you should be comfortable with conditions, loops, list/dict/set
 | Real applications | 15–18 | Use SQL transactions, build testable HTTP clients, package a CLI, profile code |
 | Integration and assessment | 19 | Combine the concepts and identify readiness gaps |
 
-## Practice packs — 80 additional problems
+## Challenges
 
-- [01 — OOP and collections](exercises/01_oop_and_collections_exercises.ipynb)
-- [02 — Iteration and functional abstractions](exercises/02_iteration_and_abstractions_exercises.ipynb)
-- [03 — Data quality, regex, and testing](exercises/03_data_quality_and_testing_exercises.ipynb)
-- [04 — SQL, HTTP, CLI, and performance](exercises/04_sql_http_cli_performance_exercises.ipynb)
-
-Check your work with the matching [auto-graded modules](../practice/README.md): `python -m pytest practice -k intermediate`.
+The challenges live inside the lessons that teach their topic (lessons 01–17). Each one is a
+function or class you finish, and `check('name')` grades it with the tests in
+[`practice/`](../practice/README.md), the same tests used to verify an achievement claim.
+Prefer a terminal? Solve them in `practice/exercises/intermediate_*.py` and run
+`python -m pytest practice -k intermediate`.
 
 ## Portfolio projects
 
@@ -76,13 +76,13 @@ The [projects index](projects/README.md) explains deliverables and suggested por
 
 | Week | Lessons | Practical deliverable |
 |---|---|---|
-| 1 | 00–02 | Clean function and class design; start workbook 1 |
+| 1 | 00–02 | Clean function and class design |
 | 2 | 03–04 | Dataclass and service model; build library project |
 | 3 | 05–07 | Iterator/generator pipelines and decorators |
-| 4 | 08–09 | Resource safety, sorting, functional utilities; workbook 2 |
-| 5 | 10–12 | Type contracts, logging, regex; workbook 3 |
+| 4 | 08–09 | Resource safety, sorting, functional utilities |
+| 5 | 10–12 | Type contracts, logging, regex |
 | 6 | 13–15 | Data processing, unittest, SQLite |
-| 7 | 16–18 | Offline API project, CLI task manager, workbook 4 |
+| 7 | 16–18 | Offline API project, CLI task manager |
 | 8 | 19 | Finish projects, review, and final assessment |
 
 The schedule is a guideline, not a requirement. For detailed milestones see [Curriculum](CURRICULUM.md).
@@ -107,8 +107,8 @@ To check your practice work: `python -m pytest practice -k intermediate`.
 
 ## Completion checklist
 
-- [ ] Complete the 20 guided notebooks and their embedded exercises.
-- [ ] Pass every check in the four workbooks (`python tools/verify_level.py intermediate`).
+- [ ] Complete the 20 lessons and their exercises.
+- [ ] Pass every challenge (`python tools/verify_level.py intermediate`).
 - [ ] Explain and extend all three portfolio projects.
 - [ ] Write tests covering valid, invalid, empty, and boundary inputs.
 - [ ] Run all notebooks with a fresh kernel and resolve hidden-state dependencies.

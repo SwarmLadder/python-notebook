@@ -6,8 +6,9 @@ Learn the engineering techniques required to build reliable and maintainable Pyt
 
 | Material | Count | Purpose |
 |---|---:|---|
-| Detailed lesson notebooks | **20** | Theory, four executable demonstrations per lesson, design questions, independent exercises |
-| Exercise workbooks | **4 notebooks, 58 exercises** | Fill-in-the-blank code with automatic checks: concurrency, security, testing, architecture |
+| Lessons | **20 notebooks** | Short rules, a demo, then graded exercises from easy to hard |
+| Fill-in exercises | **153** | Each one checked as soon as you run it |
+| Challenges | **58** | Functions and classes in the lessons, graded by the practice tests |
 | Auto-graded practice | **4 modules, 95 tests** | Instant feedback; answers stay hidden |
 | Advanced portfolio projects | **3** | Async crawler simulator, streaming text analytics, transactional event processor |
 | Companion application | **1 installable package** | SQLite event processor CLI with unit tests |
@@ -49,14 +50,13 @@ The notebooks use the **Python standard library**. **Python 3.11+** is required 
 | Correctness and systems design | 10–14 | profiling, algorithms, injection, secure parsing, tests and integration |
 | Production engineering | 15–19 | SLIs/SLOs, API evolution, transactional idempotency, CI and capstone |
 
-## Exercise workbooks — 58 fill-in exercises
+## Challenges
 
-- [01 — Internals, typing, and architecture](exercises/01_internals_typing_architecture_exercises.ipynb)
-- [02 — Concurrency, async, and resilience](exercises/02_concurrency_resilience_exercises.ipynb)
-- [03 — Security, testing, and performance](exercises/03_security_testing_performance_exercises.ipynb)
-- [04 — Production systems](exercises/04_production_systems_exercises.ipynb)
-
-Check your work with the matching [auto-graded modules](../practice/README.md): `python -m pytest practice -k advanced`.
+The challenges live inside the lessons that teach their topic. Each one is a function or
+class you finish, and `check('name')` grades it with the tests in
+[`practice/`](../practice/README.md), the same tests used to verify an achievement claim.
+Prefer a terminal? Solve them in `practice/exercises/advanced_*.py` and run
+`python -m pytest practice -k advanced`.
 
 ## Advanced portfolio projects
 
@@ -72,14 +72,14 @@ For portable multiprocessing, run [the standalone process-pool demonstration](ex
 | Week | Course work | Deliverable |
 |---|---|---|
 | 1 | Lessons 00–02 | Value object, descriptor, memory case study |
-| 2 | Lessons 03–04 | Type-safe plugin interface; workbook 1 |
+| 2 | Lessons 03–04 | Type-safe plugin interface |
 | 3 | Lessons 05–06 | Cancel-safe TaskGroup pipeline |
-| 4 | Lessons 07–09 | Concurrency and retries; workbook 2 |
+| 4 | Lessons 07–09 | Concurrency and retries |
 | 5 | Lessons 10–11 | Profiling report and algorithm review |
 | 6 | Lessons 12–13 | Architecture and security assessment |
-| 7 | Lesson 14 | Tests and workbook 3 |
+| 7 | Lesson 14 | Testing strategy |
 | 8 | Lessons 15–16 | SLO metrics and versioned API |
-| 9 | Lessons 17–18 | Transactional application and workbook 4 |
+| 9 | Lessons 17–18 | Transactional application |
 | 10 | Lesson 19 | Portfolio project completion and final assessment |
 
 See [CURRICULUM.md](CURRICULUM.md) for module checkpoints and [ASSESSMENT.md](ASSESSMENT.md) for a 100-point rubric.

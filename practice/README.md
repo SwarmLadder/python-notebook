@@ -1,8 +1,8 @@
 # Auto-graded practice ✅
 
-There are 12 modules, one per exercise workbook, with 428 tests. Each exercise is **nearly finished code with `___` blanks**. Fill them in and the tests tell you whether it's correct. **The answers are never shown.** The repo stores only fingerprints (hashes) of the correct results.
+There are 12 modules, four per level, with 428 tests. Each exercise is **nearly finished code with `___` blanks**. Fill them in and the tests tell you whether it's correct. **The answers are never shown.** The repo stores only fingerprints (hashes) of the correct results.
 
-Most learners use the **workbook notebooks** (`<level>/exercises/`), where a `check("name")` cell after each exercise runs these same tests. This folder is the terminal version, and both count for [achievements](../RECOGNITION.md).
+Most learners solve these as the **challenges in the lessons**, where a `check("name")` cell after each one runs these same tests. This folder is the terminal version, and it is what an [achievement claim](../RECOGNITION.md) is verified against.
 
 ## Start
 

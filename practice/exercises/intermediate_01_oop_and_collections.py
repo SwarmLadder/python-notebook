@@ -1,12 +1,11 @@
 # Fill in every ___ so the function does what its docstring says.
-# Check your work:  python -m pytest practice -k intermediate_01_oop_and_collections   (or use the workbook notebook)
+# Check your work:  python -m pytest practice -k intermediate_01_oop_and_collections   (or run check() in the lesson)
 # Stuck? Fail a check twice to unlock the hints.
 # Reset this file:  git checkout -- practice/exercises/intermediate_01_oop_and_collections.py
 
 """Intermediate practice 1 — Comprehensions, classes, dataclasses and properties.
 
-Companion to intermediate/exercises/01_oop_and_collections_exercises.ipynb and
-lessons 01–04.
+Graded by the challenges in lessons 01–04.
 """
 from dataclasses import dataclass, field
 

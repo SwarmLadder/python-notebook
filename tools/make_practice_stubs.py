@@ -29,7 +29,7 @@ EXERCISES = ROOT / "practice" / "exercises"
 BLANK = "___"
 HEADER = (
     "# Fill in every ___ so the function does what its docstring says.\n"
-    "# Check your work:  python -m pytest practice -k {name}   (or use the workbook notebook)\n"
+    "# Check your work:  python -m pytest practice -k {name}   (or run check() in the lesson)\n"
     "# Stuck? Fail a check twice to unlock the hints.\n"
     "# Reset this file:  git checkout -- practice/exercises/{name}.py\n\n"
 )
