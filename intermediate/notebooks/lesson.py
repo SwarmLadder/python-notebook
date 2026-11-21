@@ -42,6 +42,8 @@ class _Blank:
     __floordiv__ = __rfloordiv__ = __mod__ = __rmod__ = __pow__ = __rpow__ = __neg__ = _stop
     __lt__ = __le__ = __gt__ = __ge__ = __contains__ = __format__ = __int__ = __float__ = _stop
     __enter__ = __exit__ = __hash__ = _stop
+    __round__ = __abs__ = __pos__ = __trunc__ = __floor__ = __ceil__ = __invert__ = _stop
+    __and__ = __rand__ = __or__ = __ror__ = __xor__ = __rxor__ = __divmod__ = __rdivmod__ = _stop
 
     def __eq__(self, other):
         raise BlankNotFilled()
