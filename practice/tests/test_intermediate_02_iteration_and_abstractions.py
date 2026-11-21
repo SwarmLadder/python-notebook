@@ -136,7 +136,11 @@ def test_non_blank():
 
 def test_chunked():
     check(list(m.chunked(range(7), 3)))
-    check(list(itertools.islice(m.chunked(itertools.count(), 2), 2)), hint="must work on infinite input")
+    def guarded_stream():
+        yield from range(1000)
+        raise AssertionError("Requesting two batches should not exhaust a long input.")
+
+    check(list(itertools.islice(m.chunked(guarded_stream(), 2), 2)), hint="must work on streaming input")
 
     assert list(m.chunked(iter(()), 3)) == []
     stream = iter(["paid", "packed", "shipped"])

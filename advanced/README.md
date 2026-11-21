@@ -117,7 +117,7 @@ PYTHONPATH=advanced/projects/event_processor_package/src python -m unittest disc
 ## Graduation criteria
 
 - [ ] All 20 notebooks can be explained and run from a fresh kernel.
-- [ ] At least 80% of the 58 practice challenges solved independently.
+- [ ] Review your independent-build report and explain one boundary test from each project.
 - [ ] Completed and tested all three capstone projects.
 - [ ] Can reason about cancellation, rate limits, rollback, and idempotency.
 - [ ] Can justify benchmarks with measured evidence, not assumptions.
