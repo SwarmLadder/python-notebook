@@ -62,6 +62,8 @@ def test_roll_dice_is_reproducible():
     assert m.roll_dice(10, seed=42) == rolls, "same seed must give the same rolls"
     assert m.roll_dice(10, seed=1) != rolls
 
+    assert m.roll_dice(0, seed=42) == [], "Zero requested rolls produce no samples."
+
 
 def test_write_and_read_lines(tmp_path):
     path = tmp_path / "notes.txt"
@@ -124,3 +126,6 @@ def test_longest_word_in_file(tmp_path):
     empty = tmp_path / "empty.txt"
     empty.write_text("", encoding="utf-8")
     check(m.longest_word_in_file(empty))
+
+    path.write_text("paid reçu!\nship dock!", encoding="utf-8")
+    assert m.longest_word_in_file(path) == "reçu!", "Keep the first longest token, including punctuation."

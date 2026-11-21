@@ -6,7 +6,8 @@
     "primary_skill": "Run and edit a cell from a fresh kernel",
     "reused_concepts": [],
     "difficulty": "foundation",
-    "independent_evidence": "session_label"
+    "independent_evidence": "session_label",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "b01",
@@ -19,7 +20,8 @@
       "b00"
     ],
     "difficulty": "foundation",
-    "independent_evidence": "total_cost"
+    "independent_evidence": "total_cost",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "b02",
@@ -32,7 +34,8 @@
       "b01"
     ],
     "difficulty": "foundation",
-    "independent_evidence": "clock_time"
+    "independent_evidence": "clock_time",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "b03",
@@ -45,7 +48,8 @@
       "b01"
     ],
     "difficulty": "foundation",
-    "independent_evidence": "initials"
+    "independent_evidence": "initials",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "b04",
@@ -59,7 +63,8 @@
       "b03"
     ],
     "difficulty": "foundation",
-    "independent_evidence": "receipt"
+    "independent_evidence": "receipt",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "b05",
@@ -73,7 +78,8 @@
       "b02"
     ],
     "difficulty": "foundation",
-    "independent_evidence": "letter_grade"
+    "independent_evidence": "letter_grade",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "b06",
@@ -87,7 +93,8 @@
       "b05"
     ],
     "difficulty": "foundation",
-    "independent_evidence": "scan_batch"
+    "independent_evidence": "scan_batch",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "b07",
@@ -101,7 +108,8 @@
       "b06"
     ],
     "difficulty": "foundation",
-    "independent_evidence": "rotate"
+    "independent_evidence": "rotate",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "b08",
@@ -114,7 +122,8 @@
       "b07"
     ],
     "difficulty": "foundation",
-    "independent_evidence": "compare_sets"
+    "independent_evidence": "compare_sets",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "b09",
@@ -128,7 +137,12 @@
       "b07"
     ],
     "difficulty": "foundation",
-    "independent_evidence": "merge_counts"
+    "independent_evidence": "merge_counts",
+    "assessment_cell": "build-check",
+    "assessed_reuse": [
+      "b06",
+      "b07"
+    ]
   },
   {
     "concept_id": "b10",
@@ -143,7 +157,8 @@
       "b06"
     ],
     "difficulty": "foundation",
-    "independent_evidence": "invoice_total"
+    "independent_evidence": "invoice_total",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "b11",
@@ -157,7 +172,8 @@
       "b07"
     ],
     "difficulty": "foundation",
-    "independent_evidence": "average"
+    "independent_evidence": "average",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "b12",
@@ -171,7 +187,8 @@
       "b10"
     ],
     "difficulty": "foundation",
-    "independent_evidence": "safe_divide"
+    "independent_evidence": "safe_divide",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "b13",
@@ -186,7 +203,12 @@
       "b10"
     ],
     "difficulty": "foundation",
-    "independent_evidence": "longest_word_in_file"
+    "independent_evidence": "longest_word_in_file",
+    "assessment_cell": "build-check",
+    "assessed_reuse": [
+      "b03",
+      "b06"
+    ]
   },
   {
     "concept_id": "b14",
@@ -200,7 +222,8 @@
       "b07"
     ],
     "difficulty": "foundation",
-    "independent_evidence": "roll_dice"
+    "independent_evidence": "roll_dice",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "b15",
@@ -214,7 +237,8 @@
       "b06"
     ],
     "difficulty": "foundation",
-    "independent_evidence": "first_shortfall"
+    "independent_evidence": "first_shortfall",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "b16",
@@ -228,7 +252,8 @@
       "b07"
     ],
     "difficulty": "foundation",
-    "independent_evidence": "pack_runs"
+    "independent_evidence": "pack_runs",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "b17",
@@ -242,7 +267,8 @@
       "b12"
     ],
     "difficulty": "foundation",
-    "independent_evidence": "stock_report"
+    "independent_evidence": "stock_report",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "i00",
@@ -256,7 +282,8 @@
       "b14"
     ],
     "difficulty": "intermediate",
-    "independent_evidence": "environment_report"
+    "independent_evidence": "environment_report",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "i01",
@@ -270,7 +297,8 @@
       "b12"
     ],
     "difficulty": "intermediate",
-    "independent_evidence": "index_by_sku"
+    "independent_evidence": "index_by_sku",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "i02",
@@ -284,7 +312,8 @@
       "b12"
     ],
     "difficulty": "intermediate",
-    "independent_evidence": "Money"
+    "independent_evidence": "Money",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "i03",
@@ -298,7 +327,8 @@
       "i02"
     ],
     "difficulty": "intermediate",
-    "independent_evidence": "total_area"
+    "independent_evidence": "total_area",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "i04",
@@ -312,7 +342,8 @@
       "b12"
     ],
     "difficulty": "intermediate",
-    "independent_evidence": "Temperature"
+    "independent_evidence": "Temperature",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "i05",
@@ -326,7 +357,8 @@
       "b08"
     ],
     "difficulty": "intermediate",
-    "independent_evidence": "sliding_window"
+    "independent_evidence": "sliding_window",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "i06",
@@ -340,7 +372,12 @@
       "i05"
     ],
     "difficulty": "intermediate",
-    "independent_evidence": "chunked"
+    "independent_evidence": "chunked",
+    "assessment_cell": "build-check",
+    "assessed_reuse": [
+      "b06",
+      "i05"
+    ]
   },
   {
     "concept_id": "i07",
@@ -354,7 +391,8 @@
       "b11"
     ],
     "difficulty": "intermediate",
-    "independent_evidence": "once"
+    "independent_evidence": "once",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "i08",
@@ -368,7 +406,8 @@
       "b12"
     ],
     "difficulty": "intermediate",
-    "independent_evidence": "EventRecorder"
+    "independent_evidence": "EventRecorder",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "i09",
@@ -382,7 +421,8 @@
       "b06"
     ],
     "difficulty": "intermediate",
-    "independent_evidence": "totals_by_category"
+    "independent_evidence": "totals_by_category",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "i10",
@@ -396,7 +436,8 @@
       "i05"
     ],
     "difficulty": "intermediate",
-    "independent_evidence": "apply_transform"
+    "independent_evidence": "apply_transform",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "i11",
@@ -410,7 +451,8 @@
       "b12"
     ],
     "difficulty": "intermediate",
-    "independent_evidence": "parse_quantity"
+    "independent_evidence": "parse_quantity",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "i12",
@@ -424,7 +466,8 @@
       "b05"
     ],
     "difficulty": "intermediate",
-    "independent_evidence": "is_order_code"
+    "independent_evidence": "is_order_code",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "i13",
@@ -438,7 +481,12 @@
       "b12"
     ],
     "difficulty": "intermediate",
-    "independent_evidence": "summarize_sales"
+    "independent_evidence": "summarize_sales",
+    "assessment_cell": "build-check",
+    "assessed_reuse": [
+      "b09",
+      "b12"
+    ]
   },
   {
     "concept_id": "i14",
@@ -452,7 +500,8 @@
       "b10"
     ],
     "difficulty": "intermediate",
-    "independent_evidence": "test_fee"
+    "independent_evidence": "test_fee",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "i15",
@@ -466,7 +515,8 @@
       "i13"
     ],
     "difficulty": "intermediate",
-    "independent_evidence": "count_by_status"
+    "independent_evidence": "count_by_status",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "i16",
@@ -481,7 +531,8 @@
       "b12"
     ],
     "difficulty": "intermediate",
-    "independent_evidence": "paginate"
+    "independent_evidence": "paginate",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "i17",
@@ -495,7 +546,8 @@
       "b14"
     ],
     "difficulty": "intermediate",
-    "independent_evidence": "build_parser"
+    "independent_evidence": "build_parser",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "i18",
@@ -509,7 +561,8 @@
       "b09"
     ],
     "difficulty": "intermediate",
-    "independent_evidence": "lookup_counts"
+    "independent_evidence": "lookup_counts",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "i19",
@@ -523,7 +576,12 @@
       "i13"
     ],
     "difficulty": "intermediate",
-    "independent_evidence": "reconcile"
+    "independent_evidence": "reconcile",
+    "assessment_cell": "build-check",
+    "assessed_reuse": [
+      "i01",
+      "i13"
+    ]
   },
   {
     "concept_id": "a00",
@@ -537,7 +595,8 @@
       "i02"
     ],
     "difficulty": "advanced",
-    "independent_evidence": "Vector"
+    "independent_evidence": "Vector",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "a01",
@@ -551,7 +610,8 @@
       "i04"
     ],
     "difficulty": "advanced",
-    "independent_evidence": "PositiveInt"
+    "independent_evidence": "PositiveInt",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "a02",
@@ -565,7 +625,8 @@
       "i02"
     ],
     "difficulty": "advanced",
-    "independent_evidence": "LRUCache"
+    "independent_evidence": "LRUCache",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "a03",
@@ -579,7 +640,8 @@
       "i10"
     ],
     "difficulty": "advanced",
-    "independent_evidence": "first_or_none"
+    "independent_evidence": "first_or_none",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "a04",
@@ -593,7 +655,8 @@
       "b10"
     ],
     "difficulty": "advanced",
-    "independent_evidence": "parameter_defaults"
+    "independent_evidence": "parameter_defaults",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "a05",
@@ -607,7 +670,8 @@
       "b12"
     ],
     "difficulty": "advanced",
-    "independent_evidence": "gather_in_order"
+    "independent_evidence": "gather_in_order",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "a06",
@@ -621,7 +685,8 @@
       "a05"
     ],
     "difficulty": "advanced",
-    "independent_evidence": "run_bounded"
+    "independent_evidence": "run_bounded",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "a07",
@@ -635,7 +700,8 @@
       "i05"
     ],
     "difficulty": "advanced",
-    "independent_evidence": "map_threaded"
+    "independent_evidence": "map_threaded",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "a08",
@@ -649,7 +715,8 @@
       "b07"
     ],
     "difficulty": "advanced",
-    "independent_evidence": "split_jobs"
+    "independent_evidence": "split_jobs",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "a09",
@@ -663,7 +730,11 @@
       "b12"
     ],
     "difficulty": "advanced",
-    "independent_evidence": "IdempotentPayments"
+    "independent_evidence": "IdempotentPayments",
+    "assessment_cell": "build-check",
+    "assessed_reuse": [
+      "b09"
+    ]
   },
   {
     "concept_id": "a10",
@@ -677,7 +748,8 @@
       "a02"
     ],
     "difficulty": "advanced",
-    "independent_evidence": "peak_delta"
+    "independent_evidence": "peak_delta",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "a11",
@@ -691,7 +763,8 @@
       "i06"
     ],
     "difficulty": "advanced",
-    "independent_evidence": "merge_sorted"
+    "independent_evidence": "merge_sorted",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "a12",
@@ -705,7 +778,8 @@
       "i10"
     ],
     "difficulty": "advanced",
-    "independent_evidence": "rename_user"
+    "independent_evidence": "rename_user",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "a13",
@@ -719,7 +793,8 @@
       "b09"
     ],
     "difficulty": "advanced",
-    "independent_evidence": "redact"
+    "independent_evidence": "redact",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "a14",
@@ -733,7 +808,8 @@
       "a09"
     ],
     "difficulty": "advanced",
-    "independent_evidence": "test_replay"
+    "independent_evidence": "test_replay",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "a15",
@@ -747,7 +823,8 @@
       "b10"
     ],
     "difficulty": "advanced",
-    "independent_evidence": "availability"
+    "independent_evidence": "availability",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "a16",
@@ -761,7 +838,8 @@
       "b08"
     ],
     "difficulty": "advanced",
-    "independent_evidence": "is_compatible"
+    "independent_evidence": "is_compatible",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "a17",
@@ -775,7 +853,8 @@
       "i15"
     ],
     "difficulty": "advanced",
-    "independent_evidence": "add_users"
+    "independent_evidence": "add_users",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "a18",
@@ -789,7 +868,8 @@
       "a17"
     ],
     "difficulty": "advanced",
-    "independent_evidence": "migrate"
+    "independent_evidence": "migrate",
+    "assessment_cell": "build-check"
   },
   {
     "concept_id": "a19",
@@ -803,6 +883,11 @@
       "a15"
     ],
     "difficulty": "advanced",
-    "independent_evidence": "replay_summary"
+    "independent_evidence": "replay_summary",
+    "assessment_cell": "build-check",
+    "assessed_reuse": [
+      "a09",
+      "a15"
+    ]
   }
 ]

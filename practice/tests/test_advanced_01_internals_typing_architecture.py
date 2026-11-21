@@ -84,6 +84,8 @@ def test_parameter_defaults():
         pass
     check(m.parameter_defaults(connect))
 
+    assert m.parameter_defaults(lambda: None) == {}
+
 
 def test_rename_user_with_in_memory_repository():
     repo = m.InMemoryUserRepository()

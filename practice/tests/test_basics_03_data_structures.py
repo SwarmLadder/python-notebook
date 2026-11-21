@@ -47,6 +47,8 @@ def test_unique_cities():
 def test_compare_sets():
     check(m.compare_sets({1, 2, 3}, {3, 4}))
 
+    assert m.compare_sets(set(), {"A"}) == {"common": set(), "only_a": set(), "only_b": {"A"}}
+
 
 def test_word_frequencies():
     check(m.word_frequencies("The cat, the hat. THE END!"))
@@ -105,6 +107,9 @@ def test_merge_counts_does_not_mutate():
     check(m.merge_counts(first, second))
     assert first == {"a": 1, "b": 2} and second == {"b": 3, "c": 4}, "inputs must not change"
 
+    assert m.merge_counts({}, {}) == {}
+    assert m.merge_counts({"A": 2}, {"A": 0, "B": 0}) == {"A": 2, "B": 0}, "Preserve reported zero counts."
+
 
 def test_invert():
     check(m.invert({"a": 1, "b": 2}))
@@ -126,6 +131,11 @@ def test_rotate(k):
 
 def test_rotate_empty():
     check(m.rotate([], 3))
+
+    queue = ["first", "second"]
+    rotated = m.rotate(queue, -1)
+    assert rotated == ["second", "first"] and queue == ["first", "second"], "Preserve the original queue."
+    assert m.rotate(queue, 0) is not queue, "Return a new list even for zero rotation."
 
 
 @pytest.mark.parametrize("size", [2, 3, 10])

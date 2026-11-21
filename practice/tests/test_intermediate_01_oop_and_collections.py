@@ -27,6 +27,8 @@ def test_index_by_sku():
     with pytest.raises(ValueError):
         m.index_by_sku(records + [{"sku": "A1", "name": "Dup"}])
 
+    assert m.index_by_sku([]) == {}
+
 
 def test_unique_usernames():
     check(m.unique_usernames([" Ana", "ana", "BEN ", "   ", ""]))
@@ -98,6 +100,10 @@ def test_temperature_properties():
         temp.celsius = -300
     with pytest.raises(ValueError):
         m.Temperature(-274)
+
+    with pytest.raises(ValueError):
+        temp.fahrenheit = -500
+    assert temp.celsius == 0, "Reject the update before changing the stored temperature."
 
 
 def test_inventory_total():

@@ -99,11 +99,14 @@ def _stopped_at_blank(error: BaseException, source: str) -> bool:
 class RunResult:
     executed_cells: int
     stdout: str
+    mastery_passed: bool = False
 
 
-def run_notebook(path: Path) -> RunResult:
+def run_notebook(path: Path, *, assess: str | None = None) -> RunResult:
     """Execute every non-placeholder code cell; raise NotebookCellError on failure."""
     notebook = load(path)
+    if assess and not __debug__:
+        raise ValueError("Run mastery checks without Python optimization so assertions are enabled.")
     namespace = {"__name__": "__main__", "__file__": str(path)}
     stdout = io.StringIO()
     executed = 0
@@ -111,15 +114,27 @@ def run_notebook(path: Path) -> RunResult:
     original_input = builtins.input
     builtins.input = _no_input
     previous_checks = os.environ.get("PRACTICE_CHECKS")
-    if os.environ.get("PRACTICE_STRICT") != "1":
+    if assess or os.environ.get("PRACTICE_STRICT") != "1":
         os.environ["PRACTICE_CHECKS"] = "skip"  # workbook blanks are meant to be empty in the repo
     sys.path.insert(0, str(path.parent))  # Jupyter can import helpers (quiz.py) next to the notebook
     try:
         os.chdir(path.parent)  # relative data paths behave as they do in Jupyter
+        work_source = None
         for number, source in code_cells(notebook):
+            cell_id = notebook["cells"][number - 1].get("id")
+            if assess and cell_id == "build-work":
+                # A worked example earlier in the lesson may use the same name.
+                namespace.pop(assess, None)
+                work_source = source
+            if assess and cell_id == "build-check":
+                if work_source is None or assess not in namespace:
+                    print(f"Define {assess} in the independent build cell.", file=stdout)
+                    return RunResult(executed, stdout.getvalue())
+                os.environ.pop("PRACTICE_CHECKS", None)
+                namespace["check"].mastery_result = False
             if is_placeholder(source):
                 continue
-            code = compile(strip_ipython_magics(source), f"{notebook_id(path)}#cell{number}", "exec")
+            code = compile(strip_ipython_magics(source), f"{notebook_id(path)}#cell{number}", "exec", dont_inherit=True)
             try:
                 with contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(io.StringIO()):
                     exec(code, namespace)
@@ -140,6 +155,17 @@ def run_notebook(path: Path) -> RunResult:
                     f"{type(error).__name__}: {error}\n    cell starts with: {first_line!r}"
                 ) from error
             executed += 1
+            if assess and cell_id == "build-check":
+                passed = namespace["check"].mastery_result is True
+                if passed and assess == "receipt":
+                    # This early exercise uses variables, before functions are taught.
+                    variant = dict(namespace, item="notebook", units=0)
+                    del variant["receipt"]
+                    exec(compile(work_source, "<receipt revision>", "exec"), variant)
+                    passed = variant.get("receipt") == "notebook x 0"
+                    if not passed:
+                        print("Format the supplied item and units again when the order changes.", file=stdout)
+                return RunResult(executed, stdout.getvalue(), passed)
     finally:
         builtins.input = original_input
         os.chdir(previous_cwd)
@@ -162,3 +188,22 @@ def syntax_errors(notebook: dict, label: str) -> list[str]:
         except SyntaxError as error:
             errors.append(f"{label} cell {number}: {error.msg} (line {error.lineno})")
     return errors
+
+
+def smoke_level(level: str) -> None:
+    """Exercise lesson, capstone and optional maintainer notebooks in their own directories."""
+    paths = sorted(path for folder in ("notebooks", "projects", "solutions")
+                   for path in (ROOT / level / folder).glob("*.ipynb"))
+    if not paths:
+        raise SystemExit(f"No {level} notebooks found")
+    failures = []
+    for path in paths:
+        try:
+            result = run_notebook(path)
+        except Exception as error:
+            failures.append(f"{notebook_id(path)}: {error}")
+        else:
+            print(f"PASS {notebook_id(path)} ({result.executed_cells} code cells)")
+    if failures:
+        raise SystemExit("\n".join(failures))
+    print(f"{level.title()} smoke tests passed for {len(paths)} notebooks.")

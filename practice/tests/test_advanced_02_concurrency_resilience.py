@@ -66,6 +66,8 @@ def test_run_bounded_limits_concurrency():
     assert results == list(range(1, 11))
     check(peak)
 
+    assert asyncio.run(m.run_bounded([], work, limit=2)) == ([], 0)
+
 
 def test_pipeline():
     check(asyncio.run(m.pipeline(["a", "b", "c"], str.upper, maxsize=1)))
@@ -150,6 +152,13 @@ def test_idempotent_payments():
     assert payments.charge("order-2", 25.0) != first
     with pytest.raises(ValueError):
         payments.charge("order-1", 99.0)
+
+    before = list(charged)
+    fresh = m.IdempotentPayments(charge_card)
+    receipt = fresh.charge("order-0", 0)
+    fresh.charge("order-1", 8)
+    assert fresh.charge("order-0", 0) == receipt
+    assert charged == before + [0, 8], "A later order must not erase an earlier receipt."
 
 
 def test_first_result_cancels_the_rest():

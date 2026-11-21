@@ -67,3 +67,13 @@ def test_verify_level_rejects_blank_exercises():
                             capture_output=True, text=True, timeout=600)
     assert result.returncode == 1
     assert "not complete yet" in result.stdout
+
+
+@pytest.mark.parametrize("summary,expected", [
+    ("12 tests collected", False), ("1 passed, 11 deselected in 0.1s", False),
+    ("11 passed, 1 skipped in 0.1s", False), ("12 passed in 0.1s", True),
+])
+def test_achievement_requires_completed_tests(summary, expected, monkeypatch):
+    import verify_level
+    monkeypatch.setattr(subprocess, "run", lambda *a, **kw: subprocess.CompletedProcess([], 0, summary, ""))
+    assert verify_level.terminal_route("sample")[0] is expected

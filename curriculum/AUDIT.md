@@ -10,4 +10,4 @@ The baseline has 18 Basics, 20 Intermediate and 20 Advanced lessons. All have sh
 | Nine projects and three assessments | Projects mix running examples with extension requests. Assessments already have rubrics. | Label the handoff, specify evidence for the independent change, and use the existing rubric. |
 | Retention | Projects revisit earlier material, but prerequisite and reuse relationships are implicit. | Map each lesson to an observable task and earlier concepts. |
 
-The practice files are also achievement inputs. Notebook-only work is formative. Keep keyed tests, hints, claim verification, environment bootstrap and the CI version matrix in place.
+The practice files are also achievement inputs. Saved independent builds now have a separate local mastery report. Keep keyed tests, hints, claim verification, environment bootstrap and the CI version matrix in place.

@@ -2,6 +2,8 @@
 
 Complete this after the 18 lessons, lesson builds, and three projects.
 
+Run `python tools/assess_build.py basics --json` on your saved lessons. Submit the report, one original boundary test and a short explanation of a design decision with your project. Review the code and rationale alongside the reported behavior. See the [mastery guide](../curriculum/MASTERY.md).
+
 ## Skills checklist
 
 - [ ] I can distinguish numbers, strings, booleans, None, lists, tuples, sets, and dictionaries.

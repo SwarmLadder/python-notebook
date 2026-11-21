@@ -35,7 +35,7 @@ No install? Open the repo in **GitHub Codespaces** (see the main README). Everyt
 
 Functions whose blanks you haven't filled yet count as **to do**, not failures.
 
-**Hints unlock step by step.** The first time a test fails you see hint 1, a nudge. If it fails again you see hint 2, which describes the method. You never see the answer. Your progress is saved locally in `practice/.progress.json`.
+**Hints unlock step by step.** Guided checks first suggest a diagnostic, then a concept, then a more specific step. Independent notebook assessments report failed behavior without unlocking these hints. You never see the answer. Your progress is saved locally in `practice/.progress.json`.
 
 **Infinite loop?** Each test is stopped after 10 seconds with an explanation instead of running forever. If Python is stuck inside a built-in like `sum()`, pytest stops after 30 seconds and prints `Timeout` with the exact line of your code.
 

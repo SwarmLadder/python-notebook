@@ -24,6 +24,13 @@ def test_apply_transform():
     rows = [{"price": 1}, {"price": 2}]
     check(m.apply_transform(rows, lambda r: {**r, "price": r["price"] * 10}))
 
+    seen = []
+    def mark(row):
+        seen.append(row["id"])
+        return {"seen": row["id"]}
+    assert m.apply_transform(iter([{"id": "B"}, {"id": "A"}]), mark) == [{"seen": "B"}, {"seen": "A"}]
+    assert seen == ["B", "A"], "Transform each row exactly once, in order."
+
 
 def test_settings_validation():
     assert m.Settings().timeout > 0
@@ -107,3 +114,6 @@ def test_summarize_sales():
     rows = [{"region": "north", "amount": "10.50"}, {"region": "south", "amount": "n/a"},
             {"region": "north", "amount": "4.25"}, {"region": "south", "amount": "3"}]
     check(m.summarize_sales(rows))
+
+    assert m.summarize_sales([]) == {}
+    assert m.summarize_sales([{"region": "west"}, {"region": "east", "amount": "0"}]) == {"east": 0}, "Distinguish a missing amount from a valid zero."

@@ -8,11 +8,11 @@ A free, hands-on Python course: **Basics → Intermediate → Advanced**. You re
 
 **No install needed:** Codespaces gives you everything, including the auto-graded practice. Binder and Colab run the notebooks in your browser.
 
-| Level | Lessons (each with a quiz) | Worked examples | Practice challenges | Auto-graded tests | Projects |
+| Level | Lessons (each with a quiz) | Worked examples | Named practice checks | Practice tests | Projects |
 |---|---:|---:|---:|---:|---:|
 | [Basics](basics/README.md) | 18 | 6 | 72 | 231 | 3 |
-| [Intermediate](intermediate/README.md) | 20 | 6 | 73 | 102 | 3 + CLI package |
-| [Advanced](advanced/README.md) | 20 | 6 | 58 | 95 | 3 + CLI package |
+| [Intermediate](intermediate/README.md) | 20 | 6 | 71 | 102 | 3 + CLI package |
+| [Advanced](advanced/README.md) | 20 | 6 | 57 | 95 | 3 + CLI package |
 
 ## Start on your computer
 
@@ -33,7 +33,7 @@ jupyter lab                      # open basics/notebooks/00_python_introduction.
 2. **Change one input** and explain what happened.
 3. **Answer each part's questions as you go.** Lessons teach a few rules, then test them straight away with short cells that have `___` blanks; `check` tells you if you're right. The hardest questions are the **challenges**: real functions graded by tests. Then take the **quick quiz** at the end.
 4. **Study the worked examples** (`<level>/worked_examples/`). They show how a solution is planned, written and tested.
-5. **Solve the challenges** in each lesson. For guided tasks, fill in each `___`. For an independent build, implement the contract and add a boundary test. Run the check after your code. ✅ means move on. ❌ shows your result and the test's input, never the answer. The first failure unlocks a hint and the second a more detailed one.
+5. **Solve the challenges** in each lesson. For guided tasks, fill in each `___`. For an independent build, implement the contract and add a boundary test. Run the check after your code. ✅ means move on. ❌ shows your result and the test's input, never the answer. Guided practice unlocks increasingly specific hints. Saved independent builds have a separate [mastery check](curriculum/MASTERY.md).
 6. **Prefer a terminal?** The achievement-track practice modules are in `practice/exercises/`; check them with `python -m pytest practice -k basics_01`. See [practice/README.md](practice/README.md).
 7. **Build the projects** and take the level's assessment before moving up.
 

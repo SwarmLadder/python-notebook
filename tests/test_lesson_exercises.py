@@ -79,3 +79,18 @@ def test_run_works_inside_a_running_event_loop():
         return lesson.run(inner())
 
     assert asyncio.run(outer()) == 42
+
+
+def test_pending_cell_uses_real_blank_names_only():
+    assert lesson.pending_exercise("n = ___\ncheck(3, n)") == 3
+    assert lesson.pending_exercise("n = '___'\ncheck(3, n)") is None
+    assert lesson.pending_exercise("def work(x):\n    return ___") is None
+
+
+def test_failed_rerun_invalidates_previous_success(capsys, monkeypatch):
+    monkeypatch.delenv("PRACTICE_CHECKS", raising=False)
+    check = lesson.Exercises("demo", {}, "basics_01_fundamentals", independent="total_cost")
+    assert check._challenge("total_cost", {"total_cost": lambda price_text, units=7: float(price_text)*units})
+    assert not check._challenge("total_cost", {"total_cost": lambda price_text, units=7: 0})
+    assert "total_cost" not in check._checker.passed
+    assert "hint 1/" not in capsys.readouterr().out

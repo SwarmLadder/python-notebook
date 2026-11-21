@@ -1,42 +1,87 @@
-"""Check the map and the independent-build cells used by learners."""
+"""Check curriculum evidence through the same cells a learner runs."""
+import ast
 import json
 
 import pytest
 
+import notebook_runner as runner
 from notebook_runner import ROOT, cell_source, load
+
+ROWS = json.loads((ROOT / "curriculum/concepts.json").read_text())
 
 
 def test_map_covers_lessons_and_references_earlier_concepts():
-    rows = json.loads((ROOT / "curriculum/concepts.json").read_text())
     paths = {p.relative_to(ROOT).as_posix() for p in ROOT.glob("*/notebooks/*.ipynb")}
-    assert {row["lesson"] for row in rows} == paths
-    assert len(rows) == len(paths)
+    assert {row["lesson"] for row in ROWS} == paths
+    assert len(ROWS) == len(paths)
     earlier = set()
-    for row in rows:
+    for row in ROWS:
         assert row["concept_id"] not in earlier
         assert set(row["prerequisites"] + row["reused_concepts"]) <= earlier
+        assert set(row.get("assessed_reuse", [])) <= set(row["reused_concepts"])
         assert row["primary_skill"] and row["difficulty"]
         earlier.add(row["concept_id"])
         cells = load(ROOT / row["lesson"])["cells"]
-        builds = [i for i, cell in enumerate(cells) if cell.get("id") == "independent-build"]
-        assert len(builds) == 1, row["lesson"]
-        index = builds[0]
+        ids = [c["id"] for c in cells]
+        assert len(ids) == len(set(ids))
+        assert ids.index("independent-build") < ids.index("build-work") < ids.index(row["assessment_cell"])
         name = row["independent_evidence"]
-        assert name in cell_source(cells[index]), row["lesson"]
-        checks = [cell_source(c) for c in cells[index + 1:] if c.get("id") == "build-check"]
-        if checks:
-            assert len(checks) == 1 and name in checks[0]
-        else:
-            assert cell_source(cells[index + 2]) == f"check('{name}')"
+        assert name in cell_source(cells[ids.index("independent-build")])
+        tree = ast.parse(cell_source(cells[ids.index(row["assessment_cell"])]))
+        call = tree.body[-1].value
+        assert ast.unparse(call.func) in ("check", "check.assess")
+        assert call.args[0].value == name
 
 
-@pytest.mark.parametrize("lesson,name,defect", [
-    ("06_loops", "scan_batch", lambda events: events.count("A")),
-    ("10_functions", "invoice_total",
-     lambda lines, fee=0: sum(price * quantity for price, quantity in lines) + fee),
+@pytest.mark.parametrize("row", ROWS, ids=[r["concept_id"] for r in ROWS])
+def test_omitted_build_cannot_pass_from_an_earlier_example(row, monkeypatch):
+    path = ROOT / row["lesson"]
+    notebook = load(path)
+    work = next(c for c in notebook["cells"] if c["id"] == "build-work")
+    work["source"] = ["# Work removed"]
+    monkeypatch.setattr(runner, "load", lambda path: notebook)
+    assert not runner.run_notebook(path, assess=row["independent_evidence"]).mastery_passed
+
+
+@pytest.mark.parametrize("concept,submission,passed", [
+    ("b00", "session_label = 'Order Desk'", True),
+    ("b04", "receipt = 'pen x 3'", False),
+    ("b04", "receipt = '{} x {}'.format(item, units)", True),
+    ("b06", "def scan_batch(events): return events.count('A')", False),
+    ("b10", "def invoice_total(lines, fee=0): return fee + sum(p*q for p, q in lines)", False),
+    ("i03", "def total_area(shapes): return 0", False),
+    ("i14", "def test_fee(candidate): pass", False),
+    ("a14", "def test_replay(deliver): pass", False),
 ])
-def test_pilot_check_rejects_boundary_defect(lesson, name, defect):
-    cells = load(ROOT / "basics/notebooks" / f"{lesson}.ipynb")["cells"]
-    check = next(cell_source(c) for c in cells if c["id"] == "build-check")
-    with pytest.raises(AssertionError):
-        exec(check, {name: defect})
+def test_current_saved_submission(concept, submission, passed, monkeypatch):
+    row = next(r for r in ROWS if r["concept_id"] == concept)
+    path = ROOT / row["lesson"]
+    notebook = load(path)
+    work = next(c for c in notebook["cells"] if c["id"] == "build-work")
+    work["source"] = [submission]
+    monkeypatch.setattr(runner, "load", lambda path: notebook)
+    result = runner.run_notebook(path, assess=row["independent_evidence"])
+    assert result.mastery_passed is passed, result.stdout
+
+
+def test_early_standard_library_names_are_provided():
+    expected = {1: ["math"], 9: ["Counter", "string"], 13: ["Path", "csv", "tempfile"]}
+    for number, names in expected.items():
+        path = next((ROOT / "basics/notebooks").glob(f"{number:02d}_*.ipynb"))
+        setup = cell_source(load(path)["cells"][2])
+        imports = {a.asname or a.name for node in ast.walk(ast.parse(setup))
+                   if isinstance(node, (ast.Import, ast.ImportFrom)) for a in node.names}
+        assert set(names) <= imports
+
+
+def test_published_inventory_matches_the_lessons():
+    import runpy
+    stats = runpy.run_path(str(ROOT / "tools/course_stats.py"))["inventory"]()
+    readme = (ROOT / "README.md").read_text()
+    for row in stats:
+        level = row["level"]
+        line = next(line for line in readme.splitlines() if f"]({level}/README.md) |" in line)
+        fields = [field.strip() for field in line.strip("|").split("|")]
+        assert int(fields[1]) == row["lessons"] == row["independent_builds"]
+        assert int(fields[3]) == row["named_practice_checks"]
+        assert int(fields[5].split()[0]) == row["projects"]
