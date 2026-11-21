@@ -62,7 +62,15 @@ ___ = _Blank()
 
 def _top_level_names(module: str) -> list[str]:
     tree = ast.parse((HERE / "exercises" / f"{module}.py").read_text(encoding="utf-8"))
-    return [n.name for n in tree.body if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))]
+    names = []
+    for node in tree.body:
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+            names.append(node.name)
+        elif isinstance(node, ast.Assign):
+            names.extend(target.id for target in node.targets if isinstance(target, ast.Name))
+        elif isinstance(node, ast.AnnAssign) and isinstance(node.target, ast.Name):
+            names.append(node.target.id)
+    return names
 
 
 def tests_by_exercise(module: str) -> dict[str, list[str]]:
@@ -131,9 +139,10 @@ class Checker:
         args = [f"{test_file}::{t}" for t in tests] + [
             "-q", "-p", "no:cacheprovider", "--color=no", "--tb=short",
             f"--rootdir={ROOT}", "-c", str(ROOT / "pytest.ini")]
+        status = {}
         def run():
             with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
-                pytest.main(args, plugins=[collector])
+                status["exit_code"] = int(pytest.main(args, plugins=[collector]))
 
         # A worker thread has no running event loop, so tests may call asyncio.run()
         # even though Jupyter itself runs one in the main thread. Where threads are not
@@ -147,24 +156,33 @@ class Checker:
                 run()
         finally:
             practice_loader.OVERRIDES.pop(self.module, None)
-        return self._report(name, collector.reports)
+        return self._report(name, collector.reports, tests, status.get("exit_code"))
 
-    def _report(self, name: str, reports) -> bool:
+    def _report(self, name: str, reports, expected_tests: list[str], exit_code: int | None) -> bool:
+        # A passing subset is not mastery: collection errors, missing test functions,
+        # interrupted runs and skipped tests must all block success.
+        observed = {r.nodeid.split("::")[-1].split("[", 1)[0] for r in reports}
+        missing = set(expected_tests) - observed
         total = len(reports)
         todo = [r for r in reports if r.skipped]
         failed = [r for r in reports if r.failed]
-        if not failed and not todo and total:
+        if exit_code == 0 and not missing and not failed and not todo and total:
             self.passed.add(name)
             checks = "check" if total == 1 else f"{total} checks"
             print(f"✅ {name}: {'the' if total == 1 else 'all'} {checks} passed. Move on to the next exercise!")
             return True
-        if todo and not failed:
+        self.passed.discard(name)
+        if todo and not failed and not missing and exit_code in (0, 5):
             print(f"✏️  {name}: fill in every ___ blank, run the code cell, then run this check again.")
-            ok = False
         else:
-            print(f"❌ {name}: {total - len(failed) - len(todo)} of {total} checks passed. First problem:\n")
-            print(_failure_text(failed[0]))
-            ok = False
+            print(f"❌ {name}: mastery check incomplete ({total - len(failed) - len(todo)}/{total} executed checks passed).")
+            if missing:
+                print("Missing test coverage: " + ", ".join(sorted(missing)))
+            if exit_code != 0:
+                print(f"Test runner exited with status {exit_code}; no mastery credit.")
+            if failed:
+                print("First problem:\n" + _failure_text(failed[0]))
+        ok = False
         if os.environ.get("PRACTICE_STRICT") == "1":
             raise AssertionError(f"{self.module}.{name} did not pass its checks")
         return ok
