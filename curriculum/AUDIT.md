@@ -11,3 +11,11 @@ The baseline has 18 Basics, 20 Intermediate and 20 Advanced lessons. All have sh
 | Retention | Projects revisit earlier material, but prerequisite and reuse relationships are implicit. | Map each lesson to an observable task and earlier concepts. |
 
 The practice files are also achievement inputs. Notebook-only work is formative. Keep keyed tests, hints, claim verification, environment bootstrap and the CI version matrix in place.
+
+## Phase 2 implementation
+
+All 58 lesson builds now map to named practice-module assessments via `mastery_module` in `concepts.json`. Fifteen previously notebook-only builds (7 Basics, 4 Intermediate, 4 Advanced) now receive separate behavioral grading, so a finished notebook alone does not constitute achievement evidence. Existing named challenges retain salted fingerprints and hints; new independent tests use no staged hints.
+
+The `independently_reinforced` field records selected delayed, mixed-concept demonstrations, including Basics scanner/stock reports, Intermediate reconciliation, and Advanced idempotency/replay audits. The existing concept prerequisite/reuse map remains the source of truth. Lesson build descriptions now include spaced engineering revision tickets; future audits should inspect the rest of the guided questions for redundancy.
+
+Build checks test observable results and missing implementations rather than merely printing acceptance examples. Real-kernel Colab exercises are still instructor- or learner-reviewed; CI uses clean isolated Python namespaces for notebook execution. Project rubric reviews remain human-assessed.

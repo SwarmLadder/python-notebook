@@ -18,7 +18,7 @@ There are two ways to get your name on this course. Both are checked automatical
 
 ## Track 2: Achievers
 
-You qualify for a level (Basics, Intermediate or Advanced) when **all four practice modules of that level pass**. The lesson challenges are the same exercises; to claim, put your solutions in the **practice files** (`practice/exercises/<module>.py`), where `python -m pytest practice -k <module>` must pass with nothing left "to do".
+You qualify for a level (Basics, Intermediate or Advanced) when **all five practice modules of that level pass**. Four guided modules use the existing salted answer fingerprints. The fifth, `practice/exercises/<level>_independent_builds.py`, checks every build that previously had only notebook assertions using dedicated behavioral tests. Named builds from the other four modules already count as mastery evidence. To claim, put your solutions in the **practice files** (`practice/exercises/<module>.py`), where `python -m pytest practice -k <module>` must pass with nothing left "to do".
 
 Check yourself before claiming:
 

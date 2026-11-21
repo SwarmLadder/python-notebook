@@ -1,6 +1,6 @@
 # Auto-graded practice ✅
 
-There are 12 modules, four per level, with 428 tests. Each exercise is **nearly finished code with `___` blanks**. Fill them in and the tests tell you whether it's correct. **The answers are never shown.** The repo stores only fingerprints (hashes) of the correct results.
+There are 15 practice modules: four guided modules and one independent-build module per level. Guided exercises use `___` blanks and salted answer fingerprints; independent builds start unimplemented and are assessed by observable behavior (including boundaries, invalid input, mutation and regression cases). No private reference implementations are published.
 
 Most learners solve these as the **challenges in the lessons**, where a `check("name")` cell after each one runs these same tests. This folder is the terminal version, and it is what an [achievement claim](../RECOGNITION.md) is verified against.
 
@@ -15,8 +15,8 @@ No install? Open the repo in **GitHub Codespaces** (see the main README). Everyt
 
 ## The loop
 
-1. Open a module in [`exercises/`](exercises). Each function's docstring says what to build, often with an example and a hint.
-2. Replace every `___` with the missing code. Don't rewrite the parts that are given.
+1. Open a module in [`exercises/`](exercises). Each task's docstring says what to build. Guided tasks supply examples and progressive hints; independent builds give the contract without an algorithm.
+2. For guided work, fill the `___` blanks. For independent builds, implement the named function (or the two introductory variables) and copy it to the corresponding `*_independent_builds.py` file.
 3. Run `python -m pytest practice -k <module or function name>`.
 4. Read the result:
 
@@ -35,7 +35,7 @@ No install? Open the repo in **GitHub Codespaces** (see the main README). Everyt
 
 Functions whose blanks you haven't filled yet count as **to do**, not failures.
 
-**Hints unlock step by step.** The first time a test fails you see hint 1, a nudge. If it fails again you see hint 2, which describes the method. You never see the answer. Your progress is saved locally in `practice/.progress.json`.
+**Guided hints unlock step by step.** The first time a test fails you see hint 1, a nudge. If it fails again you see hint 2, which describes the method. You never see the answer. Independent tests do not unlock hints or count repeated failed attempts as mastery. Your guided progress is saved locally in `practice/.progress.json`.
 
 **Infinite loop?** Each test is stopped after 10 seconds with an explanation instead of running forever. If Python is stuck inside a built-in like `sum()`, pytest stops after 30 seconds and prints `Timeout` with the exact line of your code.
 
@@ -46,9 +46,9 @@ Tips:
 
 | Level | Modules |
 |---|---|
-| Basics | [fundamentals](exercises/basics_01_fundamentals.py) · [control flow](exercises/basics_02_control_flow.py) · [data structures](exercises/basics_03_data_structures.py) · [functions & files](exercises/basics_04_functions_and_files.py) |
-| Intermediate | [OOP & collections](exercises/intermediate_01_oop_and_collections.py) · [iteration](exercises/intermediate_02_iteration_and_abstractions.py) · [data quality](exercises/intermediate_03_data_quality_and_testing.py) · [SQL, HTTP, CLI](exercises/intermediate_04_sql_http_cli.py) |
-| Advanced | [internals & typing](exercises/advanced_01_internals_typing_architecture.py) · [concurrency](exercises/advanced_02_concurrency_resilience.py) · [security & performance](exercises/advanced_03_security_testing_performance.py) · [production](exercises/advanced_04_production_systems.py) |
+| Basics | [fundamentals](exercises/basics_01_fundamentals.py) · [control flow](exercises/basics_02_control_flow.py) · [data structures](exercises/basics_03_data_structures.py) · [functions & files](exercises/basics_04_functions_and_files.py) · [independent builds](exercises/basics_independent_builds.py) |
+| Intermediate | [OOP & collections](exercises/intermediate_01_oop_and_collections.py) · [iteration](exercises/intermediate_02_iteration_and_abstractions.py) · [data quality](exercises/intermediate_03_data_quality_and_testing.py) · [SQL, HTTP, CLI](exercises/intermediate_04_sql_http_cli.py) · [independent builds](exercises/intermediate_independent_builds.py) |
+| Advanced | [internals & typing](exercises/advanced_01_internals_typing_architecture.py) · [concurrency](exercises/advanced_02_concurrency_resilience.py) · [security & performance](exercises/advanced_03_security_testing_performance.py) · [production](exercises/advanced_04_production_systems.py) · [independent builds](exercises/advanced_independent_builds.py) |
 
 ## For maintainers
 
@@ -65,3 +65,5 @@ python tools/make_workbooks.py
 `--record-answers` writes `answers/*.json` only if every test passes, and never from a run filtered with `-k`. `tests/test_practice_stubs.py` fails if an exercise function has no blank, a workbook is out of date, or a test has no answer key.
 
 A determined learner could brute-force a hash with very few possible answers, such as `True` or `False`. The point is that nobody sees an answer by accident. It is not exam security.
+
+Independent builds intentionally have no keyed answer files or progressive hint files. Their publicly inspectable tests specify inputs and observable acceptance criteria but do not include private reference solutions. The existing guided exercise answer keys and hint progression are unchanged.
