@@ -196,7 +196,7 @@ class Exercises:
     def pending(self, number):
         self.passed.discard(number)
         self.last_result = None
-        print(f"✏️  Exercise {number}: Not attempted — replace each ___ blank, then run the cell.")
+        print(f"✏️  Exercise {number}: Not attempted — fill in every ___ blank, then run the cell.")
 
     def assess(self, name, cases):
         """Run public acceptance cases on the current submission, without hints."""
@@ -224,7 +224,7 @@ class Exercises:
             return None
         self.passed.discard(number)
         if _contains_blank(value):
-            print(f"✏️  Exercise {number}: Not attempted — replace each ___ blank, then run the cell.")
+            print(f"✏️  Exercise {number}: Not attempted — fill in every ___ blank, then run the cell.")
             return None
         if fingerprint(self.lesson_id, number, value) == self._answers[number]:
             self.passed.add(number)
