@@ -58,7 +58,7 @@ ___ = _Blank()
 
 
 def _contains_blank(value, depth=0) -> bool:
-    if value is ___ or (isinstance(value, str) and value == "___"):
+    if value is ___:
         return True
     if depth > 4:
         return False
@@ -196,7 +196,7 @@ class Exercises:
     def pending(self, number):
         self.passed.discard(number)
         self.last_result = None
-        print(f"✏️  Exercise {number}: fill in every ___ blank first.")
+        print(f"✏️  Exercise {number}: Not attempted — replace each ___ blank, then run the cell.")
 
     def assess(self, name, cases):
         """Run public acceptance cases on the current submission, without hints."""
@@ -224,11 +224,11 @@ class Exercises:
             return None
         self.passed.discard(number)
         if _contains_blank(value):
-            print(f"✏️  Exercise {number}: fill in every ___ blank first.")
+            print(f"✏️  Exercise {number}: Not attempted — replace each ___ blank, then run the cell.")
             return None
         if fingerprint(self.lesson_id, number, value) == self._answers[number]:
             self.passed.add(number)
-            print(f"✅ Exercise {number}: correct! ({len(self.passed)}/{len(self._answers)} done)")
+            print(f"✅ Exercise {number}: Passed ({len(self.passed)}/{len(self._answers)} done)")
             return True
         self._attempts[number] = self._attempts.get(number, 0) + 1
         if isinstance(value, dict):
@@ -246,7 +246,8 @@ class Exercises:
         ))
         shown = repr(value)
         shown = shown if len(shown) < 200 else shown[:200] + "..."
-        print(f"❌ Exercise {number}: not yet. Your result: {shown}\n"
-              "   Re-read the example above this section, change one blank, and run the cell again.")
+        print(f"❌ Exercise {number}: Needs improvement. Your result: {shown}")
         print(steps[min(self._attempts[number], len(steps)) - 1])
+        if self._attempts[number] == 1:
+            print(diagnostic)
         return False
