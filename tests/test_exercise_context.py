@@ -26,6 +26,8 @@ def test_declared_context_provides_starter_globals(path):
         available = set(dir(builtins))
         context = selected_cells(notebook, key)
         for part in context:
+            if part["id"] == "colab-setup":
+                continue  # The Lab skips the notebook bootstrap.
             scope = symtable.symtable(cell_source(part), part["id"], "exec")
             available.update(s.get_name() for s in scope.get_symbols() if s.is_assigned() or s.is_imported())
         assert not (missing := global_reads(scope) - available), f"{path.name}#{key}: {missing}"
@@ -89,18 +91,42 @@ def test_sqlite_submission_runs_as_a_standalone_module(tmp_path):
     import sys
 
     path = ROOT / "intermediate/notebooks/15_sqlite_and_transactions.ipynb"
-    cells = selected_cells(load(path), "build-work")
+    cells = selected_cells(load(path), "ex-6")
     setup = ast.parse(cell_source(cells[1]))
     imports = [ast.unparse(n) for n in setup.body if isinstance(n, (ast.Import, ast.ImportFrom))
                and getattr(n, "module", None) != "lesson"]
-    function = cell_source(cells[-1]).replace("raise NotImplementedError",
-        'return dict(open=conn.execute("SELECT COUNT(*) FROM tasks WHERE done=0").fetchone()[0], '
-        'done=conn.execute("SELECT COUNT(*) FROM tasks WHERE done=1").fetchone()[0])')
+    function = ast.unparse(ast.parse(cell_source(cells[-1])).body[0])
+    function = function.replace("raise NotImplementedError",
+                                'return [r[0] for r in conn.execute("SELECT title FROM tasks ORDER BY id")]')
     (tmp_path / "report.py").write_text("\n".join(imports) + "\n" + function)
     (tmp_path / "cli.py").write_text(
-        'import sqlite3\nfrom report import count_by_status\n'
+        'import sqlite3\nfrom report import titles\n'
         'with sqlite3.connect(":memory:") as db:\n'
-        '    db.execute("CREATE TABLE tasks(done INTEGER)")\n'
-        '    db.execute("INSERT INTO tasks VALUES (1)")\n'
-        '    assert count_by_status(db) == {"open": 0, "done": 1}\n')
+        '    db.execute("CREATE TABLE tasks(id INTEGER, title TEXT)")\n'
+        '    db.execute("INSERT INTO tasks VALUES (1, ?)", ("tea",))\n'
+        '    assert titles(db) == ["tea"]\n')
     subprocess.run([sys.executable, "cli.py"], cwd=tmp_path, check=True)
+
+
+@pytest.mark.parametrize("path", sorted(ROOT.glob("*/notebooks/*.ipynb")), ids=lambda p: p.stem)
+def test_starters_execute_after_only_their_declared_setup(path, monkeypatch):
+    from notebook_runner import _stopped_at_blank
+
+    monkeypatch.chdir(path.parent)
+    monkeypatch.syspath_prepend(str(path.parent))
+    notebook = load(path)
+    for target in notebook["cells"]:
+        key = target["id"]
+        if target["cell_type"] != "code" or key.endswith("-check"):
+            continue
+        if not (key.startswith(("ex-", "ch-")) or key == "build-work"):
+            continue
+        ns = {"__name__": "__main__"}
+        for cell in selected_cells(notebook, key):
+            source = cell_source(cell)
+            try:
+                exec(compile(source, "<exercise>", "exec", dont_inherit=True), ns)
+            except Exception as error:
+                if cell is target and not isinstance(error, NameError) and _stopped_at_blank(error, source):
+                    break
+                raise AssertionError(f"{path.name}#{key} while running {cell['id']}") from error

@@ -58,7 +58,7 @@ async def pipeline(items: Iterable, transform: Callable[[object], object], maxsi
 
     Return transform(item) for each item, in order.
     """
-    ___
+    raise NotImplementedError
 
 
 async def run_blocking(func: Callable, *args):
@@ -97,12 +97,12 @@ def retry(operation: Callable[[], object], attempts: int = 3, base_delay: float 
     PermanentError is re-raised immediately. After `attempts` failures re-raise the
     last TransientError. `sleep` is injected so tests never really wait.
     """
-    ___
+    raise NotImplementedError
 
 
 def jittered_delays(attempts: int, base: float, seed: int) -> list[float]:
     """Full-jitter backoff: delay n is uniform in [0, base * 2**n]. Same seed -> same delays."""
-    ___
+    raise NotImplementedError
 
 
 class IdempotentPayments:
@@ -131,7 +131,7 @@ async def first_result(coroutines: list) -> object:
 
     Hint: asyncio.wait(..., return_when=asyncio.FIRST_COMPLETED).
     """
-    ___
+    raise NotImplementedError
 
 
 def map_threaded(func: Callable, items: list, workers: int = 4) -> list:

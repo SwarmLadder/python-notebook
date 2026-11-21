@@ -42,7 +42,7 @@ def second_largest(values: list[float]) -> float:
 
 def flatten(matrix: list[list]) -> list:
     """Flatten a 2-D list with nested loops: [[1, 2], [3]] -> [1, 2, 3]."""
-    ___
+    raise NotImplementedError
 
 
 def distance_from_origin(point: tuple[float, float]) -> float:
@@ -81,7 +81,7 @@ def word_frequencies(text: str) -> dict[str, int]:
 
 def split_pass_fail(scores: dict[str, float], threshold: float = 50) -> dict[str, dict[str, float]]:
     """Group students into {'pass': {...}, 'fail': {...}}; a score equal to threshold passes."""
-    ___
+    raise NotImplementedError
 
 
 def student_averages(grades: dict[str, list[float]]) -> dict[str, float]:
@@ -136,7 +136,7 @@ def merge_counts(first: dict[str, int], second: dict[str, int]) -> dict[str, int
 
 def invert(mapping: dict) -> dict:
     """Swap keys and values. Raise ValueError if two keys share a value."""
-    ___
+    raise NotImplementedError
 
 
 def top_words(text: str, n: int) -> list[tuple[str, int]]:

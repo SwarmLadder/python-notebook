@@ -7,7 +7,7 @@ python tools/assess_build.py b06
 python tools/assess_build.py intermediate --json
 ```
 
-The command starts a fresh Python process per lesson, runs the supplied setup and earlier cells, clears any previous example with the build's name, and grades the saved work. A missing definition, failed or skipped check, exception or timeout yields an incomplete attempt and a nonzero exit code. The receipt exercise also gets a different order on replay. Each JSON record names the concept and build and reports the current result. Course practice tests require pytest.
+The command starts a fresh Python process per lesson, runs the supplied setup and explicitly declared prerequisites, then grades the saved work in that isolated context. A missing definition, failed or skipped check, exception or timeout yields an incomplete attempt and a nonzero exit code. The receipt exercise also gets a different order on replay. Each JSON record names the concept and build and reports the current result. Course practice tests require pytest.
 
 Use the guided exercises for hints. The assessment reruns the behavioral checks without progressive hints. A passing report records demonstrated behavior on those cases. Ask the learner to reproduce a boundary case, explain a decision and handle a changed requirement in the project review. Local reports do not establish authorship or record assistance received outside the attempt.
 

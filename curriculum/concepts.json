@@ -166,7 +166,15 @@
       "b02",
       "b05",
       "b06"
-    ]
+    ],
+    "reuse_evidence": {
+      "check": "build-check",
+      "observations": {
+        "b02": "Prices and quantities compose into line costs.",
+        "b05": "Free items with positive quantity trigger the fee; all-zero orders do not.",
+        "b06": "Several input lines contribute to one total."
+      }
+    }
   },
   {
     "concept_id": "b11",
@@ -216,7 +224,14 @@
     "assessed_reuse": [
       "b03",
       "b06"
-    ]
+    ],
+    "reuse_evidence": {
+      "check": "practice/tests/test_basics_04_functions_and_files.py#test_longest_word_in_file",
+      "observations": {
+        "b03": "Split whitespace while keeping punctuation and Unicode text.",
+        "b06": "Visit multiple items and preserve the first matching maximum."
+      }
+    }
   },
   {
     "concept_id": "b14",
@@ -387,7 +402,14 @@
     "assessed_reuse": [
       "b06",
       "i05"
-    ]
+    ],
+    "reuse_evidence": {
+      "check": "practice/tests/test_intermediate_02_iteration_and_abstractions.py#test_chunked",
+      "observations": {
+        "b06": "Accumulate successive items, preserving their order and the final partial batch.",
+        "i05": "Consume a one-pass source and stop early when the caller stops."
+      }
+    }
   },
   {
     "concept_id": "i07",
@@ -436,7 +458,14 @@
     "assessed_reuse": [
       "b06",
       "b09"
-    ]
+    ],
+    "reuse_evidence": {
+      "check": "practice/tests/test_intermediate_02_iteration_and_abstractions.py#test_totals_by_category_with_unsorted_input",
+      "observations": {
+        "b06": "Account for every adjustment, including nonadjacent refunds.",
+        "b09": "Combine repeated category keys without mutating the caller’s records."
+      }
+    }
   },
   {
     "concept_id": "i10",
@@ -500,7 +529,14 @@
     "assessed_reuse": [
       "b09",
       "b12"
-    ]
+    ],
+    "reuse_evidence": {
+      "check": "practice/tests/test_intermediate_03_data_quality_and_testing.py#test_summarize_sales",
+      "observations": {
+        "b09": "Combine multiple amounts under one region.",
+        "b12": "Recover from malformed or missing amounts and preserve a valid zero."
+      }
+    }
   },
   {
     "concept_id": "i14",
@@ -595,7 +631,14 @@
     "assessed_reuse": [
       "b02",
       "b09"
-    ]
+    ],
+    "reuse_evidence": {
+      "check": "build-check",
+      "observations": {
+        "b02": "Return the signed difference of expected and received quantities.",
+        "b09": "Consider keys present in only one report and preserve both reports."
+      }
+    }
   },
   {
     "concept_id": "a00",
@@ -748,7 +791,13 @@
     "assessment_cell": "build-check",
     "assessed_reuse": [
       "b09"
-    ]
+    ],
+    "reuse_evidence": {
+      "check": "practice/tests/test_advanced_02_concurrency_resilience.py#test_idempotent_payments",
+      "observations": {
+        "b09": "Retain the original amount and receipt for each key across interleaved calls."
+      }
+    }
   },
   {
     "concept_id": "a10",
@@ -902,6 +951,13 @@
     "assessed_reuse": [
       "i05",
       "a09"
-    ]
+    ],
+    "reuse_evidence": {
+      "check": "build-check",
+      "observations": {
+        "i05": "Consume a one-pass delivery stream.",
+        "a09": "Separate true duplicates from conflicting deliveries using the original amount."
+      }
+    }
   }
 ]

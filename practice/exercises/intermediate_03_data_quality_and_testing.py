@@ -19,7 +19,7 @@ from typing import Optional, TypedDict
 
 def mean_or_none(values: list[float]) -> Optional[float]:
     """Return the arithmetic mean, or None for an empty list."""
-    ___
+    raise NotImplementedError
 
 
 class ProductRecord(TypedDict):
@@ -68,7 +68,7 @@ def parse_quantity(text: str) -> int:
 
 def log_request(logger: logging.Logger, url: str, token: str, status: int) -> None:
     """Log 'GET <url> -> <status>' at INFO level. The token must never appear in logs."""
-    ___
+    raise NotImplementedError
 
 
 ORDER_CODE = re.compile(r"[A-Z]{2}-\d{4}")
@@ -113,7 +113,7 @@ def clean_csv(text: str) -> tuple[list[dict], list[int]]:
 
     Valid rows have price converted to float. Line numbers count the header as line 1.
     """
-    ___
+    raise NotImplementedError
 
 
 def slugify(title: str) -> str:
@@ -121,12 +121,12 @@ def slugify(title: str) -> str:
 
     'Hello, World!  2024' -> 'hello-world-2024'
     """
-    ___
+    raise NotImplementedError
 
 
 def hashtags(text: str) -> list[str]:
     """Unique hashtags (without '#'), lowercase, in first-seen order. '#Py #py #AI' -> ['py', 'ai']."""
-    ___
+    raise NotImplementedError
 
 
 def parse_settings(text: str) -> dict[str, str]:
@@ -134,7 +134,7 @@ def parse_settings(text: str) -> dict[str, str]:
 
     Raise ValueError mentioning the line number (e.g. 'line 3') for a line without '='.
     """
-    ___
+    raise NotImplementedError
 
 
 def summarize_sales(rows: list[dict]) -> dict[str, float]:

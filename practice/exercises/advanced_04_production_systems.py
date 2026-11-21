@@ -80,7 +80,7 @@ def iterate_cursor(fetch: Callable[[str | None], dict]) -> list:
 
     Raise RuntimeError if a cursor repeats (the server is looping).
     """
-    ___
+    raise NotImplementedError
 
 
 class IdempotencyStore:
@@ -91,21 +91,21 @@ class IdempotencyStore:
     """
 
     def __init__(self, conn: sqlite3.Connection):
-        ___
+        raise NotImplementedError
 
     def execute(self, key: str, action: Callable[[], object]):
-        ___
+        raise NotImplementedError
 
 
 def should_alert(error_rates: list[float], threshold: float, sustained: int) -> bool:
     """Alert only if the last `sustained` samples are ALL above threshold (avoids flapping)."""
-    ___
+    raise NotImplementedError
 
 
 def readiness(checks: dict[str, Callable[[], bool]]) -> dict:
     """Run every check; a check that raises counts as failed. Return
     {'ready': all passed, 'checks': {name: 'ok' | 'fail'}}."""
-    ___
+    raise NotImplementedError
 
 
 def migrate(conn: sqlite3.Connection, migrations: list[str]) -> int:
@@ -121,7 +121,7 @@ def migrate(conn: sqlite3.Connection, migrations: list[str]) -> int:
 
 def parse_version(text: str) -> tuple[int, int, int]:
     """Parse 'MAJOR.MINOR.PATCH' (optional leading 'v') into ints; ValueError otherwise."""
-    ___
+    raise NotImplementedError
 
 
 def is_compatible(client: str, server: str) -> bool:

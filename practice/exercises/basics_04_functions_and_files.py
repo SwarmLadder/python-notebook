@@ -51,7 +51,7 @@ def is_prime(n: int) -> bool:
 
 def parse_number(text: str):
     """Return float(text), or None if the text is not a valid number (catch ValueError)."""
-    ___
+    raise NotImplementedError
 
 
 def check_percentage(value: float) -> float:
@@ -67,7 +67,7 @@ def score_report(names: list[str], scores: list[int]) -> list[str]:
     >>> score_report(["Ana", "Ben"], [90, 72])
     ['1. Ana: 90', '2. Ben: 72']
     """
-    ___
+    raise NotImplementedError
 
 
 def roll_dice(count: int, seed: int) -> list[int]:
@@ -105,7 +105,7 @@ def write_students_csv(path: Path, rows: list[dict]) -> None:
 
 def read_grades(path: Path) -> dict[str, int]:
     """Read a name,grade CSV with csv.DictReader and return {name: int(grade)}."""
-    ___
+    raise NotImplementedError
 
 
 def save_tasks(path: Path, tasks: list[str]) -> None:
@@ -148,7 +148,7 @@ def discount_price(price: float, *, percent: float = 10) -> float:
 def append_log(path: Path, message: str) -> int:
     """Append message as a new line in a UTF-8 file (create it if missing) and return the
     total number of lines now in the file. Hint: open(path, 'a', encoding='utf-8')."""
-    ___
+    raise NotImplementedError
 
 
 def longest_word_in_file(path: Path) -> str:

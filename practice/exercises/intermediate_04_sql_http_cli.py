@@ -68,7 +68,7 @@ def transfer(conn: sqlite3.Connection, source: str, target: str, amount: float) 
     If the CHECK constraint fails (overdraft) or an account is missing, raise
     ValueError and leave BOTH balances unchanged. Hint: `with conn:` commits or rolls back.
     """
-    ___
+    raise NotImplementedError
 
 
 def count_by_status(conn: sqlite3.Connection) -> dict[str, int]:
@@ -103,7 +103,7 @@ def collect_pages(fetch_page: Callable[[str], dict], first: str, max_pages: int 
 
     Raise RuntimeError if more than max_pages pages are visited (protects against loops).
     """
-    ___
+    raise NotImplementedError
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -119,7 +119,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 def search_tasks(conn: sqlite3.Connection, text: str) -> list[str]:
     """Titles containing text (case-insensitive), ordered by id. Use LIKE with a ? parameter."""
-    ___
+    raise NotImplementedError
 
 
 def set_setting(conn: sqlite3.Connection, key: str, value: str) -> None:
@@ -127,7 +127,7 @@ def set_setting(conn: sqlite3.Connection, key: str, value: str) -> None:
 
     Hint: INSERT ... ON CONFLICT(key) DO UPDATE SET value = excluded.value
     """
-    ___
+    raise NotImplementedError
 
 
 def build_url(base: str, path: str, params: dict | None = None) -> str:

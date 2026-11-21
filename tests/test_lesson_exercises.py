@@ -1,4 +1,4 @@
-"""Every lesson's "Try it" section is fill-in-the-blank with a hidden-answer check."""
+"""Numbered practice grades both guided answers and learner-owned implementations."""
 import ast
 import importlib.util
 import re

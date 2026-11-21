@@ -287,4 +287,4 @@ def enforce_types(func):
     Only check parameters annotated with a plain class (int, str, ...); skip others.
     Hint: inspect.signature(func).bind(*args, **kwargs).
     """
-    ___
+    raise NotImplementedError
