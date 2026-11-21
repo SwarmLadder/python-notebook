@@ -1,6 +1,6 @@
 # Level 1 — Python Basics
 
-A complete beginner-friendly Python course with **18 guided lesson notebooks**, **72 fill-in-the-blank exercises**, **4 auto-graded practice modules**, and **3 mini-projects**. No prior programming experience is expected.
+A complete beginner-friendly Python course with **18 lesson notebooks** that teach a little and test it straight away: **200 fill-in exercises** from easy to hard and **72 auto-graded challenges**, plus **3 mini-projects**. No prior programming experience is expected.
 
 ## Learning outcomes
 
@@ -42,10 +42,9 @@ By the end you should be able to explain Python's main types, write control flow
 
 ## Practice packs
 
-- [Fundamentals](exercises/01_fundamentals_exercises.ipynb)
-- [Control flow](exercises/02_control_flow_exercises.ipynb)
-- [Data structures](exercises/03_data_structures_exercises.ipynb)
-- [Functions and files](exercises/04_functions_and_files_exercises.ipynb)
+The challenges live inside the lessons that teach their topic (lessons 01–14). Each one
+is a function you finish and `check('name')` grades with the tests in
+[`practice/`](../practice/), the same tests used to verify an achievement claim.
 
 Each pack has an auto-graded module in [`practice/`](../practice/README.md). The tests tell you whether your answer is correct without showing the answer.
 
