@@ -21,6 +21,23 @@ def test_map_covers_lessons_and_references_earlier_concepts():
         builds = [i for i, cell in enumerate(cells) if cell.get("id") == "independent-build"]
         assert len(builds) == 1, row["lesson"]
         index = builds[0]
+        # Map each build to a real practice-module test for achievement evidence.
+        import ast
+        module = row["mastery_module"]
+        assert module.startswith(row["lesson"].split("/")[0] + "_")
+        submission = ROOT / "practice" / "exercises" / f"{module}.py"
+        tests = ROOT / "practice" / "tests" / f"test_{module}.py"
+        assert submission.is_file() and tests.is_file(), row["lesson"]
+        name = row["independent_evidence"]
+        tree = ast.parse(submission.read_text(encoding="utf-8"))
+        definitions = {n.name for n in tree.body if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))}
+        definitions.update(target.id for n in tree.body if isinstance(n, ast.Assign)
+                           for target in n.targets if isinstance(target, ast.Name))
+        assert name in definitions, row["lesson"]
+        tested = ast.parse(tests.read_text(encoding="utf-8"))
+        assert any(isinstance(n, ast.Attribute) and isinstance(n.value, ast.Name)
+                   and n.value.id == "m" and n.attr == name for n in ast.walk(tested)), row["lesson"]
+        assert set(row["independently_reinforced"]) <= set(row["reused_concepts"])
         name = row["independent_evidence"]
         assert name in cell_source(cells[index]), row["lesson"]
         checks = [cell_source(c) for c in cells[index + 1:] if c.get("id") == "build-check"]

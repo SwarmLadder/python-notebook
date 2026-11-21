@@ -11,6 +11,9 @@ PRACTICE = ROOT / "practice"
 EXERCISES = sorted((PRACTICE / "exercises").glob("*.py"))
 WORKBOOKS = sorted(p for level in ("basics", "intermediate", "advanced") for p in (ROOT / level / "exercises").glob("*.ipynb"))
 STUB_IDS = [p.stem for p in EXERCISES]
+# Unlike guided workbooks, these independent builds use direct behavioral
+# acceptance tests. No answer keys or progressive hints are published for them.
+INDEPENDENT = {f"{level}_independent_builds" for level in ("basics", "intermediate", "advanced")}
 
 
 def practice_name(workbook):
@@ -40,6 +43,11 @@ NO_BLANK_NEEDED = {"__init__", "get", "save", "area"}  # trivial setup, Protocol
 def test_every_exercise_function_has_blanks_to_fill(stub):
     """Exercises are scaffolds: real code with ___ gaps, never a finished solution."""
     tree = ast.parse(stub.read_text(encoding="utf-8"))
+    if stub.stem in INDEPENDENT:
+        functions = [n for n in tree.body if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))]
+        assert functions and all("raise NotImplementedError" in ast.unparse(n) for n in functions), (
+            "independent submissions must ship unimplemented and never reveal solutions")
+        return
     complete = [node.name for node in ast.walk(tree)
                 if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
                 and node.name not in NO_BLANK_NEEDED and "___" not in ast.unparse(node)]
@@ -56,6 +64,9 @@ def test_every_public_definition_has_a_docstring(stub):
 
 @pytest.mark.parametrize("stub", EXERCISES, ids=STUB_IDS)
 def test_answer_key_holds_only_fingerprints(stub):
+    if stub.stem in INDEPENDENT:
+        assert not (PRACTICE / "answers" / f"{stub.stem}.json").exists()
+        return
     key = json.loads((PRACTICE / "answers" / f"{stub.stem}.json").read_text(encoding="utf-8"))
     assert key, "empty answer key"
     assert all(re.fullmatch(r"[0-9a-f]{64}", v) for v in key.values()), "answer keys must hold hashes only"
@@ -63,7 +74,12 @@ def test_answer_key_holds_only_fingerprints(stub):
 
 @pytest.mark.parametrize("stub", EXERCISES, ids=STUB_IDS)
 def test_every_check_call_has_an_answer(stub):
-    """Each test that calls check() has at least one key, so learners never see 'no answer key'."""
+    """Each guided check() must have an answer key; independent tests assert behavior."""
+    if stub.stem in INDEPENDENT:
+        source = (PRACTICE / "tests" / f"test_{stub.stem}.py").read_text()
+        assert not any(isinstance(c, ast.Call) and getattr(c.func, "id", None) == "check"
+                       for c in ast.walk(ast.parse(source)))
+        return
     key = json.loads((PRACTICE / "answers" / f"{stub.stem}.json").read_text(encoding="utf-8"))
     tests = ast.parse((PRACTICE / "tests" / f"test_{stub.stem}.py").read_text(encoding="utf-8"))
     recorded = {k.split("[")[0].split("#")[0] for k in key}
@@ -78,6 +94,10 @@ NO_HINT_NEEDED = {"TransientError", "PermanentError", "CircuitOpen", "InvalidQua
 
 @pytest.mark.parametrize("stub", EXERCISES, ids=STUB_IDS)
 def test_every_exercise_has_step_by_step_hints(stub):
+    if stub.stem in INDEPENDENT:
+        assert not (PRACTICE / "hints" / f"{stub.stem}.json").exists(), (
+            "independent assessment must not leak incremental hints")
+        return
     hints = json.loads((PRACTICE / "hints" / f"{stub.stem}.json").read_text(encoding="utf-8"))
     tree = ast.parse(stub.read_text(encoding="utf-8"))
     names = {n.name for n in tree.body if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))

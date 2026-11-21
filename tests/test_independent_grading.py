@@ -13,7 +13,7 @@ import pytest
 from notebook_runner import ROOT
 
 sys.path.insert(0, str(ROOT / "practice"))
-from notebook_check import Checker, tests_by_exercise  # noqa: E402
+from notebook_check import Checker, tests_by_exercise as _tests_by_exercise  # noqa: E402
 
 
 def report(test, outcome="passed"):
@@ -27,7 +27,7 @@ def report(test, outcome="passed"):
 
 
 def test_submitted_variable_and_function_names_are_discovered():
-    grouped = tests_by_exercise("basics_independent_builds")
+    grouped = _tests_by_exercise("basics_independent_builds")
     assert "test_session_label" in grouped["session_label"]
     assert "test_receipt" in grouped["receipt"]
     assert "test_invoice_total" in grouped["invoice_total"]

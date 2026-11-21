@@ -28,7 +28,7 @@ def test_lesson_exercises_are_fill_in_with_hidden_answers(path):
     """
     cells = load(path)["cells"]
     sources = [cell_source(c) for c in cells if c["cell_type"] == "code"]
-    setup = [s for s in sources if "Exercises(" in s]
+    setup = [s for s in sources if "check = Exercises(" in s]
     assert len(setup) == 1, "one code cell must create Exercises(lesson_id, {number: hash})"
     match = re.search(r"Exercises\('([^']+)', (\{[^}]*\})", setup[0])
     assert match, "Exercises(lesson_id, {number: hash}) not found"
