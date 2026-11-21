@@ -138,6 +138,12 @@ def test_chunked():
     check(list(m.chunked(range(7), 3)))
     check(list(itertools.islice(m.chunked(itertools.count(), 2), 2)), hint="must work on infinite input")
 
+    assert list(m.chunked(iter(()), 3)) == []
+    stream = iter(["paid", "packed", "shipped"])
+    batches = iter(m.chunked(stream, 2))
+    assert next(batches) == ["paid", "packed"]
+    assert list(batches) == [["shipped"]], "Keep the partial dispatch batch."
+
 
 def test_running_total():
     check(list(m.running_total([3, 1, 4, 1, 5])))
@@ -159,6 +165,14 @@ def test_once():
 
     check([setup(1), setup(2), setup(3)])
     assert calls == [1], "the wrapped function must run only once"
+
+    calls = []
+    @m.once
+    def empty(*, key):
+        calls.append(key)
+        return None
+    assert empty(key="first") is None and empty(key="later") is None
+    assert calls == ["first"], "A successful None result must be remembered."
 
 
 def test_count_calls():

@@ -52,6 +52,10 @@ def test_redact():
     check(m.redact(record))
     assert record["Password"] == "hunter2", "return a copy; do not modify the input"
 
+    nested = {"profile": {"Authorization": {"value": "secret"}}}
+    assert m.redact(nested) == {"profile": {"Authorization": "***"}}
+    assert nested["profile"]["Authorization"] == {"value": "secret"}, "Keep nested input intact."
+
 
 def test_limit_text():
     assert m.limit_text("ok", max_chars=2) == "ok"
@@ -125,6 +129,9 @@ def test_safe_join(tmp_path):
 
 def test_merge_sorted():
     check(m.merge_sorted([1, 4, 9], [2, 3, 10], [], [5]))
+
+    assert m.merge_sorted() == []
+    assert m.merge_sorted([1, 1], [], [1]) == [1, 1, 1], "Preserve duplicates from every source."
 
 
 @pytest.mark.parametrize("k", [0, 1, 3, 10])

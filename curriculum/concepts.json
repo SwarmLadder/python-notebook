@@ -138,7 +138,11 @@
     ],
     "difficulty": "foundation",
     "independent_evidence": "merge_counts",
-    "assessment_cell": "build-check"
+    "assessment_cell": "build-check",
+    "assessed_reuse": [
+      "b06",
+      "b07"
+    ]
   },
   {
     "concept_id": "b10",
@@ -200,7 +204,11 @@
     ],
     "difficulty": "foundation",
     "independent_evidence": "longest_word_in_file",
-    "assessment_cell": "build-check"
+    "assessment_cell": "build-check",
+    "assessed_reuse": [
+      "b03",
+      "b06"
+    ]
   },
   {
     "concept_id": "b14",
@@ -365,7 +373,11 @@
     ],
     "difficulty": "intermediate",
     "independent_evidence": "chunked",
-    "assessment_cell": "build-check"
+    "assessment_cell": "build-check",
+    "assessed_reuse": [
+      "b06",
+      "i05"
+    ]
   },
   {
     "concept_id": "i07",
@@ -470,7 +482,11 @@
     ],
     "difficulty": "intermediate",
     "independent_evidence": "summarize_sales",
-    "assessment_cell": "build-check"
+    "assessment_cell": "build-check",
+    "assessed_reuse": [
+      "b09",
+      "b12"
+    ]
   },
   {
     "concept_id": "i14",
@@ -561,7 +577,11 @@
     ],
     "difficulty": "intermediate",
     "independent_evidence": "reconcile",
-    "assessment_cell": "build-check"
+    "assessment_cell": "build-check",
+    "assessed_reuse": [
+      "i01",
+      "i13"
+    ]
   },
   {
     "concept_id": "a00",
@@ -711,7 +731,10 @@
     ],
     "difficulty": "advanced",
     "independent_evidence": "IdempotentPayments",
-    "assessment_cell": "build-check"
+    "assessment_cell": "build-check",
+    "assessed_reuse": [
+      "b09"
+    ]
   },
   {
     "concept_id": "a10",
@@ -861,6 +884,10 @@
     ],
     "difficulty": "advanced",
     "independent_evidence": "replay_summary",
-    "assessment_cell": "build-check"
+    "assessment_cell": "build-check",
+    "assessed_reuse": [
+      "a09",
+      "a15"
+    ]
   }
 ]

@@ -14,6 +14,8 @@ def test_total_cost(price_text, units):
 def test_total_cost_default_units():
     check(m.total_cost("1.25"), hint="units defaults to 7")
 
+    assert m.total_cost("2.50", 0) == 0, "A zero-unit order costs zero."
+
 
 @pytest.mark.parametrize("radius", [0, 1, 2.5])
 def test_circle_measurements(radius):
