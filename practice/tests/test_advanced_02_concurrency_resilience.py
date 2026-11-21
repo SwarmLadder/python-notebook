@@ -20,11 +20,20 @@ def test_gather_in_order_keeps_input_order():
 
 
 def test_gather_in_order_runs_concurrently():
-    async def nap(_):
-        await asyncio.sleep(0.05)
-    started = time.perf_counter()
-    asyncio.run(m.gather_in_order(range(10), nap))
-    assert time.perf_counter() - started < 0.3, "the workers should overlap, not run one by one"
+    active = peak = 0
+
+    async def worker(value):
+        nonlocal active, peak
+        active += 1
+        peak = max(peak, active)
+        try:
+            await asyncio.sleep(0)  # Let other ready tasks run.
+            return value
+        finally:
+            active -= 1
+
+    asyncio.run(m.gather_in_order(range(4), worker))
+    assert peak > 1, "at least two workers should overlap"
 
 
 def test_gather_in_order_propagates_errors():
