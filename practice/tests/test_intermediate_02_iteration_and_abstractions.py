@@ -128,6 +128,18 @@ def test_all_variants():
 def test_totals_by_category_with_unsorted_input():
     rows = [{"category": "b", "amount": 1}, {"category": "a", "amount": 2}, {"category": "b", "amount": 3}]
     check(m.totals_by_category(rows), hint="groupby only groups ADJACENT items")
+    adjustments = [
+        {"category": "paper", "amount": 7},
+        {"category": "pens", "amount": 0},
+        {"category": "paper", "amount": -2},
+        {"category": "pens", "amount": 3},
+    ]
+    original = [dict(row) for row in adjustments]
+    assert m.totals_by_category(adjustments) == {"paper": 5, "pens": 3}, (
+        "Combine non-adjacent entries, including refunds and zero amounts"
+    )
+    assert adjustments == original, "Do not change the caller's records"
+    assert m.totals_by_category([]) == {}, "No records means no totals"
 
 
 def test_non_blank():
