@@ -228,7 +228,7 @@ class Exercises:
             return None
         if fingerprint(self.lesson_id, number, value) == self._answers[number]:
             self.passed.add(number)
-            print(f"✅ Exercise {number}: Passed ({len(self.passed)}/{len(self._answers)} done)")
+            print(f"✅ Exercise {number}: correct — Passed ({len(self.passed)}/{len(self._answers)} done)")
             return True
         self._attempts[number] = self._attempts.get(number, 0) + 1
         if isinstance(value, dict):
