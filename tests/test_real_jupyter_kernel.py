@@ -64,3 +64,32 @@ def test_representative_lesson_in_real_jupyter_kernel(name):
     finally:
         client.stop_channels()
         km.shutdown_kernel(now=True)
+
+
+def test_sqlite_challenge_after_restart_uses_only_declared_setup():
+    from exercise_context import selected_cells
+
+    path = ROOT / "intermediate/notebooks/15_sqlite_and_transactions.ipynb"
+    cells = selected_cells(load(path), "ex-6")
+    manager = jupyter_client.KernelManager(kernel_name="python3")
+    manager.start_kernel(cwd=str(path.parent))
+    try:
+        for restart in (False, True):
+            if restart:
+                manager.restart_kernel(now=True)
+            client = manager.client()
+            client.start_channels()
+            try:
+                client.wait_for_ready(timeout=20)
+                for cell in cells[:-1]:
+                    run_cell(client, cell_source(cell))
+                source = cell_source(cells[-1])
+                assert "Not attempted" in run_cell(client, source)
+                edited = source.replace("raise NotImplementedError", 'return [r[0] for r in conn.execute("SELECT title FROM tasks ORDER BY id")]')
+                assert "Passed" in run_cell(client, edited)
+                assert "Needs improvement" in run_cell(client, source.replace("raise NotImplementedError", "return []"))
+                assert "False" in run_cell(client, "print(6 in check.passed)")
+            finally:
+                client.stop_channels()
+    finally:
+        manager.shutdown_kernel(now=True)

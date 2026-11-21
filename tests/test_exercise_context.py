@@ -65,3 +65,42 @@ def test_component_reruns_exact_editor_source(concept, number, correct, alternat
         exec(compile(edited, work["id"], "exec", dont_inherit=True), ns)
         assert ns["check"].last_result is expected
         assert (number in ns["check"].passed) == (expected is True)
+
+
+def test_repaired_component_requires_a_discriminating_regression(monkeypatch):
+    path = next((ROOT / "advanced/notebooks").glob("16_*.ipynb"))
+    monkeypatch.chdir(path.parent)
+    monkeypatch.syspath_prepend(str(path.parent))
+    ns = {"__name__": "__main__"}
+    *setup, work = selected_cells(load(path), "ex-7")
+    for cell in setup:
+        exec(cell_source(cell), ns)
+    source = cell_source(work)
+    repair = source.replace("return actual >= minimum",
+                            "return tuple(map(int, actual.split('.'))) >= tuple(map(int, minimum.split('.')))", 1)
+    for test, expected in [("pass", False), ('assert candidate("1.11.0", "1.9.0")', True),
+                           ('assert not candidate("1.2.0", "1.2.0")', False)]:
+        exec(repair.replace("raise NotImplementedError", test), ns)
+        assert ns["check"].last_result is expected
+
+
+def test_sqlite_submission_runs_as_a_standalone_module(tmp_path):
+    import subprocess
+    import sys
+
+    path = ROOT / "intermediate/notebooks/15_sqlite_and_transactions.ipynb"
+    cells = selected_cells(load(path), "build-work")
+    setup = ast.parse(cell_source(cells[1]))
+    imports = [ast.unparse(n) for n in setup.body if isinstance(n, (ast.Import, ast.ImportFrom))
+               and getattr(n, "module", None) != "lesson"]
+    function = cell_source(cells[-1]).replace("raise NotImplementedError",
+        'return dict(open=conn.execute("SELECT COUNT(*) FROM tasks WHERE done=0").fetchone()[0], '
+        'done=conn.execute("SELECT COUNT(*) FROM tasks WHERE done=1").fetchone()[0])')
+    (tmp_path / "report.py").write_text("\n".join(imports) + "\n" + function)
+    (tmp_path / "cli.py").write_text(
+        'import sqlite3\nfrom report import count_by_status\n'
+        'with sqlite3.connect(":memory:") as db:\n'
+        '    db.execute("CREATE TABLE tasks(done INTEGER)")\n'
+        '    db.execute("INSERT INTO tasks VALUES (1)")\n'
+        '    assert count_by_status(db) == {"open": 0, "done": 1}\n')
+    subprocess.run([sys.executable, "cli.py"], cwd=tmp_path, check=True)
