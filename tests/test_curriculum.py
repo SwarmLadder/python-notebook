@@ -93,6 +93,8 @@ def test_pre_import_lessons_provide_library_setup_and_do_not_assign_imports():
         path = next((ROOT / "basics/notebooks").glob(f"{number:02d}_*.ipynb"))
         cells = load(path)["cells"]
         for cell in cells:
+            if cell["cell_type"] != "code":
+                continue
             cell_id = cell.get("id", "")
             if not (cell_id.startswith(("ex-", "ch-")) or cell_id == "build-work"):
                 continue
