@@ -72,9 +72,7 @@ def redact(record: dict) -> dict:
 
 def limit_text(text: str, max_chars: int = 1000) -> str:
     """Return text unchanged if short enough; raise ValueError otherwise."""
-    if ___:
-        raise ValueError(f"input longer than {max_chars} characters")
-    return text
+    raise NotImplementedError
 
 
 class StablePriorityQueue:
@@ -153,4 +151,4 @@ def merge_sorted(*sequences: Sequence) -> list:
 
 def top_k(values: Sequence[float], k: int) -> list:
     """The k largest values, largest first, in O(n log k). Hint: heapq.nlargest."""
-    return ___
+    raise NotImplementedError

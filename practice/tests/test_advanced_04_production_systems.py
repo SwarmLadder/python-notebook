@@ -130,3 +130,18 @@ def test_parse_version_rejects(bad):
 @pytest.mark.parametrize("client, server", [("1.2.0", "1.4.9"), ("1.4.0", "1.2.0"), ("1.0.0", "2.0.0"), ("2.1.3", "2.1.0")])
 def test_is_compatible(client, server):
     check(m.is_compatible(client, server))
+
+
+def test_failed_migration_preserves_completed_versions_and_can_resume():
+    from contextlib import closing
+    with closing(sqlite3.connect(":memory:")) as db:
+        create = "CREATE TABLE audit(id INTEGER PRIMARY KEY)"
+        with pytest.raises(sqlite3.Error):
+            m.migrate(db, [create, "ALTER TABLE missing ADD COLUMN note TEXT"])
+        assert db.execute("PRAGMA user_version").fetchone() == (1,)
+        db.execute("INSERT INTO audit VALUES (17)")
+        db.commit()
+        repaired = [create, "ALTER TABLE audit ADD COLUMN note TEXT"]
+        assert m.migrate(db, repaired) == 2
+        assert m.migrate(db, repaired) == 2
+        assert db.execute("SELECT id, note FROM audit").fetchall() == [(17, None)]

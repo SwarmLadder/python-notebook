@@ -39,7 +39,7 @@ def index_by_sku(records: list[dict]) -> dict[str, dict]:
 
 def unique_usernames(names: list[str]) -> list[str]:
     """Strip + casefold names, drop blank ones, return them sorted and unique."""
-    return ___
+    raise NotImplementedError
 
 
 def flatten_grid(rows: list[list[int]]) -> list[int]:
@@ -186,7 +186,7 @@ class Inventory:
 
 def transpose(matrix: list[list]) -> list[list]:
     """Swap rows and columns with a nested comprehension: [[1, 2], [3, 4]] -> [[1, 3], [2, 4]]."""
-    return ___
+    raise NotImplementedError
 
 
 @dataclass(frozen=True)

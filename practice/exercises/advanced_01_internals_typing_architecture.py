@@ -287,16 +287,4 @@ def enforce_types(func):
     Only check parameters annotated with a plain class (int, str, ...); skip others.
     Hint: inspect.signature(func).bind(*args, **kwargs).
     """
-    import functools
-    signature = ___
-    hints = ___
-
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        bound = signature.bind(*args, **kwargs)
-        for name, value in bound.arguments.items():
-            expected = hints.get(name)
-            if ___:
-                raise TypeError(f"{name} must be {expected.__name__}, got {type(value).__name__}")
-        return ___
-    return wrapper
+    raise NotImplementedError

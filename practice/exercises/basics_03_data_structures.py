@@ -30,7 +30,11 @@ def second_largest(values: list[float]) -> float:
     >>> second_largest([4, 9, 9, 2])
     4
     """
-    distinct = sorted(set(values))
+    distinct = []
+    for value in values:
+        if value not in distinct:
+            distinct.append(value)
+    distinct.sort()
     if ___:
         raise ValueError("need at least two distinct values")
     return ___
@@ -38,11 +42,7 @@ def second_largest(values: list[float]) -> float:
 
 def flatten(matrix: list[list]) -> list:
     """Flatten a 2-D list with nested loops: [[1, 2], [3]] -> [1, 2, 3]."""
-    flat = ___
-    for row in ___:
-        for item in row:
-            flat.append(item)
-    return flat
+    raise NotImplementedError
 
 
 def distance_from_origin(point: tuple[float, float]) -> float:
@@ -81,10 +81,7 @@ def word_frequencies(text: str) -> dict[str, int]:
 
 def split_pass_fail(scores: dict[str, float], threshold: float = 50) -> dict[str, dict[str, float]]:
     """Group students into {'pass': {...}, 'fail': {...}}; a score equal to threshold passes."""
-    groups: dict[str, dict[str, float]] = {"pass": {}, "fail": {}}
-    for name, score in ___:
-        groups["pass" if score >= threshold else "fail"][name] = score
-    return ___
+    raise NotImplementedError
 
 
 def student_averages(grades: dict[str, list[float]]) -> dict[str, float]:
@@ -139,12 +136,7 @@ def merge_counts(first: dict[str, int], second: dict[str, int]) -> dict[str, int
 
 def invert(mapping: dict) -> dict:
     """Swap keys and values. Raise ValueError if two keys share a value."""
-    inverted = {}
-    for key, value in ___:
-        if ___:
-            raise ValueError(f"duplicate value: {value!r}")
-        inverted[value] = key
-    return inverted
+    raise NotImplementedError
 
 
 def top_words(text: str, n: int) -> list[tuple[str, int]]:

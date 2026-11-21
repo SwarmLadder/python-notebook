@@ -42,7 +42,9 @@ def test_every_exercise_function_has_blanks_to_fill(stub):
     tree = ast.parse(stub.read_text(encoding="utf-8"))
     complete = [node.name for node in ast.walk(tree)
                 if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
-                and node.name not in NO_BLANK_NEEDED and "___" not in ast.unparse(node)]
+                and node.name not in NO_BLANK_NEEDED and "___" not in ast.unparse(node)
+                and not any(isinstance(n, ast.Raise) and isinstance(n.exc, ast.Name)
+                            and n.exc.id == "NotImplementedError" for n in ast.walk(node))]
     assert not complete, f"these functions have no ___ blank, so the answer is visible: {complete}"
 
 

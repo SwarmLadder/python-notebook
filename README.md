@@ -1,6 +1,6 @@
 # Python Learning Notebooks 🐍
 
-A free, hands-on Python course: **Basics → Intermediate → Advanced**. You read short lessons, run the examples and take a quick quiz. Then you complete **fill-in-the-blank exercises**: nearly finished code with a few `___` gaps. A check cell tells you right away whether you got it, without showing the answer, and gives hints when you're stuck. Each lesson also includes an independent build. Projects assess a larger change to working software.
+A free, hands-on Python course from Basics through Advanced. Start with short explanations, examples and guided checks. Later lessons ask you to implement complete components, diagnose failures and write regression tests. Each lesson includes a build assessed from your saved code. Engineering tickets and projects ask you to deliver and explain changes to working software.
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/SwarmLadder/python-notebook)
 [![Launch Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/SwarmLadder/python-notebook/main?urlpath=lab/tree/basics/notebooks/00_python_introduction.ipynb)
@@ -31,7 +31,7 @@ jupyter lab                      # open basics/notebooks/00_python_introduction.
 
 1. **Read a lesson** and predict each cell's output before you run it.
 2. **Change one input** and explain what happened.
-3. **Answer each part's questions as you go.** Lessons teach a few rules, then test them straight away with short cells that have `___` blanks; `check` tells you if you're right. The hardest questions are the **challenges**: real functions graded by tests. Then take the **quick quiz** at the end.
+3. **Practice, implement and check.** Use short questions to learn the mechanics. In later sections, implement a function from its contract or repair a component and write a regression test. Run the independent build check on your saved code. Engineering submissions have their own acceptance criteria for review.
 4. **Study the worked examples** (`<level>/worked_examples/`). They show how a solution is planned, written and tested.
 5. **Solve the challenges** in each lesson. For guided tasks, fill in each `___`. For an independent build, implement the contract and add a boundary test. Run the check after your code. ✅ means move on. ❌ shows your result and the test's input, never the answer. Guided practice unlocks increasingly specific hints. Saved independent builds have a separate [mastery check](curriculum/MASTERY.md).
 6. **Prefer a terminal?** The achievement-track practice modules are in `practice/exercises/`; check them with `python -m pytest practice -k basics_01`. See [practice/README.md](practice/README.md).

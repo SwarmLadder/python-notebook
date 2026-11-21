@@ -56,13 +56,7 @@ def fibonacci(n: int) -> Iterator[int]:
 
 def positive_ints(lines: Iterable[str]) -> Iterator[int]:
     """Lazily yield positive integers from text lines, skipping anything invalid."""
-    for line in lines:
-        try:
-            value = ___
-        except ValueError:
-            continue
-        if ___:
-            yield value
+    raise NotImplementedError
 
 
 def flatten_one_level(groups: Iterable[Iterable]) -> Iterator:
@@ -73,7 +67,7 @@ def flatten_one_level(groups: Iterable[Iterable]) -> Iterator:
 
 def take(iterable: Iterable, n: int) -> list:
     """Return the first n items, even from an infinite iterator. Hint: itertools.islice."""
-    return ___
+    raise NotImplementedError
 
 
 def make_tax_adder(rate: float) -> Callable[[float], float]:
@@ -159,7 +153,7 @@ def cached_fib(n: int) -> int:
 
 def all_variants(colors: list[str], sizes: list[str]) -> list[tuple[str, str]]:
     """Every (color, size) pair, colors in the outer loop. Hint: itertools.product."""
-    return ___
+    raise NotImplementedError
 
 
 def totals_by_category(rows: list[dict]) -> dict[str, float]:
@@ -182,7 +176,7 @@ def chunked(iterable: Iterable, size: int) -> Iterator[list]:
 
 def running_total(values: Iterable[float]) -> Iterator[float]:
     """Yield the cumulative sum after each value. Hint: itertools.accumulate."""
-    return ___
+    raise NotImplementedError
 
 
 def sliding_window(values: list, n: int) -> list[tuple]:
@@ -205,9 +199,4 @@ def once(func):
 
 def count_calls(func):
     """Decorator that counts calls in a `calls` attribute on the wrapper (starts at 0)."""
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        wrapper.calls += 1
-        return ___
-    wrapper.calls = 0
-    return ___
+    raise NotImplementedError

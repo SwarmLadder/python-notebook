@@ -100,3 +100,7 @@ def test_percent_change_from_zero():
 @pytest.mark.parametrize("number", ["1234 5678 9012 3456", "4321", "12345"])
 def test_mask_card(number):
     check(m.mask_card(number))
+
+
+def test_elapsed_hours_do_not_wrap_at_midnight():
+    assert m.clock_time(100 * 3600 + 62) == "100:01:02"

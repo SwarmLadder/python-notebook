@@ -58,22 +58,7 @@ async def pipeline(items: Iterable, transform: Callable[[object], object], maxsi
 
     Return transform(item) for each item, in order.
     """
-    queue: asyncio.Queue = asyncio.Queue(maxsize=maxsize)
-    output: list = []
-
-    async def producer():
-        for item in ___:
-            await queue.put(item)
-        await queue.put(None)
-
-    async def consumer():
-        while ___:
-            output.append(transform(item))
-
-    async with asyncio.TaskGroup() as group:
-        group.create_task(___)
-        group.create_task(___)
-    return output
+    raise NotImplementedError
 
 
 async def run_blocking(func: Callable, *args):
@@ -112,22 +97,12 @@ def retry(operation: Callable[[], object], attempts: int = 3, base_delay: float 
     PermanentError is re-raised immediately. After `attempts` failures re-raise the
     last TransientError. `sleep` is injected so tests never really wait.
     """
-    import time
-    sleep = sleep or time.sleep
-    for attempt in ___:
-        try:
-            return ___
-        except TransientError:
-            if ___:
-                raise
-            sleep(base_delay * 2 ** attempt)
-    raise ValueError("attempts must be at least 1")
+    raise NotImplementedError
 
 
 def jittered_delays(attempts: int, base: float, seed: int) -> list[float]:
     """Full-jitter backoff: delay n is uniform in [0, base * 2**n]. Same seed -> same delays."""
-    rng = random.Random(seed)
-    return ___
+    raise NotImplementedError
 
 
 class IdempotentPayments:
@@ -156,14 +131,7 @@ async def first_result(coroutines: list) -> object:
 
     Hint: asyncio.wait(..., return_when=asyncio.FIRST_COMPLETED).
     """
-    tasks = ___
-    try:
-        done, _ = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)
-        return ___
-    finally:
-        for task in tasks:
-            task.cancel()
-        await asyncio.gather(*tasks, return_exceptions=True)
+    raise NotImplementedError
 
 
 def map_threaded(func: Callable, items: list, workers: int = 4) -> list:

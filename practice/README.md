@@ -1,6 +1,6 @@
 # Auto-graded practice ✅
 
-There are 12 modules, four per level, with 428 tests. Each exercise is **nearly finished code with `___` blanks**. Fill them in and the tests tell you whether it's correct. **The answers are never shown.** The repo stores only fingerprints (hashes) of the correct results.
+There are 12 modules, four per level, with behavioral tests. Guided exercises supply code with `___` blanks. In implementation exercises the docstring and signature specify the contract. Replace `raise NotImplementedError` with your own implementation. **The answers are never shown.** The repo stores only fingerprints (hashes) of the correct results.
 
 Most learners solve these as the **challenges in the lessons**, where a `check("name")` cell after each one runs these same tests. This folder is the terminal version, and it is what an [achievement claim](../RECOGNITION.md) is verified against.
 
@@ -16,7 +16,7 @@ No install? Open the repo in **GitHub Codespaces** (see the main README). Everyt
 ## The loop
 
 1. Open a module in [`exercises/`](exercises). Each function's docstring says what to build, often with an example and a hint.
-2. Replace every `___` with the missing code. Don't rewrite the parts that are given.
+2. Replace every `___` with the missing code. For a contract-based exercise, keep the public interface and choose the implementation.
 3. Run `python -m pytest practice -k <module or function name>`.
 4. Read the result:
 

@@ -68,15 +68,7 @@ def transfer(conn: sqlite3.Connection, source: str, target: str, amount: float) 
     If the CHECK constraint fails (overdraft) or an account is missing, raise
     ValueError and leave BOTH balances unchanged. Hint: `with conn:` commits or rolls back.
     """
-    try:
-        with conn:
-            for name, delta in ___:
-                updated = conn.execute("UPDATE accounts SET balance = balance + ? WHERE name = ?",
-                                       (delta, name)).rowcount
-                if ___:
-                    raise ValueError(f"unknown account: {name}")
-    except sqlite3.IntegrityError as error:
-        raise ValueError("insufficient funds") from error
+    raise NotImplementedError
 
 
 def count_by_status(conn: sqlite3.Connection) -> dict[str, int]:
@@ -111,15 +103,7 @@ def collect_pages(fetch_page: Callable[[str], dict], first: str, max_pages: int 
 
     Raise RuntimeError if more than max_pages pages are visited (protects against loops).
     """
-    items, page, visited = ___
-    while ___:
-        visited += 1
-        if ___:
-            raise RuntimeError("too many pages")
-        data = fetch_page(page)
-        items.extend(data["items"])
-        page = data.get("next")
-    return items
+    raise NotImplementedError
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -135,8 +119,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 def search_tasks(conn: sqlite3.Connection, text: str) -> list[str]:
     """Titles containing text (case-insensitive), ordered by id. Use LIKE with a ? parameter."""
-    rows = conn.execute("SELECT title FROM tasks WHERE title LIKE ? ORDER BY id", (f"%{text}%",))
-    return ___
+    raise NotImplementedError
 
 
 def set_setting(conn: sqlite3.Connection, key: str, value: str) -> None:
@@ -144,10 +127,7 @@ def set_setting(conn: sqlite3.Connection, key: str, value: str) -> None:
 
     Hint: INSERT ... ON CONFLICT(key) DO UPDATE SET value = excluded.value
     """
-    with conn:
-        conn.execute("CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT)")
-        conn.execute("INSERT INTO settings (key, value) VALUES (?, ?) "
-                     "ON CONFLICT(key) DO UPDATE SET value = excluded.value", ___)
+    raise NotImplementedError
 
 
 def build_url(base: str, path: str, params: dict | None = None) -> str:

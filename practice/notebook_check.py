@@ -173,7 +173,7 @@ class Checker:
             print(f"✅ {name}: {'the' if total == 1 else 'all'} {checks} passed. Move on to the next exercise!")
             return True
         if todo and not failed:
-            print(f"✏️  {name}: fill in every ___ blank, run the code cell, then run this check again.")
+            print(f"✏️  {name}: finish the implementation, run the code cell, then run this check again.")
             ok = False
         else:
             print(f"❌ {name}: {total - len(failed) - len(todo)} of {total} checks passed. First problem:\n")

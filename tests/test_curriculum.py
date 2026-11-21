@@ -173,3 +173,18 @@ def test_capstone_retention_claims_match_observable_contracts():
     assert "a15" not in index["a19"]["reused_concepts"]
     assert "i13" not in index["i19"]["assessed_reuse"]
     assert "b07" not in index["b09"]["assessed_reuse"]
+
+
+def test_assessed_reuse_identifies_existing_behavioral_checks():
+    for row in ROWS:
+        if not row.get("assessed_reuse"):
+            continue
+        evidence = row["reuse_evidence"]
+        assert set(evidence["observations"]) == set(row["assessed_reuse"])
+        assert all(evidence["observations"].values())
+        if evidence["check"] == "build-check":
+            assert row["assessment_cell"] == "build-check"
+        else:
+            path, name = evidence["check"].split("#")
+            tree = ast.parse((ROOT / path).read_text())
+            assert any(isinstance(node, ast.FunctionDef) and node.name == name for node in tree.body)
