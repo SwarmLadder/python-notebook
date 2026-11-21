@@ -145,3 +145,31 @@ def test_delayed_revisions_have_named_assessed_skills(concept):
     else:
         practice = (ROOT / "practice/tests/test_intermediate_02_iteration_and_abstractions.py").read_text()
         assert "m.totals_by_category(adjustments)" in practice
+
+
+
+@pytest.mark.parametrize("row", ROWS, ids=[r["concept_id"] for r in ROWS])
+def test_independent_build_rejects_trivial_constant_submission(row, monkeypatch):
+    """Every public checker must reject a defined but behaviorally empty build.
+
+    This is a negative control, not a private reference solution: passing this
+    test does not certify broad mastery or rule out more subtle mutants.
+    """
+    path = ROOT / row["lesson"]
+    notebook = load(path)
+    name = row["independent_evidence"]
+    work = next(c for c in notebook["cells"] if c["id"] == "build-work")
+    work["source"] = [f"{name} = lambda *args, **kwargs: None"]
+    monkeypatch.setattr(runner, "load", lambda path: notebook)
+    result = runner.run_notebook(path, assess=name)
+    assert not result.mastery_passed, f"{row['concept_id']}: constant placeholder passed"
+
+
+def test_capstone_retention_claims_match_observable_contracts():
+    """Do not label a billing/replay task as a test of an unrelated skill."""
+    index = {row["concept_id"]: row for row in ROWS}
+    assert set(index["i19"]["assessed_reuse"]) == {"b02", "b09"}
+    assert set(index["a19"]["assessed_reuse"]) == {"i05", "a09"}
+    assert "a15" not in index["a19"]["reused_concepts"]
+    assert "i13" not in index["i19"]["assessed_reuse"]
+    assert "b07" not in index["b09"]["assessed_reuse"]
