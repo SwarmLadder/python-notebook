@@ -21,6 +21,8 @@ ROOT = Path(__file__).resolve().parents[1]
 LEVELS = ("basics", "intermediate", "advanced")
 
 
+sys.path.insert(0, str(ROOT / "tools"))
+
 def all_notebooks() -> list[Path]:
     return sorted(p for level in LEVELS for p in (ROOT / level).rglob("*.ipynb")
                   if ".ipynb_checkpoints" not in p.parts)
@@ -107,6 +109,9 @@ def run_notebook(path: Path, *, assess: str | None = None) -> RunResult:
     notebook = load(path)
     if assess and not __debug__:
         raise ValueError("Run mastery checks without Python optimization so assertions are enabled.")
+    if assess:
+        from exercise_context import selected_cells
+        notebook = {**notebook, "cells": selected_cells(notebook, "build-check")}
     namespace = {"__name__": "__main__", "__file__": str(path)}
     stdout = io.StringIO()
     executed = 0
