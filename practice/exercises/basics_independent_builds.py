@@ -8,10 +8,10 @@ achievement verification. Do not change function names or interfaces.
 # Basics 00: create the requested session label.
 session_label = None
 
-# Basics 04: create the receipt from the supplied item and units.
-item = "pen"
-units = 3
-receipt = None
+# Basics 04: format each item and unit count independently.
+def receipt(item: str, units: int) -> str:
+    """Return '<item> x <units>' using the original item text, even for zero units."""
+    raise NotImplementedError
 
 
 def scan_batch(events: str) -> int:

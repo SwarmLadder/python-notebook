@@ -29,3 +29,13 @@ def test_loop_build_provides_function_header_and_return_explanation():
     index = next(i for i, cell in enumerate(cells) if cell.get("id") == "independent-build")
     assert "return" in cell_source(cells[index])
     assert cell_source(cells[index + 1]).startswith("# The function header is provided")
+
+
+def test_receipt_build_is_input_dependent_and_scaffolded():
+    path = ROOT / "basics/notebooks/04_input_and_output.ipynb"
+    cells = load(path)["cells"]
+    index = next(i for i, cell in enumerate(cells) if cell.get("id") == "independent-build")
+    source = cell_source(cells[index + 1])
+    assert source.startswith("# Function syntax is supplied")
+    assert "def receipt(item, units):" in source and "return result" in source
+    assert "import " not in source

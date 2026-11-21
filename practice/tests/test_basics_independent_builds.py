@@ -2,6 +2,7 @@
 
 These test observable results, not solution structure or a reference algorithm.
 """
+import copy
 import pytest
 from practice_loader import module_for
 
@@ -14,11 +15,18 @@ def test_session_label():
     assert m.session_label == "Order Desk"
 
 
-def test_receipt():
-    if m.receipt is None:
-        raise NotImplementedError("Complete Basics 04 independent build")
-    assert m.receipt == "pen x 3"
-
+@pytest.mark.parametrize("item,units,expected", [
+    ("pen", 3, "pen x 3"),
+    ("stapler", 1, "stapler x 1"),
+    ("paper", 0, "paper x 0"),
+    ("", 2, " x 2"),
+    ("Pencil box", 12, "Pencil box x 12"),
+    ("pen", 10, "pen x 10"),
+])
+def test_receipt(item, units, expected):
+    assert m.receipt(item, units) == expected, (
+        "Use both supplied inputs to build the receipt; do not hard-code the example."
+    )
 
 @pytest.mark.parametrize("events, expected", [
     ("AxA|AA", 2), ("|AAA", 0), ("A|AAA", 1),
@@ -32,9 +40,10 @@ def test_scan_batch(events, expected):
     ([], 5, 0), ([(2, 0)], 7, 0), ([(0, 1)], 7, 7),
     ([(120, 3), (50, 2)], 10, 470),
     ([(2, 0), (3, 1)], 4, 7), ([(25, 2)], 0, 50),
+    ([[10, 2], [5, 1]], 3, 28),
 ])
 def test_invoice_total(lines, fee, expected):
-    before = lines[:]
+    before = copy.deepcopy(lines)
     assert m.invoice_total(lines, fee) == expected, "Charge the fee once, only when units are ordered"
     assert lines == before, "Do not modify the caller's order"
 
