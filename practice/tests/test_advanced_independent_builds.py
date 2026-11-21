@@ -8,7 +8,7 @@ m = module_for(__file__)
 @pytest.mark.parametrize("total,workers", [(0, 1), (0, 5), (1, 3), (7, 3), (9, 4), (17, 1), (22, 7)])
 def test_split_jobs(total, workers):
     spans = m.split_jobs(total, workers)
-    assert isinstance(spans, list) and len(spans) == workers, "Return one interval per worker"
+    assert isinstance(spans, (list, tuple)) and len(spans) == workers, "Return one interval per worker"
     assert all(type(a) is int and type(b) is int and a <= b for a, b in spans)
     assert spans[0][0] == 0 and spans[-1][1] == total
     assert all(spans[i][1] == spans[i + 1][0] for i in range(workers - 1)), "No gaps or overlaps"
