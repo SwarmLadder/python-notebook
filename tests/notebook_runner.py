@@ -188,3 +188,22 @@ def syntax_errors(notebook: dict, label: str) -> list[str]:
         except SyntaxError as error:
             errors.append(f"{label} cell {number}: {error.msg} (line {error.lineno})")
     return errors
+
+
+def smoke_level(level: str) -> None:
+    """Exercise lesson, capstone and optional maintainer notebooks in their own directories."""
+    paths = sorted(path for folder in ("notebooks", "projects", "solutions")
+                   for path in (ROOT / level / folder).glob("*.ipynb"))
+    if not paths:
+        raise SystemExit(f"No {level} notebooks found")
+    failures = []
+    for path in paths:
+        try:
+            result = run_notebook(path)
+        except Exception as error:
+            failures.append(f"{notebook_id(path)}: {error}")
+        else:
+            print(f"PASS {notebook_id(path)} ({result.executed_cells} code cells)")
+    if failures:
+        raise SystemExit("\n".join(failures))
+    print(f"{level.title()} smoke tests passed for {len(paths)} notebooks.")
