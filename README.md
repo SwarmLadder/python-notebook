@@ -16,7 +16,7 @@ A free, hands-on Python course: **Basics → Intermediate → Advanced**. You re
 
 ## Start on your computer
 
-You need Python 3.11+. Basics and Intermediate also work on 3.10.
+Use Python **3.11 or 3.13**, the versions tested by this repository's CI matrix. Other versions may work but are not currently part of automated validation.
 
 ```bash
 git clone https://github.com/SwarmLadder/python-notebook.git
