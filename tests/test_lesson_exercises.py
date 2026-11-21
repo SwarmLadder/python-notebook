@@ -94,3 +94,122 @@ def test_failed_rerun_invalidates_previous_success(capsys, monkeypatch):
     assert not check._challenge("total_cost", {"total_cost": lambda price_text, units=7: 0})
     assert "total_cost" not in check._checker.passed
     assert "hint 1/" not in capsys.readouterr().out
+
+
+
+def test_running_totals_have_consistent_prompt_starter_and_fingerprint(capsys):
+    import ast
+    from notebook_runner import cell_source, load
+    book = load(ROOT / "basics/notebooks/16_basic_problem_solving.ipynb")
+    cells = {cell["id"]: cell_source(cell) for cell in book["cells"]}
+    prompt, code, setup = (cells["ex-2-q"], cells["ex-2"], cells["lesson-setup"])
+    assert "[1, 2, 3, 4]" in prompt and "[1, 3, 6, 10]" in prompt
+    assert code.startswith("values = [1, 2, 3, 4]\n")
+    assert "    ___\n" in code  # Preserve the open-ended starter and its indentation.
+    assert lesson.pending_exercise(code) == 2
+    match = re.search(r"Exercises\('basics/16', (\{[^}]+\})", setup)
+    assert match is not None
+    answers = ast.literal_eval(match.group(1))
+    assert answers[2] == lesson.fingerprint("basics/16", 2, [1, 3, 6, 10])
+
+
+def test_running_total_feedback_without_ipython_transformer(capsys):
+    """Exercise execution in a basic exec environment mirrors the browser's fallback."""
+    from notebook_runner import cell_source, load
+    book = load(ROOT / "basics/notebooks/16_basic_problem_solving.ipynb")
+    code = cell_source(next(c for c in book["cells"] if c["id"] == "ex-2"))
+    expected = [1, 3, 6, 10]
+    check = lesson.Exercises("basics/16", {2: lesson.fingerprint("basics/16", 2, expected)})
+    check.hints = {2: [
+        "Your total changes, but where do you save each updated value?",
+        "Lists have a method for adding an element at the end.",
+        "After updating total, add its current value to running.",
+    ]}
+    state = {"check": check, "___": lesson.___}
+
+    # Run the untouched cell without any IPython input transformer: no false failure.
+    exec(code, state)
+    assert check.last_result is None and 2 not in check.passed
+    assert "Not attempted" in capsys.readouterr().out
+
+    wrong = code.replace("    ___", "    running.append(0)")
+    for hint in check.hints[2]:
+        exec(wrong, state)
+        output = capsys.readouterr().out
+        assert "Needs improvement" in output and hint in output
+        assert 2 not in check.passed
+
+    # The intended answer and an equivalent list operation must both pass.
+    for answer in ("running.append(total)", "running += [total]"):
+        exec(code.replace("    ___", "    " + answer), state)
+        assert check.last_result is True and 2 in check.passed
+        assert "Passed" in capsys.readouterr().out
+
+    # Editing a previously passing solution invalidates the recorded pass.
+    exec(wrong, state)
+    assert check.last_result is False and 2 not in check.passed
+    assert "Needs improvement" in capsys.readouterr().out
+
+
+def test_placeholder_detection_ignores_comments_and_literal_strings(capsys):
+    assert lesson.pending_exercise(
+        "# ___ is just a comment\ntext = '___'\ncheck(2, text)"
+    ) is None
+    assert lesson.pending_exercise(
+        'text = "___"  # comment ___\ncheck(2, text)'
+    ) is None
+    assert lesson.pending_exercise(
+        "x = ___  # real blank\ncheck(2, x)"
+    ) == 2
+    check = lesson.Exercises("text", {1: lesson.fingerprint("text", 1, "___")})
+    check(1, "___")
+    assert check.last_result is True
+    assert "Passed" in capsys.readouterr().out
+
+
+
+@pytest.mark.parametrize("path", LESSONS, ids=[notebook_id(p) for p in LESSONS])
+def test_guided_questions_pair_with_exact_code_and_stage_parser(path):
+    """Every numbered prompt must map to the submitted code, even in the Lab UI."""
+    import ast
+    cells = load(path)["cells"]
+    questions = {
+        int(match.group(1)): cell_source(cell)
+        for cell in cells if cell["cell_type"] == "markdown"
+        if (match := re.fullmatch(r"ex-(\d+)-q", cell.get("id", "")))
+    }
+    exercises = {
+        int(match.group(1)): cell_source(cell)
+        for cell in cells if cell["cell_type"] == "code"
+        if (match := re.fullmatch(r"ex-(\d+)", cell.get("id", "")))
+    }
+    assert questions and questions.keys() == exercises.keys(), (
+        f"{notebook_id(path)}: every exercise needs exactly one matching question"
+    )
+    for number, prompt in questions.items():
+        # Staging parses this stable prefix to attach the prompt to its editor.
+        assert prompt.startswith(f"**Exercise {number}.**"), (
+            f"{notebook_id(path)}: exercise {number} needs a browser-readable prefix"
+        )
+        source = exercises[number]
+        tree = ast.parse(source)
+        assert tree.body and isinstance(tree.body[-1], ast.Expr)
+        call = tree.body[-1].value
+        assert isinstance(call, ast.Call) and isinstance(call.func, ast.Name)
+        assert call.func.id == "check"
+        assert call.args and isinstance(call.args[0], ast.Constant)
+        assert call.args[0].value == number, (
+            f"{notebook_id(path)}: exercise {number} grades a different question"
+        )
+
+
+def test_runtime_placeholder_detector_ignores_prose_but_sees_nested_code():
+    import builtins
+    direct = compile("___\ncheck(2, result)", "<lesson>", "exec")
+    nested = compile("def unfinished():\n    return ___\ncheck(2, 3)", "<lesson>", "exec")
+    prose = compile("note = '___'  # ___\ncheck(2, note)", "<lesson>", "exec")
+    attribute = compile("note = some_object.___\ncheck(2, note)", "<lesson>", "exec")
+    assert lesson._unfilled_code(direct)
+    assert lesson._unfilled_code(nested)
+    assert not lesson._unfilled_code(prose)
+    assert not lesson._unfilled_code(attribute)

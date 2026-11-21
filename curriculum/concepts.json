@@ -133,15 +133,13 @@
     ],
     "primary_skill": "Combine per-key counts",
     "reused_concepts": [
-      "b06",
-      "b07"
+      "b06"
     ],
     "difficulty": "foundation",
     "independent_evidence": "merge_counts",
     "assessment_cell": "build-check",
     "assessed_reuse": [
-      "b06",
-      "b07"
+
     ]
   },
   {
@@ -154,8 +152,7 @@
     "reused_concepts": [
       "b02",
       "b05",
-      "b06",
-      "b07"
+      "b06"
     ],
     "difficulty": "foundation",
     "independent_evidence": "invoice_total",
@@ -163,8 +160,7 @@
     "assessed_reuse": [
       "b02",
       "b05",
-      "b06",
-      "b07"
+      "b06"
     ]
   },
   {
@@ -579,19 +575,19 @@
     "concept_id": "i19",
     "lesson": "intermediate/notebooks/19_intermediate_review_and_capstone.ipynb",
     "prerequisites": [
-      "i13"
+      "b09"
     ],
     "primary_skill": "Reconcile two sources of order state",
     "reused_concepts": [
-      "i01",
-      "i13"
+      "b02",
+      "b09"
     ],
     "difficulty": "intermediate",
     "independent_evidence": "reconcile",
     "assessment_cell": "build-check",
     "assessed_reuse": [
-      "i01",
-      "i13"
+      "b02",
+      "b09"
     ]
   },
   {
@@ -886,19 +882,19 @@
     "concept_id": "a19",
     "lesson": "advanced/notebooks/19_advanced_review_capstone.ipynb",
     "prerequisites": [
-      "a15"
+      "a09"
     ],
     "primary_skill": "Audit delivery versus processing outcomes",
     "reused_concepts": [
-      "a09",
-      "a15"
+      "i05",
+      "a09"
     ],
     "difficulty": "advanced",
     "independent_evidence": "replay_summary",
     "assessment_cell": "build-check",
     "assessed_reuse": [
-      "a09",
-      "a15"
+      "i05",
+      "a09"
     ]
   }
 ]

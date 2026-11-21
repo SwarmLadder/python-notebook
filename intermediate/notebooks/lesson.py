@@ -18,11 +18,13 @@ from __future__ import annotations
 import asyncio
 import ast
 import dataclasses
+import dis
 import hashlib
 import json
 import math
 import sys
 import threading
+import types
 
 
 class BlankNotFilled(Exception):
@@ -58,7 +60,7 @@ ___ = _Blank()
 
 
 def _contains_blank(value, depth=0) -> bool:
-    if value is ___ or (isinstance(value, str) and value == "___"):
+    if value is ___:
         return True
     if depth > 4:
         return False
@@ -120,6 +122,21 @@ def fingerprint(lesson_id: str, number: int, value) -> str:
     return hashlib.sha256(f"python-notebook-lesson|{lesson_id}|{number}|{canonical}".encode()).hexdigest()[:16]
 
 
+def _unfilled_code(code):
+    """Spot a literal ___ name in an executing cell, including nested functions.
+
+    Unlike a value-only check this also catches a bare '___' statement.
+    Inspect Python bytecode, not text, so strings, comments and attributes named
+    ___ are not mistaken for unanswered blanks. Works without IPython in Pyodide.
+    """
+    reads = {"LOAD_NAME", "LOAD_GLOBAL", "LOAD_FAST", "LOAD_DEREF", "LOAD_CLASSDEREF"}
+    if any(instruction.opname in reads and instruction.argval == "___"
+           for instruction in dis.get_instructions(code)):
+        return True
+    return any(isinstance(value, types.CodeType) and _unfilled_code(value)
+               for value in code.co_consts)
+
+
 def pending_exercise(source):
     """Identify an unanswered numbered cell without executing a partial program."""
     if "___" not in source or "check(" not in source:
@@ -178,6 +195,9 @@ class Exercises:
             if number == self.independent:
                 self.mastery_result = self.last_result is True
             return
+        if _unfilled_code(sys._getframe(1).f_code):
+            self.pending(number)
+            return
         self.last_result = self._grade(number, value)
 
     def _challenge(self, name: str, namespace: dict):
@@ -196,7 +216,7 @@ class Exercises:
     def pending(self, number):
         self.passed.discard(number)
         self.last_result = None
-        print(f"✏️  Exercise {number}: fill in every ___ blank first.")
+        print(f"✏️  Exercise {number}: Not attempted — fill in every ___ blank, then run the cell.")
 
     def assess(self, name, cases):
         """Run public acceptance cases on the current submission, without hints."""
@@ -224,11 +244,11 @@ class Exercises:
             return None
         self.passed.discard(number)
         if _contains_blank(value):
-            print(f"✏️  Exercise {number}: fill in every ___ blank first.")
+            print(f"✏️  Exercise {number}: Not attempted — fill in every ___ blank, then run the cell.")
             return None
         if fingerprint(self.lesson_id, number, value) == self._answers[number]:
             self.passed.add(number)
-            print(f"✅ Exercise {number}: correct! ({len(self.passed)}/{len(self._answers)} done)")
+            print(f"✅ Exercise {number}: correct — Passed ({len(self.passed)}/{len(self._answers)} done)")
             return True
         self._attempts[number] = self._attempts.get(number, 0) + 1
         if isinstance(value, dict):
@@ -246,7 +266,8 @@ class Exercises:
         ))
         shown = repr(value)
         shown = shown if len(shown) < 200 else shown[:200] + "..."
-        print(f"❌ Exercise {number}: not yet. Your result: {shown}\n"
-              "   Re-read the example above this section, change one blank, and run the cell again.")
+        print(f"❌ Exercise {number}: Needs improvement. Your result: {shown}")
         print(steps[min(self._attempts[number], len(steps)) - 1])
+        if self._attempts[number] == 1:
+            print(diagnostic)
         return False
