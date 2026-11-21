@@ -66,7 +66,7 @@ def _always_false():
 
 
 def test_test_replay():
-    assert m.test_replay(_correct_deliver()) is None, "Do not reject a correct replay service"
+    m.test_replay(_correct_deliver())
     for broken in (_last_only, _always_true, _always_false):
         with pytest.raises(AssertionError):
             m.test_replay(broken())

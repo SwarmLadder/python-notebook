@@ -34,7 +34,7 @@ def test_scan_batch(events, expected):
     ([(2, 0), (3, 1)], 4, 7), ([(25, 2)], 0, 50),
 ])
 def test_invoice_total(lines, fee, expected):
-    before = [list(line) for line in lines]
+    before = lines[:]
     assert m.invoice_total(lines, fee) == expected, "Charge the fee once, only when units are ordered"
     assert lines == before, "Do not modify the caller's order"
 

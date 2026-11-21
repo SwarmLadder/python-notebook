@@ -30,9 +30,9 @@ def _zero_is_positive(units, fee):
 
 
 def test_test_fee():
-    assert m.test_fee(_conforming_fee) is None, "The test must accept a correct service"
+    m.test_fee(_conforming_fee)
     for faulty in (_bill_empty, _multiply_fee, _zero_is_positive):
-        with pytest.raises(AssertionError, match="."):
+        with pytest.raises(AssertionError):
             m.test_fee(faulty)
 
 

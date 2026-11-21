@@ -30,13 +30,16 @@ def test_map_covers_lessons_and_references_earlier_concepts():
             assert cell_source(cells[index + 2]) == f"check('{name}')"
 
 
-@pytest.mark.parametrize("lesson,name,defect", [
-    ("06_loops", "scan_batch", lambda events: events.count("A")),
-    ("10_functions", "invoice_total",
-     lambda lines, fee=0: sum(price * quantity for price, quantity in lines) + fee),
+@pytest.mark.parametrize("name,defect", [
+    ("scan_batch", lambda events: events.count("A")),
+    ("invoice_total", lambda lines, fee=0: sum(price * qty for price, qty in lines) + fee),
 ])
-def test_pilot_check_rejects_boundary_defect(lesson, name, defect):
-    cells = load(ROOT / "basics/notebooks" / f"{lesson}.ipynb")["cells"]
-    check = next(cell_source(c) for c in cells if c["id"] == "build-check")
-    with pytest.raises(AssertionError):
-        exec(check, {name: defect})
+def test_independent_build_rejects_plausible_boundary_defects(name, defect):
+    """Exercise a real practice-route check, not only handpicked inline asserts."""
+    import sys
+    sys.path.insert(0, str(ROOT / "practice"))
+    from notebook_check import Checker
+
+    checker = Checker("basics_independent_builds")
+    assert checker(name, {name: defect}) is False
+    assert name not in checker.passed
