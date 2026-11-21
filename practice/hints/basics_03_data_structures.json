@@ -1,15 +1,15 @@
 {
  "evens": [
   "Build a new list; never call remove() on the input.",
-  "A comprehension: [v for v in values if v % 2 == 0]."
+  "Which remainder identifies an even value? Keep the input order."
  ],
  "count_occurrences": [
   "Use a counter variable and ==.",
   "Loop through values; add 1 when value == target."
  ],
  "second_largest": [
-  "Duplicates of the maximum don't count.",
-  "sorted(set(values)); fewer than 2 items means ValueError; otherwise take [-2]."
+  "What happens when the largest value appears twice?",
+  "Collect each new value once. Check how many distinct values remain before selecting the runner-up."
  ],
  "flatten": [
   "Two loops: rows, then items in a row.",

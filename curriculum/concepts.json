@@ -109,7 +109,14 @@
     ],
     "difficulty": "foundation",
     "independent_evidence": "rotate",
-    "assessment_cell": "build-check"
+    "assessment_cell": "build-check",
+    "introduces": {
+      "list comprehension": {
+        "explanation": "teach-3",
+        "demonstration": "demo-3",
+        "guided": "ex-7"
+      }
+    }
   },
   {
     "concept_id": "b08",
@@ -138,9 +145,7 @@
     "difficulty": "foundation",
     "independent_evidence": "merge_counts",
     "assessment_cell": "build-check",
-    "assessed_reuse": [
-
-    ]
+    "assessed_reuse": []
   },
   {
     "concept_id": "b10",
@@ -292,7 +297,9 @@
     "concept_id": "i01",
     "lesson": "intermediate/notebooks/01_comprehensions_and_transformations.ipynb",
     "prerequisites": [
-      "b09"
+      "b09",
+      "b07",
+      "b08"
     ],
     "primary_skill": "Index unique records and reject ambiguity",
     "reused_concepts": [

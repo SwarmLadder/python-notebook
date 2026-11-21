@@ -30,7 +30,11 @@ def second_largest(values: list[float]) -> float:
     >>> second_largest([4, 9, 9, 2])
     4
     """
-    distinct = sorted(set(values))
+    distinct = []
+    for value in values:
+        if value not in distinct:
+            distinct.append(value)
+    distinct.sort()
     if ___:
         raise ValueError("need at least two distinct values")
     return ___
