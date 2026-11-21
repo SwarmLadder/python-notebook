@@ -1,13 +1,9 @@
 #!/usr/bin/env python3
 """Verify that a learner has completed a level (used for ACHIEVEMENTS.md).
 
-A module counts as complete if EITHER
-  * every test in `practice/tests/test_<module>.py` passes against
-    `practice/exercises/<module>.py` (the terminal route), OR
-  * the matching workbook notebook runs top to bottom with every check()
-    passing (the notebook route; checks run with PRACTICE_STRICT=1). Basics has
-    no workbooks: its challenges live in the lessons, so only the practice-file
-    route applies there.
+A module counts as complete when every test in `practice/tests/test_<module>.py`
+passes against `practice/exercises/<module>.py`. (The challenges in the lessons
+are the same exercises; a claim is verified against the practice files.)
 
 Every practice module of the level must be complete; a level with no modules
 is never complete.

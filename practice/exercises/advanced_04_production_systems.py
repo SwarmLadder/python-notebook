@@ -1,12 +1,11 @@
 # Fill in every ___ so the function does what its docstring says.
-# Check your work:  python -m pytest practice -k advanced_04_production_systems   (or use the workbook notebook)
+# Check your work:  python -m pytest practice -k advanced_04_production_systems   (or run check() in the lesson)
 # Stuck? Fail a check twice to unlock the hints.
 # Reset this file:  git checkout -- practice/exercises/advanced_04_production_systems.py
 
 """Advanced practice 4 — Observability, SLOs, API contracts, durable idempotency.
 
-Companion to advanced/exercises/04_production_systems_exercises.ipynb and
-lessons 15–18.
+Graded by the challenges in lessons 15–18.
 """
 from __future__ import annotations
 

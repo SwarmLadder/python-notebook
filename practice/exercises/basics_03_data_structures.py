@@ -1,11 +1,11 @@
 # Fill in every ___ so the function does what its docstring says.
-# Check your work:  python -m pytest practice -k basics_03_data_structures   (or use the workbook notebook)
+# Check your work:  python -m pytest practice -k basics_03_data_structures   (or run check() in the lesson)
 # Stuck? Fail a check twice to unlock the hints.
 # Reset this file:  git checkout -- practice/exercises/basics_03_data_structures.py
 
 """Basics practice 3 — Lists, tuples, sets and dictionaries.
 
-Companion to basics/exercises/03_data_structures_exercises.ipynb and lessons 07–09.
+Graded by the challenges in lessons 07–09.
 """
 import string
 

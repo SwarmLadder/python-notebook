@@ -18,10 +18,7 @@ There are two ways to get your name on this course. Both are checked automatical
 
 ## Track 2: Achievers
 
-You qualify for a level (Basics, Intermediate or Advanced) when **all four workbooks of that level pass**. For each workbook you may solve the exercises in either place:
-
-- the **workbook notebook** (`<level>/exercises/*_exercises.ipynb`), where every `check(...)` cell must show ✅, or
-- the **practice file** (`practice/exercises/<module>.py`), where `python -m pytest practice -k <module>` must pass with nothing left "to do".
+You qualify for a level (Basics, Intermediate or Advanced) when **all four practice modules of that level pass**. The lesson challenges are the same exercises; to claim, put your solutions in the **practice files** (`practice/exercises/<module>.py`), where `python -m pytest practice -k <module>` must pass with nothing left "to do".
 
 Check yourself before claiming:
 
@@ -55,7 +52,7 @@ Claim one level at a time. Each level has its own row.
 Before adding `achievement-approved`:
 
 - [ ] The **Verify achievement** check is green on the latest commit.
-- [ ] The PR touches only `practice/exercises/*.py`, `*/exercises/*_exercises.ipynb` and the author's own claim file. The record workflow re-checks this through the API, but look anyway.
+- [ ] The PR touches only `practice/exercises/*.py` and the author's own claim file. The record workflow re-checks this through the API, but look anyway.
 - [ ] Skim the solutions for obvious tampering or copied code.
 
 The record workflow never runs code from the PR. It reads the changed-file list, the claim file and the check result through the GitHub API, then edits `ACHIEVEMENTS.md` on `main`. If `main` is protected, allow the GitHub Actions bot to push, or record achievements by hand with `python tools/recognition.py achievement ...`.

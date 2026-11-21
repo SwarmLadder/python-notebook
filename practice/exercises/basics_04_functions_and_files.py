@@ -1,11 +1,11 @@
 # Fill in every ___ so the function does what its docstring says.
-# Check your work:  python -m pytest practice -k basics_04_functions_and_files   (or use the workbook notebook)
+# Check your work:  python -m pytest practice -k basics_04_functions_and_files   (or run check() in the lesson)
 # Stuck? Fail a check twice to unlock the hints.
 # Reset this file:  git checkout -- practice/exercises/basics_04_functions_and_files.py
 
 """Basics practice 4 — Functions, errors, modules and files.
 
-Companion to basics/exercises/04_functions_and_files_exercises.ipynb and lessons 10–15.
+Graded by the challenges in lessons 10–15.
 Every file function receives a path, so tests can use a temporary folder.
 """
 import csv

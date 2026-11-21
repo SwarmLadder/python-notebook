@@ -1,12 +1,11 @@
 # Fill in every ___ so the function does what its docstring says.
-# Check your work:  python -m pytest practice -k advanced_03_security_testing_performance   (or use the workbook notebook)
+# Check your work:  python -m pytest practice -k advanced_03_security_testing_performance   (or run check() in the lesson)
 # Stuck? Fail a check twice to unlock the hints.
 # Reset this file:  git checkout -- practice/exercises/advanced_03_security_testing_performance.py
 
 """Advanced practice 3 — Safe parsing, secrets, subprocess safety, transactions, algorithms.
 
-Companion to advanced/exercises/03_security_testing_performance_exercises.ipynb and
-lessons 10–11, 13–14 and 17.
+Graded by the challenges in lessons 10–11, 13–14 and 17.
 """
 from __future__ import annotations
 

@@ -1,12 +1,11 @@
 # Fill in every ___ so the function does what its docstring says.
-# Check your work:  python -m pytest practice -k advanced_02_concurrency_resilience   (or use the workbook notebook)
+# Check your work:  python -m pytest practice -k advanced_02_concurrency_resilience   (or run check() in the lesson)
 # Stuck? Fail a check twice to unlock the hints.
 # Reset this file:  git checkout -- practice/exercises/advanced_02_concurrency_resilience.py
 
 """Advanced practice 2 — asyncio, TaskGroups, timeouts, threads, retries, idempotency.
 
-Companion to advanced/exercises/02_concurrency_resilience_exercises.ipynb and
-lessons 05–09. Requires Python 3.11+ (TaskGroup, asyncio.timeout).
+Graded by the challenges in lessons 05–09. Requires Python 3.11+ (TaskGroup, asyncio.timeout).
 """
 from __future__ import annotations
 
