@@ -71,7 +71,8 @@ def _hints_for(item) -> list[tuple[str, list[str]]]:
         if (isinstance(node, ast.Attribute) and isinstance(node.value, ast.Name)
                 and node.value.id == "m" and node.attr in hints and node.attr not in names):
             names.append(node.attr)
-    return [(name, hints[name]) for name in names]
+    return [(name, [f"Trace {name} on the failing input. Which part of the stated contract changes the result?",
+                    *hints[name]]) for name in names]
 
 
 _progress: dict[str, dict[str, int]] = defaultdict(lambda: {"passed": 0, "failed": 0, "todo": 0})
@@ -111,7 +112,10 @@ def pytest_runtest_makereport(item, call):
     if call.excinfo is not None and (_not_started(call.excinfo.value) or blank_in_failure) and not grader.RECORDING:
         report.outcome = "skipped"
         report.longrepr = (str(path), item.location[1], "TO DO: fill in the ___ blanks")
-        _progress[module]["todo"] += 1
+        if grader.SHOW_HINTS:
+            _progress[module]["todo"] += 1
+    elif not grader.SHOW_HINTS:
+        return  # Mastery attempts do not change guided progress or unlock hints.
     elif report.passed:
         _progress[module]["passed"] += 1
         _passed_now.add(item.nodeid)

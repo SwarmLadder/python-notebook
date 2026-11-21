@@ -1,6 +1,8 @@
 # Advanced Python — Final Assessment (100 points)
 
-Complete the 20 guided notebooks, 80 independent challenges, and the three portfolio projects.
+Complete the 20 lessons and their independent builds, then submit the three portfolio projects.
+
+Run `python tools/assess_build.py advanced --json` on your saved lessons. Submit the report, one original boundary test and a short explanation of a design decision with your project. Review the code and rationale alongside the reported behavior. See the [mastery guide](../curriculum/MASTERY.md).
 
 ## Required submissions
 

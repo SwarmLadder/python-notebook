@@ -8,12 +8,13 @@ Develop software-building skills after mastering the [Python Basics course](../b
 |---|---:|---|
 | Lessons | **20 notebooks** | Short rules, a demo, then graded exercises from easy to hard |
 | Fill-in exercises | **185** | Each one checked as soon as you run it |
-| Challenges | **73** | Functions and classes in the lessons, graded by the practice tests |
+| Named practice checks | **71** | Lesson checks that run the shared practice suite |
+| Independent builds | **20** | One per lesson, including builds with dedicated acceptance cases |
 | Auto-graded practice | **4 modules, 102 tests** | Instant feedback; answers stay hidden |
 | Portfolio projects | **3 notebooks** | OOP library, offline HTTP/ETL, SQLite task manager |
 | Additional working application | **1 installable Python package** | CLI with SQLite, packaging metadata, and unit tests |
 
-All runnable notebook examples use Python 3.10+ and only the **standard library**. External packages are required only to provide the Jupyter environment itself. Examples involving HTTP use fake or injected transports; no live API or secret is necessary.
+All runnable notebook examples use Python 3.10+ and only the **standard library**. Notebook execution uses Jupyter. Named practice checks use pytest. Examples involving HTTP use fake or injected transports; no live API or secret is necessary.
 
 ## Prerequisites
 

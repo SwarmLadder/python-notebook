@@ -60,11 +60,14 @@ def tamper_findings(module: str, workbook: Path | None) -> list[str]:
 
 
 def terminal_route(module: str) -> tuple[bool, str]:
+    env = os.environ.copy()
+    env.pop("PYTEST_ADDOPTS", None)  # A level claim always runs the full module.
     result = subprocess.run(
         [sys.executable, "-m", "pytest", f"practice/tests/test_{module}.py", "-q", "-p", "no:cacheprovider",
-         "--color=no", "-rfEs"], cwd=ROOT, capture_output=True, text=True, timeout=900)
+         "--color=no", "-rfEs"], cwd=ROOT, env=env, capture_output=True, text=True, timeout=900)
     last = (result.stdout.strip().splitlines() or ["no output"])[-1]
-    ok = result.returncode == 0 and "skipped" not in last and "failed" not in last
+    ok = result.returncode == 0 and bool(re.search(r"\b[1-9]\d* passed\b", last))
+    ok = ok and not re.search(r"skipped|failed|deselected|xfailed|xpassed|error", last)
     return ok, last
 
 

@@ -2,6 +2,8 @@
 
 The goal is to establish readiness for advanced Python topics by showing correctness, design reasoning, and reproducible tests.
 
+Run `python tools/assess_build.py intermediate --json` on your saved lessons. Submit the report, one original boundary test and a short explanation of a design decision with your project. Review the code and rationale alongside the reported behavior. See the [mastery guide](../curriculum/MASTERY.md).
+
 ## Required submissions
 
 1. **An OOP domain model:** extend the Library Lending System with due dates, duplicate-book checks, and a clear state model.

@@ -181,9 +181,6 @@ class Exercises:
         self.last_result = self._grade(number, value)
 
     def _challenge(self, name: str, namespace: dict):
-        if name == self.independent and name not in namespace:
-            print(f"✏️  Define {name} in the independent build cell, then run its check.")
-            return False
         if not self.practice:
             print(f"There is no challenge {name!r} in this lesson.")
             return None
@@ -234,11 +231,22 @@ class Exercises:
             print(f"✅ Exercise {number}: correct! ({len(self.passed)}/{len(self._answers)} done)")
             return True
         self._attempts[number] = self._attempts.get(number, 0) + 1
-        steps = getattr(self, "hints", {}).get(number, ())
+        if isinstance(value, dict):
+            diagnostic = "Compare the keys first, then inspect the value type at the first differing key."
+        elif isinstance(value, (list, tuple)):
+            diagnostic = "Trace the first item, the final item, and the length separately."
+        elif isinstance(value, str):
+            diagnostic = "Use repr() on the result to inspect spaces, quotes and letter case."
+        else:
+            diagnostic = f"Inspect the operands just before the result is computed. Your result has type {type(value).__name__}."
+        steps = getattr(self, "hints", {}).get(number, (
+            "Predict the result on paper for the given inputs, including its type.",
+            diagnostic,
+            "Run the example above with the exercise inputs. Inspect the first intermediate value that differs from your prediction.",
+        ))
         shown = repr(value)
         shown = shown if len(shown) < 200 else shown[:200] + "..."
         print(f"❌ Exercise {number}: not yet. Your result: {shown}\n"
               "   Re-read the example above this section, change one blank, and run the cell again.")
-        if steps:
-            print(steps[min(self._attempts[number], len(steps)) - 1])
+        print(steps[min(self._attempts[number], len(steps)) - 1])
         return False

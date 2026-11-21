@@ -119,15 +119,15 @@ def run_notebook(path: Path, *, assess: str | None = None) -> RunResult:
     sys.path.insert(0, str(path.parent))  # Jupyter can import helpers (quiz.py) next to the notebook
     try:
         os.chdir(path.parent)  # relative data paths behave as they do in Jupyter
-        work_seen = False
+        work_source = None
         for number, source in code_cells(notebook):
             cell_id = notebook["cells"][number - 1].get("id")
             if assess and cell_id == "build-work":
                 # A worked example earlier in the lesson may use the same name.
                 namespace.pop(assess, None)
-                work_seen = True
+                work_source = source
             if assess and cell_id == "build-check":
-                if not work_seen or assess not in namespace:
+                if work_source is None or assess not in namespace:
                     print(f"Define {assess} in the independent build cell.", file=stdout)
                     return RunResult(executed, stdout.getvalue())
                 os.environ.pop("PRACTICE_CHECKS", None)
@@ -157,6 +157,14 @@ def run_notebook(path: Path, *, assess: str | None = None) -> RunResult:
             executed += 1
             if assess and cell_id == "build-check":
                 passed = namespace["check"].mastery_result is True
+                if passed and assess == "receipt":
+                    # This early exercise uses variables, before functions are taught.
+                    variant = dict(namespace, item="notebook", units=0)
+                    del variant["receipt"]
+                    exec(compile(work_source, "<receipt revision>", "exec"), variant)
+                    passed = variant.get("receipt") == "notebook x 0"
+                    if not passed:
+                        print("Format the supplied item and units again when the order changes.", file=stdout)
                 return RunResult(executed, stdout.getvalue(), passed)
     finally:
         builtins.input = original_input

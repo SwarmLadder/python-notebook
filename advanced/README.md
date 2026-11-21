@@ -8,13 +8,14 @@ Learn the engineering techniques required to build reliable and maintainable Pyt
 |---|---:|---|
 | Lessons | **20 notebooks** | Short rules, a demo, then graded exercises from easy to hard |
 | Fill-in exercises | **162** | Each one checked as soon as you run it |
-| Challenges | **58** | Functions and classes in the lessons, graded by the practice tests |
+| Named practice checks | **57** | Lesson checks that run the shared practice suite |
+| Independent builds | **20** | One per lesson, including builds with dedicated acceptance cases |
 | Auto-graded practice | **4 modules, 95 tests** | Instant feedback; answers stay hidden |
 | Advanced portfolio projects | **3** | Async crawler simulator, streaming text analytics, transactional event processor |
 | Companion application | **1 installable package** | SQLite event processor CLI with unit tests |
 | Standalone parallelism example | **1 Python script** | Portable ProcessPoolExecutor demonstration |
 
-The notebooks use the **Python standard library**. **Python 3.11+** is required for TaskGroup and ExceptionGroup examples (CI uses Python 3.12). No API keys or live network services are required.
+The notebooks use the **Python standard library**. **Python 3.11+** is required for TaskGroup and ExceptionGroup examples (CI tests Python 3.11 and 3.13). No API keys or live network services are required.
 
 ## Detailed lesson index
 

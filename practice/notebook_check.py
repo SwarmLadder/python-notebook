@@ -110,6 +110,9 @@ class Checker:
         if namespace is None:
             namespace = sys._getframe(1).f_globals
         self.passed.discard(name)
+        if independent and name not in namespace:
+            print(f"✏️  Define {name} in the independent build cell, then run its check.")
+            return False
         tests = self.assignment.get(name)
         if tests is None:
             print(f"Unknown exercise {name!r}. Exercises: {', '.join(self.assignment)}")
