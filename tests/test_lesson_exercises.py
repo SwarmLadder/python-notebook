@@ -105,7 +105,7 @@ def test_running_totals_have_consistent_prompt_starter_and_fingerprint(capsys):
     prompt, code, setup = (cells["ex-2-q"], cells["ex-2"], cells["lesson-setup"])
     assert "[1, 2, 3, 4]" in prompt and "[1, 3, 6, 10]" in prompt
     assert code.startswith("values = [1, 2, 3, 4]\n")
-    assert "    running.append(___)\n" in code  # Indentation is part of the starter.
+    assert "    ___\n" in code  # Preserve the open-ended starter and its indentation.
     assert lesson.pending_exercise(code) == 2
     match = re.search(r"Exercises\('basics/16', (\{[^}]+\})", setup)
     assert match is not None
@@ -132,7 +132,7 @@ def test_running_total_feedback_without_ipython_transformer(capsys):
     assert check.last_result is None and 2 not in check.passed
     assert "Not attempted" in capsys.readouterr().out
 
-    wrong = code.replace("running.append(___)", "running.append(0)")
+    wrong = code.replace("    ___", "    running.append(0)")
     for hint in check.hints[2]:
         exec(wrong, state)
         output = capsys.readouterr().out
@@ -141,7 +141,7 @@ def test_running_total_feedback_without_ipython_transformer(capsys):
 
     # The intended answer and an equivalent list operation must both pass.
     for answer in ("running.append(total)", "running += [total]"):
-        exec(code.replace("running.append(___)", answer), state)
+        exec(code.replace("    ___", "    " + answer), state)
         assert check.last_result is True and 2 in check.passed
         assert "Passed" in capsys.readouterr().out
 

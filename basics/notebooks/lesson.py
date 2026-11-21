@@ -18,11 +18,13 @@ from __future__ import annotations
 import asyncio
 import ast
 import dataclasses
+import dis
 import hashlib
 import json
 import math
 import sys
 import threading
+import types
 
 
 class BlankNotFilled(Exception):
@@ -120,6 +122,21 @@ def fingerprint(lesson_id: str, number: int, value) -> str:
     return hashlib.sha256(f"python-notebook-lesson|{lesson_id}|{number}|{canonical}".encode()).hexdigest()[:16]
 
 
+def _unfilled_code(code):
+    """Spot a literal ___ name in an executing cell, including nested functions.
+
+    Unlike a value-only check this also catches a bare '___' statement.
+    Inspect Python bytecode, not text, so strings, comments and attributes named
+    ___ are not mistaken for unanswered blanks. Works without IPython in Pyodide.
+    """
+    reads = {"LOAD_NAME", "LOAD_GLOBAL", "LOAD_FAST", "LOAD_DEREF", "LOAD_CLASSDEREF"}
+    if any(instruction.opname in reads and instruction.argval == "___"
+           for instruction in dis.get_instructions(code)):
+        return True
+    return any(isinstance(value, types.CodeType) and _unfilled_code(value)
+               for value in code.co_consts)
+
+
 def pending_exercise(source):
     """Identify an unanswered numbered cell without executing a partial program."""
     if "___" not in source or "check(" not in source:
@@ -177,6 +194,9 @@ class Exercises:
             self.last_result = self._challenge(number, sys._getframe(1).f_globals)
             if number == self.independent:
                 self.mastery_result = self.last_result is True
+            return
+        if _unfilled_code(sys._getframe(1).f_code):
+            self.pending(number)
             return
         self.last_result = self._grade(number, value)
 
