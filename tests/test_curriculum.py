@@ -85,3 +85,44 @@ def test_published_inventory_matches_the_lessons():
         assert int(fields[1]) == row["lessons"] == row["independent_builds"]
         assert int(fields[3]) == row["named_practice_checks"]
         assert int(fields[5].split()[0]) == row["projects"]
+
+
+def test_pre_import_lessons_provide_library_setup_and_do_not_assign_imports():
+    """Learner exercise cells must not depend on discovering import syntax before Lesson 14."""
+    for number in range(14):
+        path = next((ROOT / "basics/notebooks").glob(f"{number:02d}_*.ipynb"))
+        cells = load(path)["cells"]
+        for cell in cells:
+            cell_id = cell.get("id", "")
+            if not (cell_id.startswith(("ex-", "ch-")) or cell_id == "build-work"):
+                continue
+            tree = ast.parse(cell_source(cell))
+            imports = [n for n in ast.walk(tree) if isinstance(n, (ast.Import, ast.ImportFrom))]
+            assert not imports, f"{path.name} {cell_id} asks for an import before imports are taught"
+
+
+def test_untaught_control_syntax_is_scaffolded():
+    basics = ROOT / "basics/notebooks"
+    strings = load(next(basics.glob("03_*.ipynb")))
+    sets = load(next(basics.glob("08_*.ipynb")))
+    strings_code = cell_source(next(c for c in strings["cells"] if c["id"] == "build-work"))
+    sets_code = cell_source(next(c for c in sets["cells"] if c["id"] == "build-work"))
+    assert "for word in full_name.split():" in strings_code
+    assert "'common': ___" in sets_code
+    assert "'only_a': ___" in sets_code and "'only_b': ___" in sets_code
+
+
+@pytest.mark.parametrize("concept,submission", [
+    ("b03", "def initials(full_name):\n    parts = full_name.split()\n    return parts[0][0].upper() if parts else ''"),
+    ("b08", "def compare_sets(a, b):\n    return {'common': a & b, 'only_a': a - b, 'only_b': a - b}"),
+    ("b10", "def invoice_total(lines, fee=0):\n    ordered = any(q > 0 for price, q in lines)\n    amount = sum(price * q for price, q in lines)\n    lines.clear()\n    return amount + fee if ordered else 0"),
+])
+def test_plausible_but_incorrect_independent_builds_fail(concept, submission, monkeypatch):
+    """Do not award mastery to partial behavior or an implementation that mutates inputs."""
+    row = next(r for r in ROWS if r["concept_id"] == concept)
+    path = ROOT / row["lesson"]
+    notebook = load(path)
+    next(c for c in notebook["cells"] if c["id"] == "build-work")["source"] = [submission]
+    monkeypatch.setattr(runner, "load", lambda path: notebook)
+    result = runner.run_notebook(path, assess=row["independent_evidence"])
+    assert not result.mastery_passed, result.stdout
