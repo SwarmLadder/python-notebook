@@ -154,11 +154,18 @@
     "reused_concepts": [
       "b02",
       "b05",
-      "b06"
+      "b06",
+      "b07"
     ],
     "difficulty": "foundation",
     "independent_evidence": "invoice_total",
-    "assessment_cell": "build-check"
+    "assessment_cell": "build-check",
+    "assessed_reuse": [
+      "b02",
+      "b05",
+      "b06",
+      "b07"
+    ]
   },
   {
     "concept_id": "b11",
@@ -422,7 +429,11 @@
     ],
     "difficulty": "intermediate",
     "independent_evidence": "totals_by_category",
-    "assessment_cell": "build-check"
+    "assessment_cell": "build-check",
+    "assessed_reuse": [
+      "b06",
+      "b09"
+    ]
   },
   {
     "concept_id": "i10",
