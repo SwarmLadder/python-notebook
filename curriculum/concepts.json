@@ -1,0 +1,808 @@
+[
+  {
+    "concept_id": "b00",
+    "lesson": "basics/notebooks/00_python_introduction.ipynb",
+    "prerequisites": [],
+    "primary_skill": "Run and edit a cell from a fresh kernel",
+    "reused_concepts": [],
+    "difficulty": "foundation",
+    "independent_evidence": "session_label"
+  },
+  {
+    "concept_id": "b01",
+    "lesson": "basics/notebooks/01_variables_and_data_types.ipynb",
+    "prerequisites": [
+      "b00"
+    ],
+    "primary_skill": "Convert numeric text for arithmetic",
+    "reused_concepts": [
+      "b00"
+    ],
+    "difficulty": "foundation",
+    "independent_evidence": "total_cost"
+  },
+  {
+    "concept_id": "b02",
+    "lesson": "basics/notebooks/02_operators.ipynb",
+    "prerequisites": [
+      "b01"
+    ],
+    "primary_skill": "Decompose elapsed time into units",
+    "reused_concepts": [
+      "b01"
+    ],
+    "difficulty": "foundation",
+    "independent_evidence": "clock_time"
+  },
+  {
+    "concept_id": "b03",
+    "lesson": "basics/notebooks/03_strings.ipynb",
+    "prerequisites": [
+      "b01"
+    ],
+    "primary_skill": "Normalize whitespace and letter case",
+    "reused_concepts": [
+      "b01"
+    ],
+    "difficulty": "foundation",
+    "independent_evidence": "initials"
+  },
+  {
+    "concept_id": "b04",
+    "lesson": "basics/notebooks/04_input_and_output.ipynb",
+    "prerequisites": [
+      "b03"
+    ],
+    "primary_skill": "Format a receipt from supplied values",
+    "reused_concepts": [
+      "b01",
+      "b03"
+    ],
+    "difficulty": "foundation",
+    "independent_evidence": "receipt"
+  },
+  {
+    "concept_id": "b05",
+    "lesson": "basics/notebooks/05_conditional_statements.ipynb",
+    "prerequisites": [
+      "b02"
+    ],
+    "primary_skill": "Classify ordered thresholds",
+    "reused_concepts": [
+      "b01",
+      "b02"
+    ],
+    "difficulty": "foundation",
+    "independent_evidence": "letter_grade"
+  },
+  {
+    "concept_id": "b06",
+    "lesson": "basics/notebooks/06_loops.ipynb",
+    "prerequisites": [
+      "b05"
+    ],
+    "primary_skill": "Count events until a stopping condition",
+    "reused_concepts": [
+      "b03",
+      "b05"
+    ],
+    "difficulty": "foundation",
+    "independent_evidence": "scan_batch"
+  },
+  {
+    "concept_id": "b07",
+    "lesson": "basics/notebooks/07_lists.ipynb",
+    "prerequisites": [
+      "b06"
+    ],
+    "primary_skill": "Reorder a sequence without mutating it",
+    "reused_concepts": [
+      "b02",
+      "b06"
+    ],
+    "difficulty": "foundation",
+    "independent_evidence": "rotate"
+  },
+  {
+    "concept_id": "b08",
+    "lesson": "basics/notebooks/08_tuples_and_sets.ipynb",
+    "prerequisites": [
+      "b07"
+    ],
+    "primary_skill": "Compare membership across collections",
+    "reused_concepts": [
+      "b07"
+    ],
+    "difficulty": "foundation",
+    "independent_evidence": "compare_sets"
+  },
+  {
+    "concept_id": "b09",
+    "lesson": "basics/notebooks/09_dictionaries.ipynb",
+    "prerequisites": [
+      "b08"
+    ],
+    "primary_skill": "Combine per-key counts",
+    "reused_concepts": [
+      "b06",
+      "b07"
+    ],
+    "difficulty": "foundation",
+    "independent_evidence": "merge_counts"
+  },
+  {
+    "concept_id": "b10",
+    "lesson": "basics/notebooks/10_functions.ipynb",
+    "prerequisites": [
+      "b09"
+    ],
+    "primary_skill": "Package pricing rules in a reusable function",
+    "reused_concepts": [
+      "b02",
+      "b05",
+      "b06"
+    ],
+    "difficulty": "foundation",
+    "independent_evidence": "invoice_total"
+  },
+  {
+    "concept_id": "b11",
+    "lesson": "basics/notebooks/11_scope_and_builtins.ipynb",
+    "prerequisites": [
+      "b10"
+    ],
+    "primary_skill": "Define a numeric reduction with an empty-input policy",
+    "reused_concepts": [
+      "b02",
+      "b07"
+    ],
+    "difficulty": "foundation",
+    "independent_evidence": "average"
+  },
+  {
+    "concept_id": "b12",
+    "lesson": "basics/notebooks/12_exception_handling.ipynb",
+    "prerequisites": [
+      "b11"
+    ],
+    "primary_skill": "Handle an expected arithmetic failure",
+    "reused_concepts": [
+      "b02",
+      "b10"
+    ],
+    "difficulty": "foundation",
+    "independent_evidence": "safe_divide"
+  },
+  {
+    "concept_id": "b13",
+    "lesson": "basics/notebooks/13_file_handling.ipynb",
+    "prerequisites": [
+      "b12"
+    ],
+    "primary_skill": "Read text and resolve ties consistently",
+    "reused_concepts": [
+      "b03",
+      "b06",
+      "b10"
+    ],
+    "difficulty": "foundation",
+    "independent_evidence": "longest_word_in_file"
+  },
+  {
+    "concept_id": "b14",
+    "lesson": "basics/notebooks/14_modules_and_standard_library.ipynb",
+    "prerequisites": [
+      "b10"
+    ],
+    "primary_skill": "Use reproducible pseudo-random sampling",
+    "reused_concepts": [
+      "b06",
+      "b07"
+    ],
+    "difficulty": "foundation",
+    "independent_evidence": "roll_dice"
+  },
+  {
+    "concept_id": "b15",
+    "lesson": "basics/notebooks/15_debugging_basics.ipynb",
+    "prerequisites": [
+      "b12"
+    ],
+    "primary_skill": "Diagnose a threshold defect",
+    "reused_concepts": [
+      "b05",
+      "b06"
+    ],
+    "difficulty": "foundation",
+    "independent_evidence": "first_shortfall"
+  },
+  {
+    "concept_id": "b16",
+    "lesson": "basics/notebooks/16_basic_problem_solving.ipynb",
+    "prerequisites": [
+      "b10"
+    ],
+    "primary_skill": "Specify a run-length encoding",
+    "reused_concepts": [
+      "b06",
+      "b07"
+    ],
+    "difficulty": "foundation",
+    "independent_evidence": "pack_runs"
+  },
+  {
+    "concept_id": "b17",
+    "lesson": "basics/notebooks/17_python_basics_review.ipynb",
+    "prerequisites": [
+      "b16"
+    ],
+    "primary_skill": "Aggregate validated inventory records",
+    "reused_concepts": [
+      "b09",
+      "b12"
+    ],
+    "difficulty": "foundation",
+    "independent_evidence": "stock_report"
+  },
+  {
+    "concept_id": "i00",
+    "lesson": "intermediate/notebooks/00_workflow_and_environments.ipynb",
+    "prerequisites": [
+      "b14"
+    ],
+    "primary_skill": "Inspect the active interpreter",
+    "reused_concepts": [
+      "b09",
+      "b14"
+    ],
+    "difficulty": "intermediate",
+    "independent_evidence": "environment_report"
+  },
+  {
+    "concept_id": "i01",
+    "lesson": "intermediate/notebooks/01_comprehensions_and_transformations.ipynb",
+    "prerequisites": [
+      "b09"
+    ],
+    "primary_skill": "Index unique records and reject ambiguity",
+    "reused_concepts": [
+      "b06",
+      "b12"
+    ],
+    "difficulty": "intermediate",
+    "independent_evidence": "index_by_sku"
+  },
+  {
+    "concept_id": "i02",
+    "lesson": "intermediate/notebooks/02_classes_and_objects.ipynb",
+    "prerequisites": [
+      "b10"
+    ],
+    "primary_skill": "Implement addition for a value object",
+    "reused_concepts": [
+      "b02",
+      "b12"
+    ],
+    "difficulty": "intermediate",
+    "independent_evidence": "Money"
+  },
+  {
+    "concept_id": "i03",
+    "lesson": "intermediate/notebooks/03_inheritance_and_composition.ipynb",
+    "prerequisites": [
+      "i02"
+    ],
+    "primary_skill": "Consume a polymorphic interface",
+    "reused_concepts": [
+      "b06",
+      "i02"
+    ],
+    "difficulty": "intermediate",
+    "independent_evidence": "total_area"
+  },
+  {
+    "concept_id": "i04",
+    "lesson": "intermediate/notebooks/04_dataclasses_and_properties.ipynb",
+    "prerequisites": [
+      "i02"
+    ],
+    "primary_skill": "Keep two views of one value consistent",
+    "reused_concepts": [
+      "b02",
+      "b12"
+    ],
+    "difficulty": "intermediate",
+    "independent_evidence": "Temperature"
+  },
+  {
+    "concept_id": "i05",
+    "lesson": "intermediate/notebooks/05_iterables_and_iterators.ipynb",
+    "prerequisites": [
+      "b07"
+    ],
+    "primary_skill": "Extract overlapping windows",
+    "reused_concepts": [
+      "b06",
+      "b08"
+    ],
+    "difficulty": "intermediate",
+    "independent_evidence": "sliding_window"
+  },
+  {
+    "concept_id": "i06",
+    "lesson": "intermediate/notebooks/06_generators_and_lazy_pipelines.ipynb",
+    "prerequisites": [
+      "i05"
+    ],
+    "primary_skill": "Produce bounded batches from an iterable",
+    "reused_concepts": [
+      "b06",
+      "i05"
+    ],
+    "difficulty": "intermediate",
+    "independent_evidence": "chunked"
+  },
+  {
+    "concept_id": "i07",
+    "lesson": "intermediate/notebooks/07_closures_and_decorators.ipynb",
+    "prerequisites": [
+      "b11"
+    ],
+    "primary_skill": "Retain state across decorated calls",
+    "reused_concepts": [
+      "b10",
+      "b11"
+    ],
+    "difficulty": "intermediate",
+    "independent_evidence": "once"
+  },
+  {
+    "concept_id": "i08",
+    "lesson": "intermediate/notebooks/08_context_managers_and_resources.ipynb",
+    "prerequisites": [
+      "i02"
+    ],
+    "primary_skill": "Manage a lifetime across exceptions",
+    "reused_concepts": [
+      "b07",
+      "b12"
+    ],
+    "difficulty": "intermediate",
+    "independent_evidence": "EventRecorder"
+  },
+  {
+    "concept_id": "i09",
+    "lesson": "intermediate/notebooks/09_functional_tools_and_itertools.ipynb",
+    "prerequisites": [
+      "i05"
+    ],
+    "primary_skill": "Aggregate unordered records",
+    "reused_concepts": [
+      "b09",
+      "b06"
+    ],
+    "difficulty": "intermediate",
+    "independent_evidence": "totals_by_category"
+  },
+  {
+    "concept_id": "i10",
+    "lesson": "intermediate/notebooks/10_type_hints_and_protocols.ipynb",
+    "prerequisites": [
+      "i05"
+    ],
+    "primary_skill": "Use a callable contract",
+    "reused_concepts": [
+      "b10",
+      "i05"
+    ],
+    "difficulty": "intermediate",
+    "independent_evidence": "apply_transform"
+  },
+  {
+    "concept_id": "i11",
+    "lesson": "intermediate/notebooks/11_logging_configuration_and_errors.ipynb",
+    "prerequisites": [
+      "b12"
+    ],
+    "primary_skill": "Preserve the cause of a domain error",
+    "reused_concepts": [
+      "b01",
+      "b12"
+    ],
+    "difficulty": "intermediate",
+    "independent_evidence": "parse_quantity"
+  },
+  {
+    "concept_id": "i12",
+    "lesson": "intermediate/notebooks/12_regular_expressions.ipynb",
+    "prerequisites": [
+      "b03"
+    ],
+    "primary_skill": "Validate an entire identifier",
+    "reused_concepts": [
+      "b03",
+      "b05"
+    ],
+    "difficulty": "intermediate",
+    "independent_evidence": "is_order_code"
+  },
+  {
+    "concept_id": "i13",
+    "lesson": "intermediate/notebooks/13_json_csv_and_data_pipelines.ipynb",
+    "prerequisites": [
+      "b13"
+    ],
+    "primary_skill": "Aggregate imported data and handle bad rows",
+    "reused_concepts": [
+      "b09",
+      "b12"
+    ],
+    "difficulty": "intermediate",
+    "independent_evidence": "summarize_sales"
+  },
+  {
+    "concept_id": "i14",
+    "lesson": "intermediate/notebooks/14_unittest_and_mocking.ipynb",
+    "prerequisites": [
+      "b10"
+    ],
+    "primary_skill": "Build a test that distinguishes faulty behavior",
+    "reused_concepts": [
+      "b05",
+      "b10"
+    ],
+    "difficulty": "intermediate",
+    "independent_evidence": "test_fee"
+  },
+  {
+    "concept_id": "i15",
+    "lesson": "intermediate/notebooks/15_sqlite_and_transactions.ipynb",
+    "prerequisites": [
+      "i13"
+    ],
+    "primary_skill": "Aggregate persisted task state",
+    "reused_concepts": [
+      "b09",
+      "i13"
+    ],
+    "difficulty": "intermediate",
+    "independent_evidence": "count_by_status"
+  },
+  {
+    "concept_id": "i16",
+    "lesson": "intermediate/notebooks/16_http_apis_and_clients.ipynb",
+    "prerequisites": [
+      "b07"
+    ],
+    "primary_skill": "Define stable page boundaries",
+    "reused_concepts": [
+      "b02",
+      "b07",
+      "b12"
+    ],
+    "difficulty": "intermediate",
+    "independent_evidence": "paginate"
+  },
+  {
+    "concept_id": "i17",
+    "lesson": "intermediate/notebooks/17_cli_and_packaging.ipynb",
+    "prerequisites": [
+      "b14"
+    ],
+    "primary_skill": "Expose a testable command-line interface",
+    "reused_concepts": [
+      "b10",
+      "b14"
+    ],
+    "difficulty": "intermediate",
+    "independent_evidence": "build_parser"
+  },
+  {
+    "concept_id": "i18",
+    "lesson": "intermediate/notebooks/18_complexity_profiling_and_optimization.ipynb",
+    "prerequisites": [
+      "i01"
+    ],
+    "primary_skill": "Measure lookup work independently of clock speed",
+    "reused_concepts": [
+      "b06",
+      "b09"
+    ],
+    "difficulty": "intermediate",
+    "independent_evidence": "lookup_counts"
+  },
+  {
+    "concept_id": "i19",
+    "lesson": "intermediate/notebooks/19_intermediate_review_and_capstone.ipynb",
+    "prerequisites": [
+      "i13"
+    ],
+    "primary_skill": "Reconcile two sources of order state",
+    "reused_concepts": [
+      "i01",
+      "i13"
+    ],
+    "difficulty": "intermediate",
+    "independent_evidence": "reconcile"
+  },
+  {
+    "concept_id": "a00",
+    "lesson": "advanced/notebooks/00_python_data_model.ipynb",
+    "prerequisites": [
+      "i02"
+    ],
+    "primary_skill": "Implement Python numeric protocols",
+    "reused_concepts": [
+      "b02",
+      "i02"
+    ],
+    "difficulty": "advanced",
+    "independent_evidence": "Vector"
+  },
+  {
+    "concept_id": "a01",
+    "lesson": "advanced/notebooks/01_descriptors_and_metaclasses.ipynb",
+    "prerequisites": [
+      "i04"
+    ],
+    "primary_skill": "Isolate descriptor state by owner and field",
+    "reused_concepts": [
+      "b12",
+      "i04"
+    ],
+    "difficulty": "advanced",
+    "independent_evidence": "PositiveInt"
+  },
+  {
+    "concept_id": "a02",
+    "lesson": "advanced/notebooks/02_memory_references_weakrefs.ipynb",
+    "prerequisites": [
+      "i02"
+    ],
+    "primary_skill": "Specify eviction by recency",
+    "reused_concepts": [
+      "b09",
+      "i02"
+    ],
+    "difficulty": "advanced",
+    "independent_evidence": "LRUCache"
+  },
+  {
+    "concept_id": "a03",
+    "lesson": "advanced/notebooks/03_advanced_typing.ipynb",
+    "prerequisites": [
+      "i10"
+    ],
+    "primary_skill": "Preserve a generic element type",
+    "reused_concepts": [
+      "b07",
+      "i10"
+    ],
+    "difficulty": "advanced",
+    "independent_evidence": "first_or_none"
+  },
+  {
+    "concept_id": "a04",
+    "lesson": "advanced/notebooks/04_imports_introspection_plugins.ipynb",
+    "prerequisites": [
+      "b14"
+    ],
+    "primary_skill": "Inspect callable metadata",
+    "reused_concepts": [
+      "b09",
+      "b10"
+    ],
+    "difficulty": "advanced",
+    "independent_evidence": "parameter_defaults"
+  },
+  {
+    "concept_id": "a05",
+    "lesson": "advanced/notebooks/05_asyncio_event_loop.ipynb",
+    "prerequisites": [
+      "i05"
+    ],
+    "primary_skill": "Collect concurrent work in input order",
+    "reused_concepts": [
+      "i05",
+      "b12"
+    ],
+    "difficulty": "advanced",
+    "independent_evidence": "gather_in_order"
+  },
+  {
+    "concept_id": "a06",
+    "lesson": "advanced/notebooks/06_taskgroups_cancellation_timeouts.ipynb",
+    "prerequisites": [
+      "a05"
+    ],
+    "primary_skill": "Bound concurrent work and report actual peak",
+    "reused_concepts": [
+      "i05",
+      "a05"
+    ],
+    "difficulty": "advanced",
+    "independent_evidence": "run_bounded"
+  },
+  {
+    "concept_id": "a07",
+    "lesson": "advanced/notebooks/07_threading_locks_queues.ipynb",
+    "prerequisites": [
+      "i05"
+    ],
+    "primary_skill": "Preserve ordering across worker threads",
+    "reused_concepts": [
+      "b10",
+      "i05"
+    ],
+    "difficulty": "advanced",
+    "independent_evidence": "map_threaded"
+  },
+  {
+    "concept_id": "a08",
+    "lesson": "advanced/notebooks/08_multiprocessing_and_parallelism.ipynb",
+    "prerequisites": [
+      "a07"
+    ],
+    "primary_skill": "Partition work fairly for worker processes",
+    "reused_concepts": [
+      "b02",
+      "b07"
+    ],
+    "difficulty": "advanced",
+    "independent_evidence": "split_jobs"
+  },
+  {
+    "concept_id": "a09",
+    "lesson": "advanced/notebooks/09_retries_rate_limits_idempotency.ipynb",
+    "prerequisites": [
+      "i02"
+    ],
+    "primary_skill": "Deduplicate side effects by request identity",
+    "reused_concepts": [
+      "b09",
+      "b12"
+    ],
+    "difficulty": "advanced",
+    "independent_evidence": "IdempotentPayments"
+  },
+  {
+    "concept_id": "a10",
+    "lesson": "advanced/notebooks/10_profiling_memory_benchmarks.ipynb",
+    "prerequisites": [
+      "a02"
+    ],
+    "primary_skill": "Interpret memory measurements",
+    "reused_concepts": [
+      "b06",
+      "a02"
+    ],
+    "difficulty": "advanced",
+    "independent_evidence": "peak_delta"
+  },
+  {
+    "concept_id": "a11",
+    "lesson": "advanced/notebooks/11_algorithms_complexity_caching.ipynb",
+    "prerequisites": [
+      "i06"
+    ],
+    "primary_skill": "Merge ordered streams",
+    "reused_concepts": [
+      "b07",
+      "i06"
+    ],
+    "difficulty": "advanced",
+    "independent_evidence": "merge_sorted"
+  },
+  {
+    "concept_id": "a12",
+    "lesson": "advanced/notebooks/12_architecture_dependency_injection.ipynb",
+    "prerequisites": [
+      "i10"
+    ],
+    "primary_skill": "Update domain data through an injected repository",
+    "reused_concepts": [
+      "b03",
+      "i10"
+    ],
+    "difficulty": "advanced",
+    "independent_evidence": "rename_user"
+  },
+  {
+    "concept_id": "a13",
+    "lesson": "advanced/notebooks/13_security_safe_parsing_secrets.ipynb",
+    "prerequisites": [
+      "b09"
+    ],
+    "primary_skill": "Remove sensitive values recursively",
+    "reused_concepts": [
+      "b03",
+      "b09"
+    ],
+    "difficulty": "advanced",
+    "independent_evidence": "redact"
+  },
+  {
+    "concept_id": "a14",
+    "lesson": "advanced/notebooks/14_testing_property_integration.ipynb",
+    "prerequisites": [
+      "a09"
+    ],
+    "primary_skill": "Test a stateful idempotency contract",
+    "reused_concepts": [
+      "i14",
+      "a09"
+    ],
+    "difficulty": "advanced",
+    "independent_evidence": "test_replay"
+  },
+  {
+    "concept_id": "a15",
+    "lesson": "advanced/notebooks/15_observability_and_slos.ipynb",
+    "prerequisites": [
+      "b10"
+    ],
+    "primary_skill": "Compute a service indicator",
+    "reused_concepts": [
+      "b02",
+      "b10"
+    ],
+    "difficulty": "advanced",
+    "independent_evidence": "availability"
+  },
+  {
+    "concept_id": "a16",
+    "lesson": "advanced/notebooks/16_api_design_versioning_contracts.ipynb",
+    "prerequisites": [
+      "b03"
+    ],
+    "primary_skill": "Compare versioned interface contracts",
+    "reused_concepts": [
+      "b03",
+      "b08"
+    ],
+    "difficulty": "advanced",
+    "independent_evidence": "is_compatible"
+  },
+  {
+    "concept_id": "a17",
+    "lesson": "advanced/notebooks/17_sqlite_transactions_integrity.ipynb",
+    "prerequisites": [
+      "i15"
+    ],
+    "primary_skill": "Enforce all-or-nothing writes",
+    "reused_concepts": [
+      "b12",
+      "i15"
+    ],
+    "difficulty": "advanced",
+    "independent_evidence": "add_users"
+  },
+  {
+    "concept_id": "a18",
+    "lesson": "advanced/notebooks/18_production_quality_ci_deployment.ipynb",
+    "prerequisites": [
+      "a17"
+    ],
+    "primary_skill": "Resume a database migration safely",
+    "reused_concepts": [
+      "i15",
+      "a17"
+    ],
+    "difficulty": "advanced",
+    "independent_evidence": "migrate"
+  },
+  {
+    "concept_id": "a19",
+    "lesson": "advanced/notebooks/19_advanced_review_capstone.ipynb",
+    "prerequisites": [
+      "a15"
+    ],
+    "primary_skill": "Audit delivery versus processing outcomes",
+    "reused_concepts": [
+      "a09",
+      "a15"
+    ],
+    "difficulty": "advanced",
+    "independent_evidence": "replay_summary"
+  }
+]
