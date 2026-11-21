@@ -31,9 +31,9 @@ jupyter lab                      # open basics/notebooks/00_python_introduction.
 
 1. **Read a lesson** and predict each cell's output before you run it.
 2. **Change one input** and explain what happened.
-3. **Do the lesson's "Try it" exercises.** These are short cells with `___` blanks; `check` tells you if you're right. Then take the **quick quiz** at the end.
+3. **Answer each part's questions as you go.** Basics lessons teach a few rules, then test them straight away with short cells that have `___` blanks; `check` tells you if you're right. The hardest questions are the **challenges**: real functions graded by tests. Then take the **quick quiz** at the end.
 4. **Study the worked examples** (`<level>/worked_examples/`). They show how a solution is planned, written and tested.
-5. **Fill in the workbook** for the topic (`<level>/exercises/`). Fill in each `___`, run the cell, then run `check(...)`. ✅ means move on. ❌ shows your result and the test's input, never the answer. The first failure unlocks a hint and the second a more detailed one.
+5. **Fill in the workbook** for the topic (`<level>/exercises/` in Intermediate and Advanced; in Basics the challenges are already in the lessons). Fill in each `___`, run the cell, then run `check(...)`. ✅ means move on. ❌ shows your result and the test's input, never the answer. The first failure unlocks a hint and the second a more detailed one.
 6. **Prefer a terminal?** The same exercises are in `practice/exercises/`; check them with `python -m pytest practice -k basics_01`. See [practice/README.md](practice/README.md).
 7. **Build the projects** and take the level's assessment before moving up.
 

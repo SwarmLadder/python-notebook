@@ -20,22 +20,42 @@ def test_lesson_helper_is_identical_in_every_level():
 
 
 @pytest.mark.parametrize("path", LESSONS, ids=[notebook_id(p) for p in LESSONS])
-def test_try_it_exercises_are_fill_in_with_checks(path):
+def test_lesson_exercises_are_fill_in_with_hidden_answers(path):
+    """Lessons teach a little, then test it: every exercise is a fill-in cell checked by hash.
+
+    Works for both layouts: the older "Try it" section at the end, and the
+    teach-then-test layout where exercises follow each short section.
+    """
     cells = load(path)["cells"]
-    section = [c for c in cells if c.get("id", "").startswith("try-")]
-    assert section, "lesson needs a 'Try it' section"
-    setup = cell_source(section[1])
-    match = re.search(r"Exercises\('([^']+)', (\{.*\})\)", setup)
-    assert match, "the first code cell must create Exercises(lesson_id, {number: hash})"
+    sources = [cell_source(c) for c in cells if c["cell_type"] == "code"]
+    setup = [s for s in sources if "Exercises(" in s]
+    assert len(setup) == 1, "one code cell must create Exercises(lesson_id, {number: hash})"
+    match = re.search(r"Exercises\('([^']+)', (\{[^}]*\})", setup[0])
+    assert match, "Exercises(lesson_id, {number: hash}) not found"
     answers = eval(match.group(2))  # our own literal dict
-    exercises = [cell_source(c) for c in section if c["cell_type"] == "code" and "Exercises(" not in cell_source(c)]
+    exercises = [s for s in sources if re.search(r"\bcheck\(\d+, ", s)]
     assert len(exercises) == len(answers) >= 3
     for number, code in enumerate(exercises, start=1):
         assert "___" in code, f"exercise {number} has no blank to fill in"
         assert f"check({number}, " in code, f"exercise {number} must end with check({number}, value)"
         assert re.fullmatch(r"[0-9a-f]{16}", answers[number])
+    challenges = [s for s in sources if re.fullmatch(r"check\('\w+'\)", s.strip())]
+    if challenges:
+        assert "practice='" in setup[0], "lessons with challenges name their practice module"
     text = "\n".join(cell_source(c) for c in cells)
     assert "TODO" not in text, "no open-ended TODO exercises: write fill-in cells instead"
+
+
+def test_challenges_are_graded_by_the_practice_tests(capsys, monkeypatch):
+    monkeypatch.delenv("PRACTICE_CHECKS", raising=False)
+    check = lesson.Exercises("demo", {}, practice="basics_01_fundamentals")
+
+    def total_cost(price_text, units=7):
+        return float(price_text) * units
+
+    namespace = {"total_cost": total_cost}
+    assert check._challenge("total_cost", namespace) is True
+    assert "✅ total_cost" in capsys.readouterr().out
 
 
 def test_blank_and_feedback(capsys):

@@ -5,7 +5,12 @@ A module counts as complete if EITHER
   * every test in `practice/tests/test_<module>.py` passes against
     `practice/exercises/<module>.py` (the terminal route), OR
   * the matching workbook notebook runs top to bottom with every check()
-    passing (the notebook route; checks run with PRACTICE_STRICT=1).
+    passing (the notebook route; checks run with PRACTICE_STRICT=1). Basics has
+    no workbooks: its challenges live in the lessons, so only the practice-file
+    route applies there.
+
+Every practice module of the level must be complete; a level with no modules
+is never complete.
 
     python tools/verify_level.py basics
     python tools/verify_level.py intermediate --json result.json
@@ -30,17 +35,20 @@ FORBIDDEN = re.compile(r"\b(grader|practice_loader|notebook_check|conftest|_pyte
                        r"PRACTICE_STRICT|PRACTICE_CHECKS|setattr\(\s*sys)\b")
 
 
-def modules(level: str) -> list[tuple[str, Path]]:
+def modules(level: str) -> list[tuple[str, Path | None]]:
+    """Every practice module of the level, with its workbook notebook if it has one."""
     result = []
-    for workbook in sorted((ROOT / level / "exercises").glob("*_exercises.ipynb")):
-        number = workbook.name.split("_", 1)[0]
-        module = sorted((ROOT / "practice" / "exercises").glob(f"{level}_{number}_*.py"))[0].stem
-        result.append((module, workbook))
+    for path in sorted((ROOT / "practice" / "exercises").glob(f"{level}_*.py")):
+        number = path.stem.split("_")[1]
+        workbooks = sorted((ROOT / level / "exercises").glob(f"{number}_*_exercises.ipynb"))
+        result.append((path.stem, workbooks[0] if workbooks else None))
     return result
 
 
-def learner_code(module: str, workbook: Path) -> str:
+def learner_code(module: str, workbook: Path | None) -> str:
     code = (ROOT / "practice" / "exercises" / f"{module}.py").read_text(encoding="utf-8")
+    if workbook is None:
+        return code
     notebook = json.loads(workbook.read_text(encoding="utf-8"))
     cells = ["".join(c["source"]) for c in notebook["cells"] if c["cell_type"] == "code"]
     # The generated setup cell legitimately imports the checker; skip that one cell.
@@ -48,7 +56,7 @@ def learner_code(module: str, workbook: Path) -> str:
     return code + "\n" + "\n".join(cells)
 
 
-def tamper_findings(module: str, workbook: Path) -> list[str]:
+def tamper_findings(module: str, workbook: Path | None) -> list[str]:
     text = learner_code(module, workbook)
     text = "\n".join(line for line in text.splitlines()
                      if not line.lstrip().startswith("#") and "check(" not in line and "check.summary" not in line)
@@ -82,15 +90,16 @@ def notebook_route(workbook: Path) -> tuple[bool, str]:
 
 
 def verify(level: str) -> dict:
-    report = {"level": level, "modules": {}, "complete": True}
-    for module, workbook in modules(level):
+    found = modules(level)
+    report = {"level": level, "modules": {}, "complete": bool(found)}
+    for module, workbook in found:
         findings = tamper_findings(module, workbook)
         if findings:
             entry = {"complete": False, "route": None, "detail": "forbidden in learner code: " + ", ".join(findings)}
         else:
             ok, detail = terminal_route(module)
             entry = {"complete": ok, "route": "practice file" if ok else None, "detail": detail}
-            if not ok:
+            if not ok and workbook is not None:
                 ok_nb, detail_nb = notebook_route(workbook)
                 if ok_nb:
                     entry = {"complete": True, "route": "workbook notebook", "detail": detail_nb}
