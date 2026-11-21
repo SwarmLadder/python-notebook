@@ -165,3 +165,51 @@ def test_placeholder_detection_ignores_comments_and_literal_strings(capsys):
     check(1, "___")
     assert check.last_result is True
     assert "Passed" in capsys.readouterr().out
+
+
+
+@pytest.mark.parametrize("path", LESSONS, ids=[notebook_id(p) for p in LESSONS])
+def test_guided_questions_pair_with_exact_code_and_stage_parser(path):
+    """Every numbered prompt must map to the submitted code, even in the Lab UI."""
+    import ast
+    cells = load(path)["cells"]
+    questions = {
+        int(match.group(1)): cell_source(cell)
+        for cell in cells if cell["cell_type"] == "markdown"
+        if (match := re.fullmatch(r"ex-(\d+)-q", cell.get("id", "")))
+    }
+    exercises = {
+        int(match.group(1)): cell_source(cell)
+        for cell in cells if cell["cell_type"] == "code"
+        if (match := re.fullmatch(r"ex-(\d+)", cell.get("id", "")))
+    }
+    assert questions and questions.keys() == exercises.keys(), (
+        f"{notebook_id(path)}: every exercise needs exactly one matching question"
+    )
+    for number, prompt in questions.items():
+        # Staging parses this stable prefix to attach the prompt to its editor.
+        assert prompt.startswith(f"**Exercise {number}.**"), (
+            f"{notebook_id(path)}: exercise {number} needs a browser-readable prefix"
+        )
+        source = exercises[number]
+        tree = ast.parse(source)
+        assert tree.body and isinstance(tree.body[-1], ast.Expr)
+        call = tree.body[-1].value
+        assert isinstance(call, ast.Call) and isinstance(call.func, ast.Name)
+        assert call.func.id == "check"
+        assert call.args and isinstance(call.args[0], ast.Constant)
+        assert call.args[0].value == number, (
+            f"{notebook_id(path)}: exercise {number} grades a different question"
+        )
+
+
+def test_runtime_placeholder_detector_ignores_prose_but_sees_nested_code():
+    import builtins
+    direct = compile("___\ncheck(2, result)", "<lesson>", "exec")
+    nested = compile("def unfinished():\n    return ___\ncheck(2, 3)", "<lesson>", "exec")
+    prose = compile("note = '___'  # ___\ncheck(2, note)", "<lesson>", "exec")
+    attribute = compile("note = some_object.___\ncheck(2, note)", "<lesson>", "exec")
+    assert lesson._unfilled_code(direct)
+    assert lesson._unfilled_code(nested)
+    assert not lesson._unfilled_code(prose)
+    assert not lesson._unfilled_code(attribute)
