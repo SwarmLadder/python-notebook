@@ -6,8 +6,9 @@ your value is still checked. Equivalent answers count: tuple or list, 5 or 5.0,
 float differences below 6 decimal places, any order for sets and dicts.
 
     from lesson import Exercises, ___, run
-    check = Exercises("basics/06", {1: "...", 2: "..."})
+    check = Exercises("basics/06", {1: "...", 2: "..."}, practice="basics_02_control_flow")
     check(1, my_value)        # inside exercise 1's cell
+    check("sum_to")           # a challenge: runs the practice tests for sum_to()
 
 `run(coroutine)` runs async code both in Jupyter (which already has an event
 loop) and in plain Python.
@@ -117,14 +118,36 @@ def fingerprint(lesson_id: str, number: int, value) -> str:
 
 
 class Exercises:
-    def __init__(self, lesson_id: str, answers: dict[int, str]):
+    def __init__(self, lesson_id: str, answers: dict[int, str], practice: str | None = None):
         self.lesson_id = lesson_id
         self._answers = answers
+        self.practice = practice  # the practice module whose tests grade this lesson's challenges
+        self._checker = None
         self.passed: set[int] = set()
 
-    def __call__(self, number: int, value) -> None:
-        """Print whether `value` is right. Returns None so Jupyter shows only the message."""
+    def __call__(self, number, value=None) -> None:
+        """Print whether `value` is right. Returns None so Jupyter shows only the message.
+
+        check(3, value) grades exercise 3; check("name") grades the challenge function
+        name() defined in the notebook against the practice tests.
+        """
+        if isinstance(number, str):
+            self.last_result = self._challenge(number, sys._getframe(1).f_globals)
+            return
         self.last_result = self._grade(number, value)
+
+    def _challenge(self, name: str, namespace: dict):
+        if not self.practice:
+            print(f"There is no challenge {name!r} in this lesson.")
+            return None
+        if self._checker is None:
+            from pathlib import Path
+            practice = Path(__file__).resolve().parents[2] / "practice"
+            if str(practice) not in sys.path:
+                sys.path.insert(0, str(practice))
+            from notebook_check import Checker
+            self._checker = Checker(self.practice)
+        return self._checker(name, namespace)
 
     def _grade(self, number: int, value) -> bool | None:
         if number not in self._answers:
