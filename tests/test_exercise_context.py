@@ -130,3 +130,25 @@ def test_starters_execute_after_only_their_declared_setup(path, monkeypatch):
                 if cell is target and not isinstance(error, NameError) and _stopped_at_blank(error, source):
                     break
                 raise AssertionError(f"{path.name}#{key} while running {cell['id']}") from error
+
+
+def test_course_imports_are_available_in_declared_environments():
+    import sys
+
+    # The course bundle contains both helpers. Other course imports use CPython's
+    # standard library. New external packages need a browser loading contract.
+    for path in ROOT.glob("*/notebooks/*.ipynb"):
+        for cell in load(path)["cells"]:
+            if cell["cell_type"] != "code":
+                continue
+            for node in ast.walk(ast.parse(cell_source(cell))):
+                if isinstance(node, ast.Import):
+                    modules = [a.name for a in node.names]
+                elif isinstance(node, ast.ImportFrom):
+                    modules = [node.module or ""]
+                else:
+                    continue
+                for module in modules:
+                    top = module.partition(".")[0]
+                    assert top in sys.stdlib_module_names or (path.parent / (top + ".py")).is_file(), (
+                        path.name, cell["id"], module)
