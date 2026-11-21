@@ -7,7 +7,7 @@ Learn the engineering techniques required to build reliable and maintainable Pyt
 | Material | Count | Purpose |
 |---|---:|---|
 | Lessons | **20 notebooks** | Short rules, a demo, then graded exercises from easy to hard |
-| Fill-in exercises | **153** | Each one checked as soon as you run it |
+| Fill-in exercises | **162** | Each one checked as soon as you run it |
 | Challenges | **58** | Functions and classes in the lessons, graded by the practice tests |
 | Auto-graded practice | **4 modules, 95 tests** | Instant feedback; answers stay hidden |
 | Advanced portfolio projects | **3** | Async crawler simulator, streaming text analytics, transactional event processor |

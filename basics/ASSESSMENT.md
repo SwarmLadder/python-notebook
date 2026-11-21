@@ -1,6 +1,6 @@
 # Basics Final Assessment
 
-Complete this after the 18 lessons, 60 practice problems, and three projects.
+Complete this after the 18 lessons, lesson builds, and three projects.
 
 ## Skills checklist
 

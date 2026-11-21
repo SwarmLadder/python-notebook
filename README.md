@@ -1,6 +1,6 @@
 # Python Learning Notebooks 🐍
 
-A free, hands-on Python course: **Basics → Intermediate → Advanced**. You read short lessons, run the examples and take a quick quiz. Then you complete **fill-in-the-blank exercises**: nearly finished code with a few `___` gaps. A check cell tells you right away whether you got it, without showing the answer, and gives hints when you're stuck. You write programs from scratch only in the projects.
+A free, hands-on Python course: **Basics → Intermediate → Advanced**. You read short lessons, run the examples and take a quick quiz. Then you complete **fill-in-the-blank exercises**: nearly finished code with a few `___` gaps. A check cell tells you right away whether you got it, without showing the answer, and gives hints when you're stuck. Each lesson also includes an independent build. Projects assess a larger change to working software.
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/SwarmLadder/python-notebook)
 [![Launch Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/SwarmLadder/python-notebook/main?urlpath=lab/tree/basics/notebooks/00_python_introduction.ipynb)
@@ -8,7 +8,7 @@ A free, hands-on Python course: **Basics → Intermediate → Advanced**. You re
 
 **No install needed:** Codespaces gives you everything, including the auto-graded practice. Binder and Colab run the notebooks in your browser.
 
-| Level | Lessons (each with a quiz) | Worked examples | Fill-in exercises | Auto-graded tests | Projects |
+| Level | Lessons (each with a quiz) | Worked examples | Practice challenges | Auto-graded tests | Projects |
 |---|---:|---:|---:|---:|---:|
 | [Basics](basics/README.md) | 18 | 6 | 72 | 231 | 3 |
 | [Intermediate](intermediate/README.md) | 20 | 6 | 73 | 102 | 3 + CLI package |
@@ -33,8 +33,8 @@ jupyter lab                      # open basics/notebooks/00_python_introduction.
 2. **Change one input** and explain what happened.
 3. **Answer each part's questions as you go.** Lessons teach a few rules, then test them straight away with short cells that have `___` blanks; `check` tells you if you're right. The hardest questions are the **challenges**: real functions graded by tests. Then take the **quick quiz** at the end.
 4. **Study the worked examples** (`<level>/worked_examples/`). They show how a solution is planned, written and tested.
-5. **Solve the challenges** in each lesson. Fill in each `___`, run the cell, then run `check(...)`. ✅ means move on. ❌ shows your result and the test's input, never the answer. The first failure unlocks a hint and the second a more detailed one.
-6. **Prefer a terminal?** The same exercises are in `practice/exercises/`; check them with `python -m pytest practice -k basics_01`. See [practice/README.md](practice/README.md).
+5. **Solve the challenges** in each lesson. For guided tasks, fill in each `___`. For an independent build, implement the contract and add a boundary test. Run the check after your code. ✅ means move on. ❌ shows your result and the test's input, never the answer. The first failure unlocks a hint and the second a more detailed one.
+6. **Prefer a terminal?** The achievement-track practice modules are in `practice/exercises/`; check them with `python -m pytest practice -k basics_01`. See [practice/README.md](practice/README.md).
 7. **Build the projects** and take the level's assessment before moving up.
 
 Each lesson ends with a **Next:** link. Restart the kernel and run all cells once you finish a lesson.
@@ -50,6 +50,7 @@ There are two tracks, both checked automatically (see [RECOGNITION.md](RECOGNITI
 
 - `python -m pytest` runs every check: each notebook from a fresh kernel, the docs links, the data files, the project packages and the practice tests.
 - See [CONTRIBUTING.md](CONTRIBUTING.md). Questions, typo reports and translations are welcome.
+- The [coverage audit](curriculum/AUDIT.md) and [concept map](curriculum/concepts.json) connect lessons to prerequisites, reused skills and independent work.
 - Using this course in a class? It's free to use and adapt, with credit (see License).
 
 ## License

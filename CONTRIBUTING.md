@@ -12,7 +12,7 @@ Thanks for helping more people learn Python! Small fixes are as welcome as new l
 ## Style
 
 - One idea per section: a short explanation, a runnable example, and one question for the reader.
-- No open-ended "TODO: write your answer" cells outside the projects. Exercises are fill-in-the-blank code (`___`) that ends with `check(...)`, so learners know whether they're right.
+- Use the [exercise authoring standard](curriculum/AUTHORING.md) for guided practice, independent builds and retention.
 - Plain words, short sentences, no filler. Explain *why*, not just *what*.
 - Examples use only the standard library and run offline, and the notebook works with **Restart & Run All**.
 - Clear outputs before committing (Jupyter: *Edit → Clear Outputs of All Cells*).
@@ -33,7 +33,7 @@ Practice answers are hidden. Tests call `check(value)`, and the repo stores only
 To propose a new exercise:
 1. Add the function to `practice/exercises/<module>.py` as nearly finished code: a docstring with an example and a hint, and the key parts replaced by `___`. Then run `python tools/make_workbooks.py` so the workbook notebook gets it too.
 2. Add tests that use `check(...)`, or plain `assert`s for rules that don't reveal the answer.
-3. Put your reference implementation in the PR description or a gist instead of the repo. A maintainer adds it to the private solutions and rebuilds the answer keys (see [practice/README.md](practice/README.md#for-maintainers)).
+3. Arrange a private handoff with a maintainer for reference implementations and keyed-answer updates (see [practice/README.md](practice/README.md#for-maintainers)).
 
 ## License
 
