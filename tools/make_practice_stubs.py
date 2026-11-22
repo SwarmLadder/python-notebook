@@ -20,6 +20,7 @@ generated version (`git diff` clean), so your work is never overwritten.
 from __future__ import annotations
 
 import ast
+import json
 import subprocess
 import sys
 from pathlib import Path
@@ -111,6 +112,27 @@ def _choose_blanks(function: ast.FunctionDef | ast.AsyncFunctionDef) -> list:
     return chosen
 
 
+def reviewed_starters(module):
+    """Keep editorial prerequisite and ownership decisions when regenerating practice."""
+    level = module.split("_", 1)[0]
+    starters = {}
+    for path in (ROOT / level / "notebooks").glob("*.ipynb"):
+        cells = json.loads(path.read_text(encoding="utf-8"))["cells"]
+        setup = next(c for c in cells if c["id"] == "lesson-setup")
+        if f"practice='{module}'" not in "".join(setup["source"]):
+            continue
+        for cell in cells:
+            mode = cell.get("metadata", {}).get("practice_mode")
+            if not cell["id"].startswith("ch-") or mode not in {"guided implementation", "partial implementation"}:
+                continue
+            source = "".join(cell["source"]).rstrip()
+            tree = ast.parse(source)
+            if not any(isinstance(n, ast.Name) and n.id in {"___", "NotImplementedError"} for n in ast.walk(tree)):
+                raise ValueError(f"Restore the unfinished starter in {path.name}#{cell['id']} before generating practice.")
+            starters[tree.body[0].name] = source
+    return starters
+
+
 def scaffold_source(solution: Path) -> str:
     source = solution.read_text(encoding="utf-8")
     tree = ast.parse(source)
@@ -128,6 +150,13 @@ def scaffold_source(solution: Path) -> str:
                 spans.append((start, end))
     for start, end in sorted(spans, reverse=True):
         source = source[:start] + BLANK + source[end:]
+    reviewed = reviewed_starters(solution.stem)
+    lines = source.splitlines(keepends=True)
+    for node in reversed(ast.parse(source).body):
+        if getattr(node, "name", None) in reviewed:
+            first = min([node.lineno] + [d.lineno for d in node.decorator_list])
+            lines[first - 1:node.end_lineno] = [reviewed[node.name] + "\n"]
+    source = "".join(lines)
     ast.parse(source)  # the scaffold must stay valid Python
     return HEADER.format(name=solution.stem) + source
 

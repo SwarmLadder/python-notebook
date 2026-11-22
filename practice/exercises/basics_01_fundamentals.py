@@ -124,7 +124,11 @@ def is_palindrome(text: str) -> bool:
 
     Hint: keep only characters where ch.isalnum(), then compare with [::-1].
     """
-    cleaned = [ch.casefold() for ch in text if ch.isalnum()]
+    cleaned = ""
+    # Provided filtering loop. Compare the cleaned string with its reverse.
+    for ch in text:
+        if ch.isalnum():
+            cleaned += ch.casefold()
     return ___
 
 
