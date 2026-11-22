@@ -81,6 +81,4 @@ to confirm provided setup imports are executed. Repeat in a genuine Jupyter
 kernel to compare semantics. Check that independent builds are not granted
 achievement or qualification merely for running a notebook.
 
-The source repository for the deployed Lab frontend has not been identified
-from the available access. Do not edit minified production bundles as a
-substitute for a reviewed source change.
+The November 22 [Phase 4 review](PHASE4.md) identifies the Lab source repository and records the live SQLite and saved-answer reproductions.
