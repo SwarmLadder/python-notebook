@@ -94,3 +94,15 @@ def test_workbooks_match_the_practice_modules():
     import sys
     result = subprocess.run([sys.executable, "tools/make_workbooks.py", "--check"], cwd=ROOT, capture_output=True, text=True)
     assert result.returncode == 0, result.stdout + result.stderr
+
+
+def test_regeneration_keeps_reviewed_task_bodies(tmp_path):
+    import runpy
+    make = runpy.run_path(str(ROOT / "tools/make_practice_stubs.py"))["scaffold_source"]
+    private = tmp_path / "basics_03_data_structures.py"
+    private.write_text('def flatten(matrix):\n    return [x for row in matrix for x in row]\n\n'
+                       'def second_largest(values):\n    return sorted(set(values))[-2]\n')
+    generated = make(private)
+    assert "raise NotImplementedError" in generated
+    assert "sorted(set(" not in generated
+    assert "distinct.append(value)" in generated
