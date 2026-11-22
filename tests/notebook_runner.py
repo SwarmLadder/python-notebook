@@ -83,7 +83,7 @@ def _stopped_at_blank(error: BaseException, source: str) -> bool:
     # Searching the source line for "___" also hides real failures when a
     # comment, string, or unrelated identifier happens to contain those bytes.
     placeholder_lines = {
-        node.lineno for node in ast.walk(ast.parse(source))
+        node.lineno for node in ast.walk(ast.parse(strip_ipython_magics(source)))
         if isinstance(node, ast.Name) and isinstance(node.ctx, ast.Load)
         and node.id == "___"
     }
