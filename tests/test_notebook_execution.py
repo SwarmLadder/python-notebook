@@ -22,7 +22,7 @@ def test_notebook_runs_from_a_fresh_kernel(path):
     ("raise RuntimeError('___')", False),
     ("1 / 0  # ___ is still unanswered elsewhere", False),
     ("missing_name + ___", False),
-    ("print('___')\\nraise ValueError('broken')", False),
+    ("print('___')\nraise ValueError('broken')", False),
 ])
 def test_only_executed_placeholders_are_skipped(source, expected):
     try:
@@ -46,7 +46,7 @@ def test_mixed_exception_group_is_not_treated_as_an_unfinished_blank():
 
 
 def test_chained_real_error_is_not_hidden_by_an_earlier_blank():
-    source = "try:\\n    ___\\nexcept NameError:\\n    raise RuntimeError('broken fallback')"
+    source = "try:\n    ___\nexcept NameError:\n    raise RuntimeError('broken fallback')"
     try:
         exec(compile(source, "<exercise>", "exec"), {})
     except RuntimeError as error:
