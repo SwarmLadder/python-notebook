@@ -79,22 +79,31 @@ def _stopped_at_blank(error: BaseException, source: str) -> bool:
     """True if a fill-in cell stopped because of one of its own ___ blanks (expected while unanswered).
 
     Looks at every frame of the traceback and inside exception groups (e.g. asyncio TaskGroup)."""
-    lines = source.splitlines()
-    pending, seen = [error], set()
-    while pending:
-        current = pending.pop()
-        if current is None or id(current) in seen:
-            continue
-        seen.add(id(current))
+    # Only an actually evaluated placeholder is an expected unfinished answer.
+    # Searching the source line for "___" also hides real failures when a
+    # comment, string, or unrelated identifier happens to contain those bytes.
+    placeholder_lines = {
+        node.lineno for node in ast.walk(ast.parse(strip_ipython_magics(source)))
+        if isinstance(node, ast.Name) and isinstance(node.ctx, ast.Load)
+        and node.id == "___"
+    }
+
+    def is_blank(current):
         if type(current).__name__ == "BlankNotFilled":
             return True
-        for frame in traceback.extract_tb(current.__traceback__):
-            if ("#cell" in frame.filename or frame.filename == "<exercise>") and 0 < frame.lineno <= len(lines) \
-                    and "___" in lines[frame.lineno - 1]:
-                return True
-        pending.extend(getattr(current, "exceptions", ()) or ())
-        pending.append(current.__context__)
-    return False
+        if isinstance(current, BaseExceptionGroup):
+            # A task group may fail for several reasons. Never swallow a real
+            # failure just because another task still contains a blank.
+            return bool(current.exceptions) and all(is_blank(e) for e in current.exceptions)
+        if not isinstance(current, NameError) or current.name != "___":
+            return False
+        return any(
+            ("#cell" in frame.filename or frame.filename == "<exercise>")
+            and frame.lineno in placeholder_lines
+            for frame in traceback.extract_tb(current.__traceback__)
+        )
+
+    return is_blank(error)
 
 
 @dataclass
